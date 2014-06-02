@@ -43,4 +43,4 @@ end
 gem 'capistrano', '~> 3.2'
 
 # Use debugger
-gem 'debugger', group: [:development, :test]
+gem 'byebug', group: [:development, :test]
