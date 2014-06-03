@@ -42,5 +42,9 @@ end
 # Use Capistrano for deployment
 gem 'capistrano', '~> 3.2'
 
-# Use debugger
-gem 'byebug', group: [:development, :test]
+group :development, :test do
+  gem 'rspec-rails', '~> 3'
+  gem 'byebug'
+end
+
+
