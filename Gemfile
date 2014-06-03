@@ -42,6 +42,8 @@ end
 # Use Capistrano for deployment
 gem 'capistrano', '~> 3.2'
 
+gem 'bootstrap-sass', '~> 3'
+
 group :development, :test do
   gem 'rspec-rails', '~> 3'
   gem 'byebug'
