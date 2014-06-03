@@ -20,6 +20,7 @@ class ImagesController < ApplicationController
 
   # GET /images/1/edit
   def edit
+    @image = Image.find(params[:id])
   end
 
   # POST /images

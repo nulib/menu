@@ -11,16 +11,17 @@
     <h1>VRA Editor</h1>
   </header>
 
+
   <div id="xml_editor">
-    <vra:vra xmlns:vra="http://www.vraweb.org/vracore4.htm"/>
+    <vra:vra xmlns:vra="http://www.vraweb.org/vracore4.htm"></vra:vra>
   </div>
 
 </div>
 
 <script>
   $(function() {
-    var extractor = new Xsd2Json("vra.xsd", {"schemaURI":"vendor/assets/mods-3-4/"});
-    
+    var extractor = new Xsd2Json("vra.xsd", {"schemaURI":"<%= root_path %>"});
+
     $("#xml_editor").xmlEditor({
       schema: extractor.getSchema()
     });
