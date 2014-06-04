@@ -11,6 +11,11 @@ class ImagesController < ApplicationController
   # GET /images/1
   # GET /images/1.json
   def show
+    @image = Image.find(params[:id])
+    respond_to do |format|
+      format.html
+      format.xml { render xml: @image.xml }
+    end
   end
 
   # GET /images/new
