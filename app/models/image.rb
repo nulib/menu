@@ -20,7 +20,7 @@ class Image < ActiveRecord::Base
       return false if file == '.'
       return false if file == '..'
       # Ensure file extension is in the list above
-      return false unless valid_file_extensions.include?( File.extname( file ) )
+      return false unless valid_file_extensions.include?( File.extname( file ).downcase )
       true
     end
 end
