@@ -17,3 +17,7 @@
 
 # Ignore database.yml
 config/database.yml
+
+# Ignore test specific items
+coverage
+coverage/*

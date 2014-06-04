@@ -5,7 +5,7 @@ gem 'rails', '4.1.1'
 
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3' # we can delete this entry after we've specified all our other dbs
-gem 'mysql2'
+#gem 'mysql2'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0'
@@ -47,6 +47,7 @@ gem 'bootstrap-sass', '~> 3'
 group :development, :test do
   gem 'rspec-rails', '~> 3'
   gem 'byebug'
+  gem 'simplecov', '0.7.1', :require => false, :group => :test
 end
 
 
