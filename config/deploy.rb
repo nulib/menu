@@ -5,10 +5,10 @@ set :application, 'menu'
 set :repo_url, 'git@github.com:nulib/menu.git'
 
 # Default branch is :master
-# ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
+ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
 # Default deploy_to directory is /var/www/my_app
-set :deploy_to, '/var/www/my_app'
+set :deploy_to, '/var/www/menu'
 
 # Default value for :scm is :git
 set :scm, :git
