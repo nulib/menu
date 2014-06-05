@@ -41,13 +41,14 @@ end
 
 # Use Capistrano for deployment
 gem 'capistrano', '~> 3.2'
+gem 'capistrano-rails'
 
 gem 'bootstrap-sass', '~> 3'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3'
   gem 'byebug'
-  gem 'simplecov', '0.7.1', :require => false, :group => :test
+  gem 'simplecov', '0.7.1', :require => false
 end
 
 
