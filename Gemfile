@@ -5,7 +5,7 @@ gem 'rails', '4.1.1'
 
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3' # we can delete this entry after we've specified all our other dbs
-gem 'mysql2'
+#gem 'mysql2'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0'
@@ -17,7 +17,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
+gem 'therubyracer', platforms: :ruby
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -41,6 +41,15 @@ end
 
 # Use Capistrano for deployment
 gem 'capistrano', '~> 3.2'
+gem 'capistrano-rails'
+gem 'capistrano-rvm'
 
-# Use debugger
-gem 'debugger', group: [:development, :test]
+gem 'bootstrap-sass', '~> 3'
+
+group :development, :test do
+  gem 'rspec-rails', '~> 3'
+  gem 'byebug'
+  gem 'simplecov', '0.7.1', :require => false
+end
+
+
