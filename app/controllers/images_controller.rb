@@ -4,7 +4,7 @@ class ImagesController < ApplicationController
   # GET /images
   # GET /images.json
   def index
-    GetImages.current_images( 'davies' )
+    GetImages.current_images( '/dropbox' )
     @images = Image.all
   end
 
