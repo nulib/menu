@@ -11,7 +11,6 @@ class ImagesController < ApplicationController
   # GET /images/1
   # GET /images/1.json
   def show
-    @image = Image.find(params[:id])
     respond_to do |format|
       format.html
       format.xml { render xml: @image.xml }
@@ -25,14 +24,14 @@ class ImagesController < ApplicationController
 
   # GET /images/1/edit
   def edit
-    @image = Image.find(params[:id])
+
   end
 
   # POST /images
   # POST /images.json
   def create
     @image = Image.new(image_params)
-    
+
     respond_to do |format|
       if @image.save
         format.html { redirect_to @image, notice: 'Image was successfully created.' }
