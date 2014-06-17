@@ -21,3 +21,7 @@ config/database.yml
 # Ignore test specific items
 coverage
 coverage/*
+
+# Ignore paperclip-generated files
+/public/system/images
+

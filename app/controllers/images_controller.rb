@@ -4,14 +4,13 @@ class ImagesController < ApplicationController
   # GET /images
   # GET /images.json
   def index
-    GetImages.current_images( '/dropbox' )
+    GetImages.current_images( 'dropbox' )
     @images = Image.all
   end
 
   # GET /images/1
   # GET /images/1.json
   def show
-    @image = Image.find(params[:id])
     respond_to do |format|
       format.html
       format.xml { render xml: @image.xml }
@@ -25,7 +24,7 @@ class ImagesController < ApplicationController
 
   # GET /images/1/edit
   def edit
-    @image = Image.find(params[:id])
+
   end
 
   # POST /images
@@ -76,6 +75,6 @@ class ImagesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def image_params
-      params.require(:image).permit(:filename, :location)
+      params.require(:image).permit(:filename, :location, :proxy)
     end
 end
