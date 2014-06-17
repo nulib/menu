@@ -34,13 +34,37 @@ set :linked_files, %w{config/database.yml}
 # Default value for keep_releases is 5
 set :keep_releases, 5
 
+# Run all rspec tests before deploying
+set :tests, []
+
 namespace :deploy do
+
+  before :deploy, "deploy:run_tests"
+
+
+  desc "Runs test before deploying, can't deploy unless they pass"
+  task :run_tests do
+    test_log = "log/capistrano.test.log"
+    tests = fetch(:tests)
+    tests.each do |test|
+      puts "--> Running tests: '#{test}', please wait ..."
+      unless system "bundle exec rspec #{test} > #{test_log} 2>&1"
+        puts "--> Tests: '#{test}' failed. Results in: #{test_log} and below:"
+        system "cat #{test_log}"
+        exit;
+      end
+      puts "--> '#{test}' passed"
+    end
+    puts "--> All tests passed"
+    system "rm #{test_log}"
+  end
+
 
   desc 'Restart application'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
       # Your restart mechanism here, for example:
-      # execute :touch, release_path.join('tmp/restart.txt')
+      execute :touch, release_path.join('tmp/restart.txt')
     end
   end
 
