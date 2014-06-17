@@ -11,7 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140613000000) do
+ActiveRecord::Schema.define(version: 20140617192022) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "images", force: true do |t|
     t.string   "filename"
@@ -23,6 +26,7 @@ ActiveRecord::Schema.define(version: 20140613000000) do
     t.string   "proxy_content_type"
     t.integer  "proxy_file_size"
     t.datetime "proxy_updated_at"
+    t.string   "job_id"
   end
 
 end
