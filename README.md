@@ -13,3 +13,4 @@ Server configuration:
 - Git
 - mySQL
 
+You'll need to install ImageMagick as well. The easiest way to use homebrew: brew install imagemagick
