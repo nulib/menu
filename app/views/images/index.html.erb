@@ -13,7 +13,7 @@
   <tbody>
     <% @images.each do |image| %>
       <tr>
-        <td><%= image_tag image.proxy( :thumb ) %></td>
+        <td><%= image_tag image.proxy( :thumb ), class: "thumbnail" %></td>
         <td><%= image.filename %></td>
         <td><%= image.location %></td>
         <td><%= link_to 'Show', image, class: "btn btn-default" %></td>
