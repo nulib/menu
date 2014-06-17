@@ -25,6 +25,3 @@ coverage/*
 # Ignore paperclip-generated files
 /public/system/images
 
-# Ignore test dropbox folders
-/spec/dropbox_invalid
-/spec/dropbox_valid
