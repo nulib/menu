@@ -5,7 +5,7 @@ RSpec.describe ImagesController, :type => :controller do
 
     it "creates a new Image" do
       expect do
-        post(:create, :image => {filename: 'test.tif', location: 'gandalf', job_id: 'test'})
+        post(:create, image: {filename: 'test.tif', location: 'gandalf', job_id: 'test'})
       end.to change(Image, :count).by(1)
     end
   end
