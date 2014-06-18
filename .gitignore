@@ -15,8 +15,9 @@
 /log/*.log
 /tmp
 
-# Ignore database.yml
+# Ignore database.yml and menu.yml
 config/database.yml
+config/menu.yml
 
 # Ignore test specific items
 coverage
@@ -24,4 +25,3 @@ coverage/*
 
 # Ignore paperclip-generated files
 /public/system/images
-
