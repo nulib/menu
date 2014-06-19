@@ -47,6 +47,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 3'
   gem 'byebug'
   gem 'simplecov', '0.7.1', :require => false
+  gem 'capybara', '~> 2'
 end
 
 group :staging, :production do

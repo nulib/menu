@@ -12,7 +12,7 @@
 
   <tbody>
     <% @images.each do |image| %>
-      <tr>
+      <tr class="image-entry">
         <td><%= image_tag image.proxy( :thumb ), class: "thumbnail" %></td>
         <td><%= image.filename %></td>
         <td><%= image.job_id %></td>

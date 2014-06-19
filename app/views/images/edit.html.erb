@@ -4,6 +4,8 @@
 
 <%= link_to 'Show', @image %> |
 <%= link_to 'Back', images_path %>
+<% image_style = :medium %>
+<%= image_tag @image.proxy( image_style ), class: "thumbnail #{image_style}" %>
 
 <div class="wrapper">
 
