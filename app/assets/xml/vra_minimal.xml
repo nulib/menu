@@ -1,0 +1,7 @@
+<vra:vra xmlns:madsrdf="http://www.loc.gov/mads/rdf/v1#"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:marc="http://www.loc.gov/MARC21/slim"
+    xmlns:mods="http://www.loc.gov/mods/v3" xmlns:vra="http://www.vraweb.org/vracore4.htm"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xsi:schemaLocation="http://www.vraweb.org/vracore4.htm http://www.vraweb.org/projects/vracore4/vra-4.0-restricted.xsd">
+</vra:vra>
