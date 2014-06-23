@@ -1,42 +1,23 @@
 require 'rails_helper'
+require 'fakefs/spec_helpers'
 
 describe GetImages do
 
   it "persists valid images to the DB" do
-    loc = "#{Rails.root}/spec/dropbox_valid"
-    path_length = loc.split( '/' ).count
-    contents = Dir.glob( "#{loc}/**/*" )
-    # contents.select! do |entry|
-    #   File.file?( entry ) || entry.split( '/' ).count == path_length + 2
-    # end
-    #
-    GetImages.current_images( loc )
-    expect( Image.all.count ).to eql( contents.count )
+    GetImages.current_images
+    expect( Image.all.count ).to eql( 3 )
   end
 
   it "rejects invalid images from persisting to the DB" do
-    loc = "#{Rails.root}/spec/dropbox_invalid"
-    GetImages.current_images( loc )
+    pending "set up factory_girl_rails to create an invalid image"
+    GetImages.current_images
     expect( Image.all.count ).to eql( 0 )
   end
 
-  it "removes stale records from the db" do
-    require 'fileutils'
-
-    loc = "spec/stale_images"
-
-    contents = Dir.glob( "#{loc}/123/*" )
-
-    GetImages.current_images( loc )
-    expect( Image.all.count ).to eql( contents.count )
-
-    FileUtils.mv('spec/stale_images/123/technology.tiff', 'spec/stale_images/technology.tiff')
-
-    GetImages.current_images( loc )
-    expect( Image.all.count ).to eql( 0 )
 
 
+  it "removes stale images" do
+    pending "create images in db that don't exist in file system"
   end
-
 
 end

@@ -1,27 +1,41 @@
 module GetImages
 
-  def self.current_images( location )
-    path_length = location.split( '/' ).count
+  @path_length = MENU_CONFIG["images_dir"].split( '/' ).count
+
+  def self.current_images
+    location = MENU_CONFIG["images_dir"]
+
     imgs = []
 
     Dir.glob( "#{location}/**/*" ).each do |file|
-      f = File.open( file )
-      path = file.split( '/' )
-      if File.file?( file ) && path.size == path_length + 2
-        i = Image.find_by( filename: file, job_id: path[ -2 ] ) #, proxy: f
-        if i == nil
-          i = Image.create( filename: file, job_id: path[ -2 ], proxy: f )
-        end
-        imgs << i.id
-      end
-      f.close
+      imgs << find_or_create_image(file)
     end
 
-    # delete img records in db if they are no longer in the file system
-    stale_records = Image.where.not(id: imgs)
+    remove_stale_images(imgs)
+
+  end
+
+
+  def self.remove_stale_images( file_system_image_ids )
+    stale_records = Image.where.not(id: file_system_image_ids)
     stale_records.each do |i|
       i.destroy
     end
-
   end
+
+
+  def self.find_or_create_image( file )
+    path = file.split( '/' )
+
+    if File.file?( file ) && path.size == @path_length + 2
+      i = Image.find_by( filename: file, job_id: path[ -2 ] ) #, proxy: f
+      if i == nil
+        f = File.open( file )
+        i = Image.create( filename: file, job_id: path[ -2 ], proxy: f )
+        f.close
+      end
+      return i.id
+    end
+  end
+
 end
