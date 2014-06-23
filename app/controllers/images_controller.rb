@@ -4,7 +4,7 @@ class ImagesController < ApplicationController
   # GET /images
   # GET /images.json
   def index
-    GetImages.current_images( MENU_CONFIG["images_dir"] )
+    GetImages.current_images
     @images = Image.all
   end
 
