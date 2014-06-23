@@ -12,7 +12,7 @@ RSpec.describe ImagesController, :type => :controller do
 
   context "with an existing image" do
     before :each do
-      @image = Image.create!( job_id: 'test' )
+      @image = Image.create!( xml: '<vra></vra>', job_id: 'test' )
     end
 
     describe "DESTROY image" do
@@ -42,6 +42,18 @@ RSpec.describe ImagesController, :type => :controller do
         put(:update, id: @image, image: {filename: 'different.tif', location: 'gandalf2'})
         expect(response).to redirect_to(@image)
       end
+    end
+
+    describe "SAVE_XML image" do
+
+      it "saves the edited xml to the image object" do
+        request.env['content_type'] = 'application/xml' 
+        request.env['RAW_POST_DATA'] =  '<vra>New</vra>'
+        post(:save_xml, id: @image, format: 'xml' )
+        @image.reload
+        expect(@image.xml.to_s).to eq('<vra>New</vra>')
+      end
+
     end
   end
 end

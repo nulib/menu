@@ -1,5 +1,5 @@
 class ImagesController < ApplicationController
-  before_action :set_image, only: [:show, :edit, :update, :destroy]
+  before_action :set_image, only: [:show, :edit, :update, :destroy, :save_xml]
 
   # GET /images
   # GET /images.json
@@ -47,12 +47,24 @@ class ImagesController < ApplicationController
   # PATCH/PUT /images/1.json
   def update
     respond_to do |format|
-      if @image.update(image_params)
+      if @image.update_attributes(image_params)
         format.html { redirect_to @image, notice: 'Image was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
         format.json { render json: @image.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # POST /images/1.xml
+  def save_xml
+    @image.xml = request.body.read
+    respond_to do |format|
+      if @image.save
+        format.xml { redirect_to @image, notice: 'Image was successfully updated.'  }
+      else
+        format.xml { render xml: @image.errors, status: :unprocessable_entity }
       end
     end
   end

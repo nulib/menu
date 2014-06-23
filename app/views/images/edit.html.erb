@@ -13,7 +13,6 @@
     <h1>VRA Editor</h1>
   </header>
 
-
   <div id="xml_editor">
     <vra:vra xmlns:vra="http://www.vraweb.org/vracore4.htm"></vra:vra>
   </div>
@@ -26,7 +25,8 @@
 
     $("#xml_editor").xmlEditor({
       ajaxOptions: {
-        xmlRetrievalPath: "<%= url_for(:only_path => false, :controller => 'images', :action => 'show', :id => @image.id, :format => :xml) %>"
+        xmlRetrievalPath: "<%= url_for(:only_path => false, :controller => 'images', :action => 'show', :id => @image.id, :format => :xml) %>",
+        xmlUploadPath: "<%= url_for(:only_path => false, :controller => 'images', :action => 'update', :id => @image.id, :format => :xml) %>"
       },
       schema: extractor.getSchema()
     });
