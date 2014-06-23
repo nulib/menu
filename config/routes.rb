@@ -6,7 +6,7 @@ Menu::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   root 'images#index'
-  match 'images/:id', to: 'images#update', via: 'post'
+  match 'images/:id', to: 'images#save_xml', via: 'post'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
