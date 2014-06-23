@@ -46,13 +46,16 @@ class ImagesController < ApplicationController
   # PATCH/PUT /images/1
   # PATCH/PUT /images/1.json
   def update
+    @image.xml = request.body.read
     respond_to do |format|
-      if @image.update(image_params)
+      if @image.save
         format.html { redirect_to @image, notice: 'Image was successfully updated.' }
         format.json { head :no_content }
+        format.xml { redirect_to @image, notice: 'Image was successfully updated.'  }
       else
         format.html { render action: 'edit' }
         format.json { render json: @image.errors, status: :unprocessable_entity }
+        format.xml { render xml: @image.errors, status: :unprocessable_entity }
       end
     end
   end
