@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'fakefs/spec_helpers'
 
 describe GetImages do
 
@@ -9,14 +8,12 @@ describe GetImages do
   end
 
   it "rejects invalid images from persisting to the DB" do
-    pending "set up factory_girl_rails to create an invalid image"
-    GetImages.current_images
+    `touch #{Rails.root}/spec/dropbox_invalid/invalid.tiff`
+    GetImages.find_or_create_image("#{Rails.root}/spec/dropbox_invalid/invalid.tiff")
     expect( Image.all.count ).to eql( 0 )
   end
 
-
-
-  it "removes stale images" do
+  xit "removes stale images" do
     pending "create images in db that don't exist in file system"
   end
 
