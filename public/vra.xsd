@@ -53,8 +53,8 @@
 
   <xsd:element name="vra"                type="vraType"/>
 
-  <xsd:element name="collection"         type="collectionRecordType"/>
-  <xsd:element name="work"               type="workRecordType"/>
+ <!--  <xsd:element name="collection"         type="collectionRecordType"/>
+  <xsd:element name="work"               type="workRecordType"/> -->
   <xsd:element name="image"              type="recordType"/>
 
 
@@ -109,13 +109,13 @@
       </xsd:documentation>
     </xsd:annotation>
     <xsd:sequence minOccurs="1" maxOccurs="unbounded">
-      <xsd:element ref="collection" minOccurs="0" maxOccurs="unbounded"/>
-      <xsd:element ref="work"       minOccurs="0" maxOccurs="unbounded"/>
+<!--       <xsd:element ref="collection" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element ref="work"       minOccurs="0" maxOccurs="unbounded"/> -->
       <xsd:element ref="image"      minOccurs="0" maxOccurs="unbounded"/>
     </xsd:sequence>
   </xsd:complexType>
 
-  <xsd:complexType name="collectionRecordType">
+  <!-- <xsd:complexType name="collectionRecordType">
     <xsd:annotation>
       <xsd:documentation>
         Contains all the values belonging to an aggregate of work and image
@@ -133,9 +133,9 @@
         </xsd:sequence>
       </xsd:extension>
     </xsd:complexContent>
-  </xsd:complexType>
+  </xsd:complexType> -->
 
-  <xsd:complexType name="workRecordType">
+  <!-- <xsd:complexType name="workRecordType">
     <xsd:annotation>
       <xsd:documentation>
         Contains all the values belonging to a unique entity such as an object
@@ -152,7 +152,7 @@
         </xsd:sequence>
       </xsd:extension>
     </xsd:complexContent>
-  </xsd:complexType>
+  </xsd:complexType> -->
 
   <xsd:complexType name="recordType">
     <xsd:annotation>
