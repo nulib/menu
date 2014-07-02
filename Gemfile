@@ -55,3 +55,4 @@ group :staging, :production do
 end
 
 gem 'paperclip'
+gem 'pry'
