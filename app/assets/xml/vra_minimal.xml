@@ -1,7 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
 <vra:vra xmlns:madsrdf="http://www.loc.gov/mads/rdf/v1#"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:marc="http://www.loc.gov/MARC21/slim"
     xmlns:mods="http://www.loc.gov/mods/v3" xmlns:vra="http://www.vraweb.org/vracore4.htm"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xsi:schemaLocation="http://www.vraweb.org/vracore4.htm http://www.vraweb.org/projects/vracore4/vra-4.0-restricted.xsd">
+   <vra:image>
+      
+      <!--Agents-->
+       <vra:agentSet>
+         <vra:display></vra:display>
+         <vra:agent>
+            <vra:name type="corporate" vocab="lcnaf"></vra:name>
+            <vra:attribution/>
+            <vra:role vocab="RDA"/>
+         </vra:agent>
+         <vra:agent>
+            <vra:name type="corporate" vocab="lcnaf"></vra:name>
+         </vra:agent>
+      </vra:agentSet>
+
+      <!--Cultural Context-->
+      <vra:culturalContextSet>
+         <vra:display/>
+         <vra:culturalContext/>
+      </vra:culturalContextSet>
+
+      <!--Dates-->
+      <vra:dateSet>
+         <vra:display/>
+         <vra:date type="creation">
+            <vra:earliestDate></vra:earliestDate>
+         </vra:date>
+      </vra:dateSet>
+
+      <!--Description-->
+      <vra:descriptionSet>
+         <vra:display></vra:display>
+         <vra:notes></vra:notes>
+         <vra:description></vra:description>
+      </vra:descriptionSet>
+
+      <!--Inscription-->
+      <vra:inscriptionSet>
+         <vra:display/>
+         <vra:inscription>
+            <vra:text></vra:text>
+         </vra:inscription>
+      </vra:inscriptionSet>
+
+      <!--Location-->
+      <vra:locationSet>
+         <vra:display></vra:display>
+         <vra:location type="creation">
+            <vra:name type="geographic"></vra:name>
+         </vra:location>
+         <vra:location type="repository">
+            <vra:name type="geographic"></vra:name>
+         </vra:location>
+         <vra:location>
+            <vra:refid source="DIL"></vra:refid>
+            <vra:refid source="Voyager"></vra:refid>
+         </vra:location>
+      </vra:locationSet>
+
+      <!--Materials-->
+      <vra:materialSet>
+         <vra:display></vra:display>
+         <vra:material></vra:material>
+      </vra:materialSet>
+
+      <!--Measurements-->
+      <vra:measurementsSet>
+         <vra:display></vra:display>
+         <vra:measurements></vra:measurements>
+      </vra:measurementsSet>
+
+      <!--Relation-->
+      <vra:relationSet>
+         <vra:display/>
+         <vra:relation pref="true" type="imageOf" relids="123456789"/>
+      </vra:relationSet>
+
+      <!--Rights-->
+      <vra:rightsSet>
+         <vra:display></vra:display>
+         <vra:rights>
+            <vra:rightsHolder></vra:rightsHolder>
+            <vra:text></vra:text>
+         </vra:rights>
+      </vra:rightsSet>
+
+      <!--Style Period-->
+      <vra:stylePeriodSet>
+         <vra:display/>
+         <vra:stylePeriod/>
+      </vra:stylePeriodSet>
+
+      <!--Subjects-->
+      <vra:subjectSet>
+         <vra:display></vra:display>
+         <vra:subject>
+            <vra:term type="geographicPlace" vocab="lcnaf"></vra:term>
+         </vra:subject>
+         <vra:subject>
+            <vra:term type="personalName" vocab="lcnaf"></vra:term>
+         </vra:subject>
+         <vra:subject>
+            <vra:term type="personalName" vocab="lcnaf"></vra:term>
+         </vra:subject>
+         <vra:subject>
+            <vra:term type="otherTopic"></vra:term>
+         </vra:subject>
+         <vra:subject>
+            <vra:term type="descriptiveTopic" vocab="lcsh"></vra:term>
+         </vra:subject>
+      </vra:subjectSet>
+
+      <!--Technique-->
+      <vra:techniqueSet>
+         <vra:display/>
+         <vra:technique/>
+      </vra:techniqueSet>
+
+      <!--Textref-->
+      <vra:textrefSet>
+         <vra:display/>
+         <vra:textref/>
+      </vra:textrefSet>
+
+      <!-- Titles -->
+      <vra:titleSet>
+         <vra:display></vra:display>
+         <vra:title pref="true"></vra:title>
+      </vra:titleSet>
+
+      <!--Work Type-->
+      <vra:worktypeSet>
+         <vra:display></vra:display>
+         <vra:worktype></vra:worktype>
+      </vra:worktypeSet>
+   </vra:image>
 </vra:vra>
+    
