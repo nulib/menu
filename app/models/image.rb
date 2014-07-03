@@ -10,6 +10,6 @@ class Image < ActiveRecord::Base
   private
 
     def add_minimal_xml
-      self.xml = File.read( "#{Rails.root}/app/assets/xml/vra_minimal.xml" ) if self.xml.nil?
+      self.image_xml = File.read( "#{Rails.root}/app/assets/xml/vra_minimal.xml" ) if self.image_xml.nil?
     end
 end

@@ -12,7 +12,7 @@ RSpec.describe ImagesController, :type => :controller do
 
   context "with an existing image" do
     before :each do
-      @image = Image.create!( xml: '<vra></vra>', job_id: 'test' )
+      @image = Image.create!( image_xml: '<vra></vra>', job_id: 'test' )
     end
 
     describe "DESTROY image" do
@@ -51,7 +51,7 @@ RSpec.describe ImagesController, :type => :controller do
         request.env['RAW_POST_DATA'] =  '<vra>New</vra>'
         post(:save_xml, id: @image, format: 'xml' )
         @image.reload
-        expect(@image.xml.to_s).to eq('<vra>New</vra>')
+        expect(@image.image_xml.to_s).to eq('<vra>New</vra>')
       end
 
     end
