@@ -26,7 +26,6 @@ class ImagesController < ApplicationController
 
   # GET /images/1/edit
   def edit
-    binding.pry
   end
 
   # POST /images
@@ -82,7 +81,6 @@ class ImagesController < ApplicationController
   end
 
   def publish_record
-    binding.pry
     @image.xml = 
 '<vra:vra xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:marc="http://www.loc.gov/MARC21/slim" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:vra="http://www.vraweb.org/vracore4.htm" xsi:schemaLocation="http://www.vraweb.org/vracore4.htm http://www.vraweb.org/projects/vracore4/vra-4.0-restricted.xsd">
     <vra:image>
