@@ -15,7 +15,7 @@ class ImagesController < ApplicationController
   def show
     respond_to do |format|
       format.html
-      format.xml { render xml: @image.xml }
+      format.xml { render xml: @image.image_xml }
     end
   end
 
@@ -60,7 +60,7 @@ class ImagesController < ApplicationController
 
   # POST /images/1.xml
   def save_xml
-    @image.xml = request.body.read
+    @image.image_xml = request.body.read
     respond_to do |format|
       if @image.save
         format.xml { redirect_to @image, notice: 'Image was successfully updated.'  }
@@ -81,7 +81,7 @@ class ImagesController < ApplicationController
   end
 
   def publish_record
-    @image.xml = 
+    @image.image_xml = 
 '<vra:vra xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:marc="http://www.loc.gov/MARC21/slim" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:vra="http://www.vraweb.org/vracore4.htm" xsi:schemaLocation="http://www.vraweb.org/vracore4.htm http://www.vraweb.org/projects/vracore4/vra-4.0-restricted.xsd">
     <vra:image>
         <!--Agents-->
@@ -188,7 +188,7 @@ class ImagesController < ApplicationController
 </vra:vra>'
     url = URI.parse( 'https://127.0.0.1:3333/multiresimages/create_update_fedora_object' )
     req = Net::HTTP::Post.new( url.path )
-    req.body = @image.xml
+    req.body = @image.image_xml
     sock = Net::HTTP.new( url.host, 3333 )
     sock.use_ssl = true
     # sock.cert_store = OpenSSL::X509::Store.new
