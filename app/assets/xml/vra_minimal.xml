@@ -79,7 +79,7 @@
       <!--Relation-->
       <vra:relationSet>
          <vra:display/>
-         <vra:relation pref="true" type="imageOf" relids="123456789"/>
+         <vra:relation pref="true" type="imageOf" relids=""/>
       </vra:relationSet>
 
       <!--Rights-->
