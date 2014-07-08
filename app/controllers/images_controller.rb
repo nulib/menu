@@ -83,39 +83,52 @@ class ImagesController < ApplicationController
   def publish_record
     # Initial vra:image
     # byebug
-    response = dil_api_call( @image.image_xml )
+
+    # Transform image xml to work xml
+    work_xml_doc = Nokogiri::XML( @image.image_xml )
+    work_xml_doc.at_xpath( '//vra:image', vra:  'http://www.vraweb.org/vracore4.htm' ).name = "work"
+    work_xml_doc.at_xpath( '//vra:relationSet/vra:relation', vra:  'http://www.vraweb.org/vracore4.htm' )[ 'type' ] = 'imageIs'
+    @image.work_xml = work_xml_doc.to_xml
+    @image.save
+
+    # Initial vra:work
+    response = dil_api_call( @image.work_xml )
     logger.debug response
-    xml_doc = Nokogiri::XML( response )
-    @image.image_pid = xml_doc.at_xpath( '//pid' ).text
+    response_xml_doc = Nokogiri::XML( response )
+    @image.work_pid = response_xml_doc.at_xpath( '//pid' ).text
     @image.save
     
-    # Transform image xml to work xml
-    # xml_doc = Nokogiri::XML( @image.image_xml )
-    # xml_doc.at_xpath( '//vra:image', vra:  'http://www.vraweb.org/vracore4.htm' ).name = "work"
-    # xml_doc.at_xpath( '//vra:relationSet/vra:relation', vra:  'http://www.vraweb.org/vracore4.htm' )[ 'type' ] = 'imageIs'
-    # xml_doc.at_xpath( '//vra:relationSet/vra:relation', vra:  'http://www.vraweb.org/vracore4.htm' )[ 'relids' ] = @image.image_pid
-    # @image.work_xml = xml_doc.to_xml
-    # @image.save
-    # # Initial vra:work
-    # response = dil_api_call( @image.work_xml )
-    # logger.debug response
-    
-    # # Update image xml to refer to work
-    # xml_doc = Nokogiri::XML( @image.image_xml )
-    # # xml_doc.at_xpath( '//vra:image', vra:  'http://www.vraweb.org/vracore4.htm' )[ 'refid' ] = @image.image_pid
-    # xml_doc.at_xpath( '//vra:relationSet/vra:relation', vra:  'http://www.vraweb.org/vracore4.htm' )[ 'type' ] = 'imageOf'
-    # xml_doc.at_xpath( '//vra:relationSet/vra:relation', vra:  'http://www.vraweb.org/vracore4.htm' )[ 'relids' ] = @image.work_pid    
-    # @image.image_xml = xml_doc.to_xml
-    # @image.save
-    # response = dil_api_call( @image.image_xml )
-    # logger.debug response
-    
+    # Update image xml to refer to work
+    image_xml_doc = Nokogiri::XML( @image.image_xml )
+    # xml_doc.at_xpath( '//vra:image', vra:  'http://www.vraweb.org/vracore4.htm' )[ 'refid' ] = @image.image_pid
+    image_xml_doc.at_xpath( '//vra:relationSet/vra:relation', vra:  'http://www.vraweb.org/vracore4.htm' )[ 'type' ] = 'imageOf'
+    image_xml_doc.at_xpath( '//vra:relationSet/vra:relation', vra:  'http://www.vraweb.org/vracore4.htm' )[ 'relids' ] = @image.work_pid    
+    @image.image_xml = image_xml_doc.to_xml
+    @image.save
+    response = dil_api_call( @image.image_xml )
+    logger.debug response
+    response_xml_doc = Nokogiri::XML( response )
+    @image.image_pid = response_xml_doc.at_xpath( '//pid' ).text
+    @image.save
+
+    work_xml_doc = Nokogiri::XML( @image.work_xml )
+    work_xml_doc.at_xpath( '//vra:relationSet/vra:relation', vra:  'http://www.vraweb.org/vracore4.htm' )[ 'relids' ] = @image.image_pid
+    @image.save
+    response = dil_api_call( @image.image_xml )
+    logger.debug response
+
     # xml_doc = Nokogiri::XML( @image.image_xml )
     # xml_doc.at_xpath( '//vra:image', vra:  'http://www.vraweb.org/vracore4.htm' )[ 'refid' ] = @image.work_pid
     # @image.work_xml = xml_doc.to_xml
     # @image.save
     # response = dil_api_call( @image.work_xml)
     # logger.debug response
+    
+    # response = dil_api_call( @image.image_xml )
+    # logger.debug response
+    # xml_doc = Nokogiri::XML( response )
+    # @image.image_pid = xml_doc.at_xpath( '//pid' ).text
+    # @image.save
     
     redirect_to root_path
   end
