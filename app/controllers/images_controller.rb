@@ -113,12 +113,20 @@ class ImagesController < ApplicationController
 
     work_xml_doc = Nokogiri::XML( @image.work_xml )
     work_xml_doc.at_xpath( '//vra:relationSet/vra:relation', vra:  'http://www.vraweb.org/vracore4.htm' )[ 'relids' ] = @image.image_pid
+    work_xml_doc.at_xpath( '//vra:work', vra:  'http://www.vraweb.org/vracore4.htm' )[ 'refid' ] = @image.work_pid
+    @image.work_xml = work_xml_doc.to_xml
+    @image.save
+    response = dil_api_call( @image.work_xml )
+    logger.debug response
+
+    image_xml_doc = Nokogiri::XML( @image.image_xml )
+    image_xml_doc.at_xpath( '//vra:image', vra:  'http://www.vraweb.org/vracore4.htm' )[ 'refid' ] = @image.image_pid
+    @image.image_xml = image_xml_doc.to_xml
     @image.save
     response = dil_api_call( @image.image_xml )
     logger.debug response
 
     # xml_doc = Nokogiri::XML( @image.image_xml )
-    # xml_doc.at_xpath( '//vra:image', vra:  'http://www.vraweb.org/vracore4.htm' )[ 'refid' ] = @image.work_pid
     # @image.work_xml = xml_doc.to_xml
     # @image.save
     # response = dil_api_call( @image.work_xml)
