@@ -82,25 +82,25 @@ class ImagesController < ApplicationController
 
   def publish_record
 
-    @image.work_xml = @image.send(:transform_image_into_work, @image.image_xml )
+    @image.work_xml = ImagesHelper.transform_image_into_work( @image.image_xml )
     @image.save
 
     response = dil_api_call( @image.work_xml )
-    @image.work_pid = @image.send(:get_pid_from_response, response )
+    @image.work_pid = ImagesHelper.get_pid_from_response( response )
     @image.save
     
-    @image.image_xml = @image.send(:add_relation_to_image, @image.image_xml )
+    @image.image_xml = ImagesHelper.add_relation_to_image( @image.image_xml, @image.work_pid )
     @image.save
 
     response = dil_api_call( @image.image_xml )
-    @image.image_pid = @image.send(:get_pid_from_response, response )
+    @image.image_pid = ImagesHelper.get_pid_from_response( response )
     @image.save
 
-    @image.work_xml = @image.send(:add_refid_and_relation_to_work, @image.work_xml )
+    @image.work_xml = ImagesHelper.add_refid_and_relation_to_work( @image.work_xml, @image.image_pid, @image.work_pid )
     @image.save
 
     response = dil_api_call( @image.work_xml )
-    @image.image_xml = @image.send(:add_refid_to_image, @image.image_xml )
+    @image.image_xml = ImagesHelper.add_refid_to_image( @image.image_xml, @image.image_pid )
     @image.save
 
     response = dil_api_call( @image.image_xml )
