@@ -81,29 +81,10 @@ class ImagesController < ApplicationController
   end
 
   def publish_record
-
-    @image.work_xml = ImagesHelper.transform_image_into_work( @image.image_xml )
-    @image.save
-
-    response = dil_api_call( @image.work_xml )
-    @image.work_pid = ImagesHelper.get_pid_from_response( response )
-    @image.save
-    
-    @image.image_xml = ImagesHelper.add_relation_to_image( @image.image_xml, @image.work_pid )
-    @image.save
-
     response = dil_api_call( @image.image_xml )
-    @image.image_pid = ImagesHelper.get_pid_from_response( response )
+    response_xml_doc = Nokogiri::XML( response )
+    @image.image_pid = response_xml_doc.at_xpath( '//pid' ).text
     @image.save
-
-    @image.work_xml = ImagesHelper.add_refid_and_relation_to_work( @image.work_xml, @image.image_pid, @image.work_pid )
-    @image.save
-
-    response = dil_api_call( @image.work_xml )
-    @image.image_xml = ImagesHelper.add_refid_to_image( @image.image_xml, @image.image_pid )
-    @image.save
-
-    response = dil_api_call( @image.image_xml )
     
     redirect_to root_path
   end
@@ -124,7 +105,7 @@ class ImagesController < ApplicationController
       type = xml_doc.at_xpath( '//vra:image', vra: 'http://www.vraweb.org/vracore4.htm' ) ||
              xml_doc.at_xpath( '//vra:work', vra: 'http://www.vraweb.org/vracore4.htm' )
       pid = xml_doc.at_xpath( "//vra:#{ type.name }", vra: 'http://www.vraweb.org/vracore4.htm' )[ 'refid' ]
-      url = URI.parse( 'https://127.0.0.1:3333/multiresimages/create_update_fedora_object' )
+      url = URI.parse( 'https://127.0.0.1:3333/multiresimages/menu_publish' )
       url += "?pid=#{pid}" if pid
       req = Net::HTTP::Post.new( url.path )
       req.body = xml
