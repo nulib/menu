@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140703162747) do
+ActiveRecord::Schema.define(version: 20140716164704) do
 
   create_table "images", force: true do |t|
     t.string   "filename"
@@ -24,7 +24,6 @@ ActiveRecord::Schema.define(version: 20140703162747) do
     t.integer  "proxy_file_size"
     t.datetime "proxy_updated_at"
     t.string   "job_id"
-    t.text     "work_xml"
     t.string   "image_pid"
     t.string   "work_pid"
   end
