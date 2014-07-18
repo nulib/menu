@@ -56,3 +56,4 @@ end
 
 gem 'paperclip'
 gem 'pry'
+gem 'rest-client'

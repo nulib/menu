@@ -92,6 +92,7 @@ GEM
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (2.9.1)
+    netrc (0.7.7)
     nokogiri (1.6.2.1)
       mini_portile (= 0.6.0)
     paperclip (4.1.1)
@@ -127,6 +128,9 @@ GEM
     rdoc (4.1.1)
       json (~> 1.4)
     ref (1.0.5)
+    rest-client (1.7.2)
+      mime-types (>= 1.16, < 3.0)
+      netrc (~> 0.7)
     rspec-core (3.0.1)
       rspec-support (~> 3.0.0)
     rspec-expectations (3.0.1)
@@ -207,6 +211,7 @@ DEPENDENCIES
   pg
   pry
   rails (= 4.1.1)
+  rest-client
   rspec-rails (~> 3)
   sass-rails (~> 4.0)
   sdoc

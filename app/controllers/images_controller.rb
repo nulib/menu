@@ -1,4 +1,5 @@
 require 'pry'
+require 'rest-client'
 
 class ImagesController < ApplicationController
   before_action :set_image, only: [:show, :edit, :update, :destroy, :save_xml, :publish_record]
@@ -81,11 +82,11 @@ class ImagesController < ApplicationController
   end
 
   def publish_record
-    response = dil_api_call( @image.image_xml )
+    response = dil_api_call( @image.image_xml, @image.filename )
     response_xml_doc = Nokogiri::XML( response )
     @image.image_pid = response_xml_doc.at_xpath( '//pid' ).text
     @image.save
-    
+
     redirect_to root_path
   end
 
@@ -100,22 +101,19 @@ class ImagesController < ApplicationController
       params.require(:image).permit(:filename, :location, :proxy, :job_id)
     end
 
-    def dil_api_call( xml )
+    def dil_api_call( xml, location )
       xml_doc = Nokogiri::XML( xml )
       type = xml_doc.at_xpath( '//vra:image', vra: 'http://www.vraweb.org/vracore4.htm' ) ||
              xml_doc.at_xpath( '//vra:work', vra: 'http://www.vraweb.org/vracore4.htm' )
       pid = xml_doc.at_xpath( "//vra:#{ type.name }", vra: 'http://www.vraweb.org/vracore4.htm' )[ 'refid' ]
-      url = URI.parse( 'https://127.0.0.1:3333/multiresimages/menu_publish' )
-      url += "?pid=#{pid}" if pid
-      req = Net::HTTP::Post.new( url.path )
-      req.body = xml
-      sock = Net::HTTP.new( url.host, 3333 )
-      sock.use_ssl = true
-      # sock.cert_store = OpenSSL::X509::Store.new
-      # sock.cert_store.set_default_paths
-      sock.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      res = ''
-      sock.start { |http| res = http.request( req ) }
-      res.body
+      
+
+      RestClient::Resource.new(
+        'https://127.0.0.1:3333/multiresimages/menu_publish',
+        verify_ssl: OpenSSL::SSL::VERIFY_NONE ,
+
+      ).post xml: xml , location: location
+
+
     end
 end
