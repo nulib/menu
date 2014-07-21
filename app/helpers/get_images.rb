@@ -28,10 +28,10 @@ module GetImages
     path = file.split( '/' )
 
     if File.file?( file ) && path.size == @path_length + 2
-      i = Image.find_by( filename: file, job_id: path[ -2 ] ) #, proxy: f
+      i = Image.find_by( filename: File.basename( file ), job_id: path[ -2 ], location: File.dirname( file ) )
       if i == nil
         f = File.open( file )
-        i = Image.create( filename: file, job_id: path[ -2 ], proxy: f )
+        i = Image.create( filename: File.basename( file ), job_id: path[ -2 ], proxy: f, location: File.dirname( file ) )
         f.close
       end
       return i.id
