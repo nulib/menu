@@ -2,10 +2,14 @@ class Image < ActiveRecord::Base
   has_attached_file :proxy, :styles => { :thumb => [ "100x100", :jpg ], :medium => ["1000x1000", :jpg] }
 
   before_create :add_minimal_xml
-  
+
   validates_attachment_content_type :proxy, :content_type => "image/tiff"
   validates :job_id, :presence => true
   validates :filename, :uniqueness => true
+
+  def path
+    "#{location}/#{filename}"
+  end
 
   private
 
@@ -28,7 +32,7 @@ class Image < ActiveRecord::Base
     def add_relation_to_image( xml )
       image_xml_doc = Nokogiri::XML( xml )
       image_xml_doc.at_xpath( '//vra:relationSet/vra:relation', vra:  'http://www.vraweb.org/vracore4.htm' )[ 'type' ] = 'imageOf'
-      image_xml_doc.at_xpath( '//vra:relationSet/vra:relation', vra:  'http://www.vraweb.org/vracore4.htm' )[ 'relids' ] = work_pid    
+      image_xml_doc.at_xpath( '//vra:relationSet/vra:relation', vra:  'http://www.vraweb.org/vracore4.htm' )[ 'relids' ] = work_pid
       image_xml_doc.to_xml.strip
     end
 

@@ -82,7 +82,7 @@ class ImagesController < ApplicationController
   end
 
   def publish_record
-    response = dil_api_call( @image.image_xml, @image.filename )
+    response = dil_api_call( @image.image_xml, @image.path )
     response_xml_doc = Nokogiri::XML( response )
     @image.image_pid = response_xml_doc.at_xpath( '//pid' ).text
     @image.save
@@ -101,18 +101,18 @@ class ImagesController < ApplicationController
       params.require(:image).permit(:filename, :location, :proxy, :job_id)
     end
 
-    def dil_api_call( xml, location )
+    def dil_api_call( xml, path )
       xml_doc = Nokogiri::XML( xml )
       type = xml_doc.at_xpath( '//vra:image', vra: 'http://www.vraweb.org/vracore4.htm' ) ||
              xml_doc.at_xpath( '//vra:work', vra: 'http://www.vraweb.org/vracore4.htm' )
       pid = xml_doc.at_xpath( "//vra:#{ type.name }", vra: 'http://www.vraweb.org/vracore4.htm' )[ 'refid' ]
-      
+
 
       RestClient::Resource.new(
         'https://127.0.0.1:3333/multiresimages/menu_publish',
         verify_ssl: OpenSSL::SSL::VERIFY_NONE ,
 
-      ).post xml: xml , location: location
+      ).post xml: xml , path: path
 
 
     end
