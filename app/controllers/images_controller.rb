@@ -83,6 +83,7 @@ class ImagesController < ApplicationController
   def publish_record
     response = dil_api_call( @image.image_xml )
     response_xml_doc = Nokogiri::XML( response )
+    logger.debug response
     @image.image_pid = response_xml_doc.at_xpath( '//pid' ).text
     @image.save
     
