@@ -85,8 +85,12 @@ class ImagesController < ApplicationController
     response = dil_api_call( @image.image_xml, @image.path )
     response_xml_doc = Nokogiri::XML( response )
     logger.debug response
-    @image.image_pid = response_xml_doc.at_xpath( '//pid' ).text
-    @image.save
+    if response_xml_doc.at_xpath( '//pid' )
+      @image.image_pid = response_xml_doc.at_xpath( '//pid' ).text
+      @image.save
+    else
+      flash[:error] = "Image not saved"
+    end
 
     redirect_to root_path
   end
