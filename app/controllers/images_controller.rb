@@ -108,10 +108,6 @@ class ImagesController < ApplicationController
 
     def dil_api_call( xml, path )
       xml_doc = Nokogiri::XML( xml )
-      type = xml_doc.at_xpath( '//vra:image', vra: 'http://www.vraweb.org/vracore4.htm' ) ||
-             xml_doc.at_xpath( '//vra:work', vra: 'http://www.vraweb.org/vracore4.htm' )
-      pid = xml_doc.at_xpath( "//vra:#{ type.name }", vra: 'http://www.vraweb.org/vracore4.htm' )[ 'refid' ]
-
 
       RestClient::Resource.new(
         'https://127.0.0.1:3333/multiresimages/menu_publish',
