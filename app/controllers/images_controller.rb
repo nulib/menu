@@ -107,7 +107,6 @@ class ImagesController < ApplicationController
     end
 
     def dil_api_call( xml, path )
-      xml_doc = Nokogiri::XML( xml )
 
       RestClient::Resource.new(
         'https://127.0.0.1:3333/multiresimages/menu_publish',
