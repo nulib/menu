@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.1.1'
+gem 'rails', '~> 4.1'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0'
@@ -50,8 +50,14 @@ group :development, :test do
   gem 'capybara', '~> 2'
 end
 
+group :test do
+  gem 'webmock'
+end
+
 group :staging, :production do
   gem 'pg'
 end
 
 gem 'paperclip'
+gem 'pry'
+gem 'rest-client'

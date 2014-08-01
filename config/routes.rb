@@ -8,6 +8,8 @@ Menu::Application.routes.draw do
   root 'images#index'
   match 'images/:id', to: 'images#save_xml', via: 'post'
 
+  get 'images/:id/edit/publish', to: 'images#publish_record', as: :publish_record
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
