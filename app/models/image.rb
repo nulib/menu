@@ -11,22 +11,36 @@ class Image < ActiveRecord::Base
     "#{location}/#{filename}"
   end
 
+  def valid_vra?
+    require 'open-uri'
+
+    xsd = Nokogiri::XML::Schema(open("http://www.loc.gov/standards/vracore/vra-strict.xsd").read)
+    doc = Nokogiri::XML(self.image_xml)
+
+    xsd.validate(doc).each do |error|
+      return false
+    end
+
+    return true
+  end
+
+
   def validate_vra
     require 'open-uri'
 
     xsd = Nokogiri::XML::Schema(open("http://www.loc.gov/standards/vracore/vra-strict.xsd").read)
     doc = Nokogiri::XML(self.image_xml)
 
-    invalid = ""
+    invalid = []
     xsd.validate(doc).each do |error|
-      invalid << error.message
+      invalid << "Validation error: #{error.message}"
     end
 
     if invalid
-      raise invalid
+      return invalid
     end
-
   end
+
 
   private
 

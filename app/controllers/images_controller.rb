@@ -82,14 +82,22 @@ class ImagesController < ApplicationController
   end
 
   def publish_record
-    response = dil_api_call( @image.image_xml, @image.path )
-    response_xml_doc = Nokogiri::XML( response )
-    logger.debug response
-    if response_xml_doc.at_xpath( '//pid' )
-      @image.image_pid = response_xml_doc.at_xpath( '//pid' ).text
-      @image.save
+
+    if @image.valid_vra?
+      response = dil_api_call( @image.image_xml, @image.path )
+      response_xml_doc = Nokogiri::XML( response )
+      logger.debug response
+      if response_xml_doc.at_xpath( '//pid' )
+        @image.image_pid = response_xml_doc.at_xpath( '//pid' ).text
+        @image.save
+      else
+        flash_messages = [ response_xml_doc.at_xpath( '//description' ).text ]
+        flash_messages << "Image not saved"
+        flash[:danger] = flash_messages
+      end
     else
-      flash[:danger] = "Image not saved"
+      errors = @image.validate_vra
+      flash[:danger] = errors
     end
 
     redirect_to root_path
