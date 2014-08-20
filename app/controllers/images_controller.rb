@@ -89,7 +89,7 @@ class ImagesController < ApplicationController
       @image.image_pid = response_xml_doc.at_xpath( '//pid' ).text
       @image.save
     else
-      flash[:error] = "Image not saved"
+      flash[:danger] = "Image not saved"
     end
 
     redirect_to root_path

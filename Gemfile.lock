@@ -214,6 +214,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0)
   jbuilder (~> 1.2)
   jquery-rails
+  nokogiri
   paperclip
   pg
   pry

@@ -39,8 +39,8 @@ end
 gem 'capistrano', '~> 3.2'
 gem 'capistrano-rails'
 gem 'capistrano-rvm'
-
 gem 'bootstrap-sass', '~> 3'
+gem 'nokogiri'
 
 group :development, :test do
   gem 'sqlite3'
