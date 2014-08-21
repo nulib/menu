@@ -17,9 +17,7 @@ class Image < ActiveRecord::Base
   end
 
   def valid_vra?
-
-
-    xsd = Nokogiri::XML::Schema()
+    xsd = Nokogiri::XML::Schema(VRA_SCHEMA)
     doc = Nokogiri::XML(self.image_xml)
 
     xsd.validate(doc).each do |error|
@@ -31,10 +29,7 @@ class Image < ActiveRecord::Base
 
 
   def validate_vra
-    #require 'open-uri'
-
-    xsd = Nokogiri::XML::Schema(File.open("#{Rails.root}/app/assets/xml/vra-strict.xsd"))
-    #xsd = Nokogiri::XML::Schema(open("http://www.loc.gov/standards/vracore/vra-strict.xsd").read)
+    xsd = Nokogiri::XML::Schema(VRA_SCHEMA)
     doc = Nokogiri::XML(self.image_xml)
 
     invalid = []
