@@ -90,17 +90,19 @@ class ImagesController < ApplicationController
       if response_xml_doc.at_xpath( '//pid' )
         @image.image_pid = response_xml_doc.at_xpath( '//pid' ).text
         @image.save
+        redirect_to root_path
       else
         flash_messages = [ response_xml_doc.at_xpath( '//description' ).text ]
         flash_messages << "Image not saved"
         flash[:danger] = flash_messages
+        render action: "edit" and return
       end
     else
       errors = @image.validate_vra
       flash[:danger] = errors
+      render action: "edit" and return
     end
 
-    redirect_to root_path
   end
 
   private
