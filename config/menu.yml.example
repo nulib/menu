@@ -1,0 +1,17 @@
+defaults: &defaults
+  SECRET_TOKEN: 'secret_token_here'
+
+development:
+  <<: *defaults
+  images_dir: path/to/images
+
+test:
+  <<: *defaults
+
+staging:
+  <<: *defaults
+  images_dir: path/to/images
+
+production:
+  <<: *defaults
+  images_dir: path/to/images

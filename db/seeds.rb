@@ -6,6 +6,3 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-10.times do |x|
-  Image.create!( filename: "image#{x}.tif", location: "gandalf" )
-end

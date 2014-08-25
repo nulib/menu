@@ -8,8 +8,23 @@
 </head>
 <body>
 
-<%= yield %>
-<%= debug(params) if Rails.env.development? %>
+  <% flash.each do |key, value| %>
+    <div class="alert alert-<%= key %> role="alert">
+      <ul>
+      <% if value.respond_to?('each') %>
+        <% value.each do |m| %>
+          <li><%= m %></li>
+        <% end %>
+      <% else %>
+        <li><%= value %></li>
+      <% end %>
+    </div>
+  <% end %>
+
+
+  <%= yield %>
+  <%= debug(params) if Rails.env.development? %>
+  <%= "Server restarted at: " + Menu::Application.config.build_identifier if Rails.env.development? || Rails.env.staging? %>
 
 </body>
 </html>

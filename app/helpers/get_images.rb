@@ -1,27 +1,40 @@
 module GetImages
 
-  def self.current_images( location )
-    file_list = get_file_list( location )
-    image_list = valid_image_list( file_list )
-    save_valid_image_list( image_list )
-  end
+  @path_length = MENU_CONFIG["images_dir"].split( '/' ).count
 
-  def self.get_file_list( location )
-    file_list = []
-    Dir.entries( location ).each do |file|
-      file_list << Image.new( filename: file, location: location )
+  def self.current_images
+    location = MENU_CONFIG["images_dir"]
+
+    imgs = []
+
+    Dir.glob( "#{location}/**/*" ).each do |file|
+      imgs << find_or_create_image(file)
     end
-    file_list
+
+    remove_stale_images(imgs)
+
   end
 
-  def self.valid_image_list( file_list )
-    file_list.delete_if { |file| !Image.valid_file?( file ) }
-    file_list.compact
+
+  def self.remove_stale_images( file_system_image_ids )
+    stale_records = Image.where.not(id: file_system_image_ids)
+    stale_records.each do |i|
+      i.destroy
+    end
   end
 
-  def self.save_valid_image_list( image_list )
-    image_list.each do |image|
-      image.save!
+
+  def self.find_or_create_image( file )
+    path = file.split( '/' )
+
+    if File.file?( file ) && path.size == @path_length + 2
+      i = Image.find_by( filename: File.basename( file ), job_id: path[ -2 ], location: File.dirname( file ) )
+      if i == nil
+        f = File.open( file )
+        i = Image.create( filename: File.basename( file ), job_id: path[ -2 ], proxy: f, location: File.dirname( file ) )
+        f.close
+      end
+      return i.id
     end
   end
 
