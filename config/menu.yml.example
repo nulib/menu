@@ -1,4 +1,5 @@
 defaults: &defaults
+  SECRET_TOKEN: 'secret_token_here'
 
 development:
   <<: *defaults
