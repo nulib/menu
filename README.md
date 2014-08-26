@@ -14,3 +14,7 @@ Server configuration:
 - mySQL
 
 You'll need to install ImageMagick as well. The easiest way to use homebrew: brew install --with-libtiff imagemagick
+
+Attribution
+------
+menu uses the [jquery.xmleditor](https://github.com/UNC-Libraries/jquery.xmleditor), developed at UNC Chapel Hill Libraries by Ben Pennell and Mike Daines.
