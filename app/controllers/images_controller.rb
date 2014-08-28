@@ -119,7 +119,7 @@ class ImagesController < ApplicationController
     def dil_api_call( xml, path )
 
       RestClient::Resource.new(
-        'https://127.0.0.1:3333/multiresimages/menu_publish',
+        MENU_CONFIG["dil_url"],
         verify_ssl: OpenSSL::SSL::VERIFY_NONE ,
 
       ).post xml: xml , path: path
