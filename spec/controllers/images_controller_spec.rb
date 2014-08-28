@@ -61,10 +61,6 @@ RSpec.describe ImagesController, :type => :controller do
     context "with valid vra" do
       before do
         @controller = ImagesController.new
-
-        stub_request(:get, "http://www.loc.gov/standards/vracore/vra-strict.xsd").
-  #with(:headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'User-Agent'=>'Ruby'}).
-          to_return(:status => 200, :body => "", :headers => {})
         @image = Image.create( job_id: 'test' )
         stub_request(:post, "https://127.0.0.1:3333/multiresimages/menu_publish").
              to_return(:status => 200, :body => "<response><returnCode>Publish successful</returnCode><pid>inu:dil-8a21a816-ac14-493c-a571-2be8e6dd4745</pid></response>", :headers => {})
