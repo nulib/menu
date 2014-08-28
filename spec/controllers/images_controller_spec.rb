@@ -16,28 +16,28 @@ RSpec.describe ImagesController, :type => :controller do
     end
 
     describe "DESTROY image" do
-  
+
       it "deletes the Image" do
-        expect do 
+        expect do
           delete(:destroy, :id => @image.to_param)
         end.to change(Image, :count).by(-1)
       end
     end
-  
+
     describe "UPDATE image" do
-  
+
       it "locates the requested image" do
         put(:update, id: @image, image: {filename: 'different.tif', location: 'gandalf2'})
         expect(assigns(:image)).to eq(@image)
       end
-  
+
       it "changes the images's attributes" do
         put(:update, id: @image, image: {filename: 'different.tif', location: 'gandalf2'})
         @image.reload
         expect(@image.filename).to eq('different.tif')
         expect(@image.location).to eq('gandalf2')
       end
-  
+
       it "redirects to the updated image" do
         put(:update, id: @image, image: {filename: 'different.tif', location: 'gandalf2'})
         expect(response).to redirect_to(@image)
@@ -47,7 +47,7 @@ RSpec.describe ImagesController, :type => :controller do
     describe "SAVE_XML image" do
 
       it "saves the edited xml to the image object" do
-        request.env['content_type'] = 'application/xml' 
+        request.env['content_type'] = 'application/xml'
         request.env['RAW_POST_DATA'] =  '<vra>New</vra>'
         post(:save_xml, id: @image, format: 'xml' )
         @image.reload
@@ -93,6 +93,6 @@ RSpec.describe ImagesController, :type => :controller do
       end
     end
 
-    
+
   end
 end
