@@ -14,13 +14,7 @@ class Image < ActiveRecord::Base
   end
 
   def valid_vra?
-    doc = Nokogiri::XML(self.image_xml)
-
-    XSD.validate(doc).each do |error|
-      return false
-    end
-
-    return true
+    true if validate_vra
   end
 
 
@@ -32,8 +26,10 @@ class Image < ActiveRecord::Base
       invalid << "Validation error: #{error.message}"
     end
 
-    if invalid
-      return invalid
+    invalid.each do |error|
+      next if error =~ /is not a valid value of the list type 'xs:IDREFS'/
+      next if error =~ /is not a valid value of the atomic type 'xs:IDREF'/
+      raise error
     end
   end
 

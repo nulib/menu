@@ -62,6 +62,10 @@ RSpec.describe ImagesController, :type => :controller do
       before do
         @controller = ImagesController.new
         @image = Image.create( job_id: 'test' )
+        doc = Nokogiri::XML( @image.image_xml )
+        doc.xpath( '//vra:earliestDate' )[ 0 ].content = '0000'
+        @image.image_xml = doc.to_s
+        @image.save
         stub_request(:post, "https://127.0.0.1:3333/multiresimages/menu_publish").
              to_return(:status => 200, :body => "<response><returnCode>Publish successful</returnCode><pid>inu:dil-8a21a816-ac14-493c-a571-2be8e6dd4745</pid></response>", :headers => {})
       end
@@ -87,9 +91,15 @@ RSpec.describe ImagesController, :type => :controller do
         stub_request(:post, "https://127.0.0.1:3333/multiresimages/menu_publish").
              to_return(:status => 200, :body => "<response><returnCode>Error</returnCode><description>Failed record</description></response>", :headers => {})
         @image = Image.create( job_id: 'test' )
+        doc = Nokogiri::XML( @image.image_xml )
+        doc.xpath( '//vra:earliestDate' )[ 0 ].content = '0000'
+        @image.image_xml = doc.to_s
+        @image.save
 
         response = get :publish_record, id: @image.id
-        expect( flash[:error] ).to eq( "Image not saved" )
+        debugger
+        #expect( flash[:error] ).to eq( "Image not saved" )
+        expect( flash[ :danger ]).to include( "Image not saved" )
       end
     end
 
