@@ -83,7 +83,7 @@ class ImagesController < ApplicationController
 
   def publish_record
 
-    # if @image.valid_vra?
+    if @image.valid_vra?
       response = dil_api_call( @image.image_xml, @image.path )
       response_xml_doc = Nokogiri::XML( response )
       logger.debug response
@@ -97,11 +97,11 @@ class ImagesController < ApplicationController
         flash[:danger] = flash_messages
         render action: "edit" and return
       end
-    # else
-    #   errors = @image.validate_vra
-    #   flash[:danger] = errors
-    #   render action: "edit" and return
-    # end
+    else
+      errors = @image.validate_vra
+      flash[:danger] = errors
+      render action: "edit" and return
+    end
 
   end
 

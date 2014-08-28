@@ -16,28 +16,28 @@ RSpec.describe ImagesController, :type => :controller do
     end
 
     describe "DESTROY image" do
-  
+
       it "deletes the Image" do
-        expect do 
+        expect do
           delete(:destroy, :id => @image.to_param)
         end.to change(Image, :count).by(-1)
       end
     end
-  
+
     describe "UPDATE image" do
-  
+
       it "locates the requested image" do
         put(:update, id: @image, image: {filename: 'different.tif', location: 'gandalf2'})
         expect(assigns(:image)).to eq(@image)
       end
-  
+
       it "changes the images's attributes" do
         put(:update, id: @image, image: {filename: 'different.tif', location: 'gandalf2'})
         @image.reload
         expect(@image.filename).to eq('different.tif')
         expect(@image.location).to eq('gandalf2')
       end
-  
+
       it "redirects to the updated image" do
         put(:update, id: @image, image: {filename: 'different.tif', location: 'gandalf2'})
         expect(response).to redirect_to(@image)
@@ -47,7 +47,7 @@ RSpec.describe ImagesController, :type => :controller do
     describe "SAVE_XML image" do
 
       it "saves the edited xml to the image object" do
-        request.env['content_type'] = 'application/xml' 
+        request.env['content_type'] = 'application/xml'
         request.env['RAW_POST_DATA'] =  '<vra>New</vra>'
         post(:save_xml, id: @image, format: 'xml' )
         @image.reload
@@ -61,6 +61,10 @@ RSpec.describe ImagesController, :type => :controller do
     context "with valid vra" do
       before do
         @controller = ImagesController.new
+
+        stub_request(:get, "http://www.loc.gov/standards/vracore/vra-strict.xsd").
+  #with(:headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'User-Agent'=>'Ruby'}).
+          to_return(:status => 200, :body => "", :headers => {})
         @image = Image.create( job_id: 'test' )
         stub_request(:post, "https://127.0.0.1:3333/multiresimages/menu_publish").
              to_return(:status => 200, :body => "<response><returnCode>Publish successful</returnCode><pid>inu:dil-8a21a816-ac14-493c-a571-2be8e6dd4745</pid></response>", :headers => {})
@@ -93,6 +97,6 @@ RSpec.describe ImagesController, :type => :controller do
       end
     end
 
-    
+
   end
 end

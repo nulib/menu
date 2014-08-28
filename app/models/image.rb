@@ -1,6 +1,4 @@
 class Image < ActiveRecord::Base
-  # for grabbing remote vra schema from loc
-  require 'open-uri'
 
   has_attached_file :proxy, :styles => { :thumb => [ "100x100", :jpg ], :medium => ["1000x1000", :jpg] }
 
@@ -10,17 +8,15 @@ class Image < ActiveRecord::Base
   validates :job_id, :presence => true
   validates :filename, :uniqueness => true
 
-  VRA_SCHEMA = open("http://www.loc.gov/standards/vracore/vra-strict.xsd").read
 
   def path
     "#{location}/#{filename}"
   end
 
   def valid_vra?
-    xsd = Nokogiri::XML::Schema(VRA_SCHEMA)
     doc = Nokogiri::XML(self.image_xml)
 
-    xsd.validate(doc).each do |error|
+    XSD.validate(doc).each do |error|
       return false
     end
 
@@ -29,11 +25,10 @@ class Image < ActiveRecord::Base
 
 
   def validate_vra
-    xsd = Nokogiri::XML::Schema(VRA_SCHEMA)
     doc = Nokogiri::XML(self.image_xml)
 
     invalid = []
-    xsd.validate(doc).each do |error|
+    XSD.validate(doc).each do |error|
       invalid << "Validation error: #{error.message}"
     end
 
