@@ -97,7 +97,6 @@ RSpec.describe ImagesController, :type => :controller do
         @image.save
 
         response = get :publish_record, id: @image.id
-        debugger
         #expect( flash[:error] ).to eq( "Image not saved" )
         expect( flash[ :danger ]).to include( "Image not saved" )
       end
