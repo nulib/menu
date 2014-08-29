@@ -14,7 +14,7 @@ class Image < ActiveRecord::Base
   end
 
   def valid_vra?
-    true if validate_vra
+    true if validate_vra.empty?
   end
 
 
@@ -29,8 +29,9 @@ class Image < ActiveRecord::Base
     invalid.each do |error|
       next if error =~ /is not a valid value of the list type 'xs:IDREFS'/
       next if error =~ /is not a valid value of the atomic type 'xs:IDREF'/
-      raise error
+      #raise StandardError
     end
+    invalid
   end
 
 
