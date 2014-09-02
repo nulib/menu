@@ -65,7 +65,10 @@ RSpec.describe ImagesController, :type => :controller do
         doc = Nokogiri::XML( @image.image_xml )
         doc.xpath( '//vra:earliestDate' )[ 0 ].content = '0000'
         @image.image_xml = doc.to_s
+        @image.filename = 'test.tif'
+        @image.location = 'dropbox'
         @image.save
+        FileUtils.stub("mv")
         stub_request(:post, "https://127.0.0.1:3333/multiresimages/menu_publish").
              to_return(:status => 200, :body => "<response><returnCode>Publish successful</returnCode><pid>inu:dil-8a21a816-ac14-493c-a571-2be8e6dd4745</pid></response>", :headers => {})
       end
@@ -75,10 +78,15 @@ RSpec.describe ImagesController, :type => :controller do
         expect( response ).to include( 'Publish successful' )
       end
 
-      it "saves the returned PID to the image" do
+      it "moves the image to the dropbox root once published" do
+        FileUtils.should_receive("mv").with(@image.path, "dropbox")
         response = get( :publish_record, id: @image )
-        @image.reload
-        expect( @image.image_pid ).to eq( 'inu:dil-8a21a816-ac14-493c-a571-2be8e6dd4745' )
+      end
+
+      it "deletes the image" do
+        expect do 
+          response = get( :publish_record, id: @image )
+        end.to change(Image, :count).by(-1)
       end
 
       it "redirects to the site root" do
