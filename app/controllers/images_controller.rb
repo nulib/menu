@@ -89,7 +89,7 @@ class ImagesController < ApplicationController
       if response_xml_doc.at_xpath( '//pid' ) && /Publish successful/.match(response_xml_doc)
         destination = @image.completed_destination
         FileUtils.mkdir_p(destination) unless File.exists?(destination)
-        FileUtils.mv(@image.path, "#{destination}/#{@image.filename}") #unless Rails.env.development?
+        FileUtils.mv(@image.path, "#{destination}/#{@image.filename}") unless Rails.env.development?
         @image.destroy
         redirect_to root_path
       else
