@@ -15,10 +15,7 @@ class Image < ActiveRecord::Base
 
   def completed_destination
     completed_directory = "_completed"
-    puts self.path
-    subdirectory = self.path.split('/').drop(1)
-    puts subdirectory
-    "#{MENU_CONFIG['images_dir']}/#{completed_directory}/#{subdirectory}"
+    "#{MENU_CONFIG['images_dir']}/#{completed_directory}/#{job_id}"
   end
 
   def valid_vra?

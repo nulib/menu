@@ -87,7 +87,9 @@ class ImagesController < ApplicationController
       response = dil_api_call( @image.image_xml, @image.path )
       response_xml_doc = Nokogiri::XML( response )
       if response_xml_doc.at_xpath( '//pid' ) && /Publish successful/.match(response_xml_doc)
-        FileUtils.mv(@image.path, @image.completed_destination) #unless Rails.env.development?
+        destination = @image.completed_destination
+        FileUtils.mkdir_p(destination) unless File.exists?(destination)
+        FileUtils.mv(@image.path, "#{destination}/#{@image.filename}") #unless Rails.env.development?
         @image.destroy
         redirect_to root_path
       else

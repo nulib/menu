@@ -61,12 +61,10 @@ RSpec.describe ImagesController, :type => :controller do
     context "with valid vra" do
       before do
         @controller = ImagesController.new
-        @image = Image.create( job_id: 'test' )
+        @image = Image.create( filename: 'test.tif', location: 'dropbox', job_id: 'test' )
         doc = Nokogiri::XML( @image.image_xml )
         doc.xpath( '//vra:earliestDate' )[ 0 ].content = '0000'
-        @image.image_xml = doc.to_s
-        @image.filename = 'test.tif'
-        @image.location = 'dropbox'
+        @image.image_xml = doc.to_xml
         @image.save
         FileUtils.stub("mv")
         stub_request(:post, "https://127.0.0.1:3333/multiresimages/menu_publish").
@@ -79,7 +77,7 @@ RSpec.describe ImagesController, :type => :controller do
       end
 
       it "moves the image to the dropbox root once published" do
-        FileUtils.should_receive("mv").with(@image.path, @image.completed_destination)
+        FileUtils.should_receive("mv").with(@image.path, "#{@image.completed_destination}/#{@image.filename}")
         response = get( :publish_record, id: @image )
       end
 
