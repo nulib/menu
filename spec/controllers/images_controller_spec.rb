@@ -79,7 +79,7 @@ RSpec.describe ImagesController, :type => :controller do
       end
 
       it "moves the image to the dropbox root once published" do
-        FileUtils.should_receive("mv").with(@image.path, "dropbox")
+        FileUtils.should_receive("mv").with(@image.path, @image.completed_destination)
         response = get( :publish_record, id: @image )
       end
 
