@@ -8,7 +8,7 @@ describe Image do
 
   it "can return the directory path where the published image file should be moved" do
     @image = Image.create( filename: 'test.tif', location: 'dropbox', job_id: 'test' )
-    expect( @image.completed_destination ).to eql( 'dropbox/_completed/test' )
+    expect( @image.completed_destination ).to eql( "#{MENU_CONFIG['images_dir']}/_completed/test" )
   end
 
   context "a new image" do
