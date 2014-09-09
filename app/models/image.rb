@@ -13,10 +13,14 @@ class Image < ActiveRecord::Base
     "#{location}/#{filename}"
   end
 
+  def completed_destination
+    completed_directory = "_completed"
+    "#{MENU_CONFIG['images_dir']}/#{completed_directory}/#{job_id}"
+  end
+
   def valid_vra?
     true if validate_vra.empty?
   end
-
 
   def validate_vra
     doc = Nokogiri::XML(self.image_xml)

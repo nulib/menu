@@ -6,8 +6,9 @@ module GetImages
     location = MENU_CONFIG["images_dir"]
 
     imgs = []
-
-    Dir.glob( "#{location}/**/*" ).each do |file|
+    subdirs = Dir.glob( "#{location}/**/*" )
+    subdirs.delete_if { |dir| dir == "_completed" }
+    subdirs.each do |file|
       imgs << find_or_create_image(file)
     end
 
