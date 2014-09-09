@@ -68,7 +68,7 @@ RSpec.describe ImagesController, :type => :controller do
         @image.filename = 'test.tif'
         @image.location = 'dropbox'
         @image.save
-        FileUtils.stub("mv")
+        allow(FileUtils).to receive(:mv)
         stub_request(:post, "https://127.0.0.1:3333/multiresimages/menu_publish").
              to_return(:status => 200, :body => "<response><returnCode>Publish successful</returnCode><pid>inu:dil-8a21a816-ac14-493c-a571-2be8e6dd4745</pid></response>", :headers => {})
       end
@@ -79,12 +79,12 @@ RSpec.describe ImagesController, :type => :controller do
       end
 
       it "moves the image to the dropbox root once published" do
-        FileUtils.should_receive("mv").with(@image.path, "dropbox")
+        expect(FileUtils).to receive("mv").with(@image.path, "lib/assets/dropbox")
         response = get( :publish_record, id: @image )
       end
 
       it "deletes the image" do
-        expect do 
+        expect do
           response = get( :publish_record, id: @image )
         end.to change(Image, :count).by(-1)
       end
