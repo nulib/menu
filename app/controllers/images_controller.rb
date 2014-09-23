@@ -93,7 +93,7 @@ class ImagesController < ApplicationController
         @image.destroy
         redirect_to root_path
       else
-        flash_messages = [ response_xml_doc.at_xpath( '//description' ).text ]
+        flash_messages = [ response_xml_doc.at_xpath( '//description' ).text.truncate( 50 ) ]
         flash_messages << "Image not saved"
         flash[:danger] = flash_messages
         render action: "edit" and return
