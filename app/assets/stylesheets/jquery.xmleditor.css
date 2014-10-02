@@ -21,7 +21,7 @@
 	left: 0;
 	padding: .2em;
 	outline: 0;
-	border-radius : 6px;
+	border-radius : 2px;
 	font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif;
 	font-size: 14px;
 }
@@ -145,9 +145,9 @@
 	box-shadow: 4px 3px 3px 0 #CCE8F1;
 	margin-bottom: 10px;
 	background-color: #fff;
-	-webkit-border-radius: 6px;
-	-moz-border-radius: 6px;
-	border-radius: 6px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
 }
 
 .xml_element.xml_root_element {
@@ -155,9 +155,9 @@
 	border: 1px solid #bbbbcc;
 }
 
-/*.xml_root_element > .content_block.xml_children {
+.xml_root_element > .content_block.xml_children {
 	padding: 0;
-}*/
+}
 
 .xml_children > .xml_element {
 	margin-bottom: 20px;
@@ -175,9 +175,9 @@
 	padding: 4px 1px 1px 7px;
 	line-height: 22px;
 	height: 22px;
-	-webkit-border-radius: 6px 6px 0px 0px;
-	-moz-border-radius: 6px 6px 0px 0px;
-	border-radius: 6px 6px 0px 0px;
+	-webkit-border-radius: 2px 2px 0px 0px;
+	-moz-border-radius: 2px 2px 0px 0px;
+	border-radius: 2px 2px 0px 0px;
 	border-bottom: 1px solid #bbbbbb;
 	margin-bottom: 12px;
 }
@@ -311,7 +311,7 @@
 .attribute_container.selected {
 	background-color: #DDDDFF;
 	box-shadow: 0 0 6px 1px #DDDDFF;
-	border-radius: 6px;
+	border-radius: 2px;
 }
 
 .attribute_container > label {
@@ -348,7 +348,7 @@
 }
 
 .attribute_container > a:hover {
-	color: #44468a;
+	/*color: #44468a;*/
 }
 
 .xml_element .content_block {
@@ -438,9 +438,9 @@
 	float: right;
 }
 
-/*.xml_content {
+.xml_content {
 	padding: 5px 0px 5px 5px;
-}*/
+}
 
 /* Head tabs */
 
@@ -618,4 +618,47 @@
 	*zoom: 1;
 	*display: inline;
 	width: 1em;
+}
+
+/************ Default Style Overrides ************/ 
+
+.xml_editor_container ol, .xml_editor_container ul {
+	list-style: none;
+}
+
+.element_header {
+	background: none !important; 
+}
+
+.xml_element.selected > ul.element_header {
+  background-color: #D7D7D7;
+  background: #D7D7D7 !important;
+}
+
+.selected > .element_header > .element_name {
+  color: black;
+}
+
+.attribute_container > a:hover {
+  color: none;
+}
+
+.selected .xml_textarea {
+  background-color: #F8F8F8;
+}
+
+.xml_input, .xml_select, .xml_textarea {
+  max-width: 100%;
+  display: block;
+  border: 1px solid #cccfdd;
+  box-shadow: -2px 2px 2px #ddddee inset;
+  font-size: 13px;
+  background-color: white;
+  padding-left: 4px;
+}
+
+.xml_element.selected {
+	border: 1px solid #666;
+	box-shadow: 0px 0px 4px 1px #EFEFEF;
+	background: #F0F0F0;
 }

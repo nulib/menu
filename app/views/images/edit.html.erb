@@ -1,26 +1,30 @@
 <h1>Editing image</h1>
 
-<%= render 'form' %>
-
-<%= link_to 'Show', @image %> |
-<%= link_to 'Back', images_path %>
-
-<div class="wrapper">
-
-  <header>
-    <h1>VRA Editor</h1>
-  </header>
-
-  <div id="xml_editor">
-    <vra:vra xmlns:vra="http://www.vraweb.org/vracore4.htm"></vra:vra>
+<div class="row">
+  <div class="col-xs-6">
+    <% image_style = :medium %>
+    <%= image_tag @image.proxy( image_style ), class: "thumbnail #{image_style}" %>
   </div>
-
+  <div class="col-xs-6">
+    <%= render 'form' %>
+  </div>
 </div>
 
-<%= link_to( 'Publish', publish_record_path(@image) ) %>
+<div class="row">
+  <div class="col-md-12">
+    <h1>VRA Editor</h1>
 
-<% image_style = :medium %>
-<%= image_tag @image.proxy( image_style ), class: "thumbnail #{image_style}" %>
+    <div id="xml_editor">
+      <vra:vra xmlns:vra="http://www.vraweb.org/vracore4.htm"></vra:vra>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div id="publishButton" class="col-md-12">
+    <%= link_to( 'Publish', publish_record_path(@image), class: 'btn btn-primary' ) %>
+  </div>
+</div>
 
 <script>
   $(function() {
@@ -33,5 +37,6 @@
       },
       schema: extractor.getSchema()
     });
+
   });
 </script>
