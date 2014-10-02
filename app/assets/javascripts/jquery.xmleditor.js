@@ -1255,7 +1255,7 @@ GUIEditor.prototype._initEventBindings = function() {
 	this.xmlContent.on('click', '.' + attributeContainerClass, function(event){
 		$(this).data('xmlAttribute').select();
 		event.stopPropagation();
-	}).on('click', '.' + attributeContainerClass + " > a", function(event){
+	}).on('click', 'button.close', function(event){
 		var attribute = $(this).parents('.' + attributeContainerClass).eq(0).data('xmlAttribute');
 		attribute.remove();
 		attribute.xmlElement.updated({action : 'attributeRemoved', target : attribute});
@@ -2596,7 +2596,7 @@ TextEditor.prototype.refreshDisplay = function() {
 
 // Adjust the size of the editor to reflect its environment
 TextEditor.prototype.resize = function() {
-	var xmlEditorHeight = ($(window).height() - this.xmlEditorDiv.offset().top);
+	var xmlEditorHeight = '1000px' // ($(window).height() - this.xmlEditorDiv.offset().top);
 	this.xmlContent.css({'height': xmlEditorHeight + 'px'});
 	this.xmlEditorDiv.width(this.xmlContent.innerWidth());
 	this.xmlEditorDiv.height(xmlEditorHeight);
@@ -2873,8 +2873,17 @@ XMLAttribute.prototype.render = function (){
 	}).data('xmlAttribute', this).appendTo(this.xmlElement.getAttributeContainer());
 	
 	var self = this;
-	var removeButton = document.createElement('a');
-	removeButton.appendChild(document.createTextNode('(x) '));
+	var removeButton = document.createElement('button');
+	$(removeButton).addClass("close");
+	$(removeButton).attr({
+	  'data-dismiss': 'modal',
+	});
+	var removeSpan = removeButton.appendChild(document.createElement('span'));
+	$(removeSpan).attr('aria-hidden', 'true');
+	$(removeSpan).html('&times;');
+	var removeClose = removeButton.appendChild(document.createElement('span'));
+	$(removeClose).addClass('sr-only');
+	$(removeClose).html('Close');
 	this.attributeContainer[0].appendChild(removeButton);
 	
 	var label = document.createElement('label');
