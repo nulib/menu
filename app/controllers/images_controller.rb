@@ -1,4 +1,3 @@
-require 'pry'
 require 'rest-client'
 
 class ImagesController < ApplicationController
