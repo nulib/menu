@@ -32,15 +32,15 @@ end
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
-# Use unicorn as the app server
-# gem 'unicorn'
-
 # Use Capistrano for deployment
 gem 'capistrano', '~> 3.2'
 gem 'capistrano-rails'
 gem 'capistrano-rvm'
 gem 'bootstrap-sass', '~> 3'
 gem 'nokogiri'
+gem 'paperclip'
+gem 'rest-client'
+
 
 group :development, :test do
   gem 'sqlite3'
@@ -48,21 +48,16 @@ group :development, :test do
   gem 'byebug'
   gem 'simplecov', '0.7.1', :require => false
   gem 'capybara', '~> 2'
-  gem 'pry'
+  gem 'pry-rails'
   gem 'pry-byebug'
 end
 
 group :test do
   gem 'webmock'
+  gem 'equivalent-xml', :git => "https://github.com/mbklein/equivalent-xml.git"
 end
 
 group :staging, :production do
   gem 'pg'
 end
 
-gem 'paperclip'
-gem 'rest-client'
-
-group :test do
-  gem 'equivalent-xml', :git => "https://github.com/mbklein/equivalent-xml.git"
-end
