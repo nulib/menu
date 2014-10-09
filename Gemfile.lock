@@ -80,6 +80,7 @@ GEM
       safe_yaml (~> 1.0.0)
     debugger-linecache (1.2.0)
     diff-lcs (1.2.5)
+    docile (1.1.5)
     erubis (2.7.0)
     execjs (2.2.1)
     hike (1.2.3)
@@ -171,10 +172,11 @@ GEM
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
-    simplecov (0.7.1)
+    simplecov (0.9.1)
+      docile (~> 1.1.0)
       multi_json (~> 1.0)
-      simplecov-html (~> 0.7.1)
-    simplecov-html (0.7.1)
+      simplecov-html (~> 0.8.0)
+    simplecov-html (0.8.0)
     slop (3.6.0)
     sprockets (2.11.0)
       hike (~> 1.2)
@@ -233,7 +235,7 @@ DEPENDENCIES
   rspec-rails (~> 3)
   sass-rails (~> 4.0)
   sdoc
-  simplecov (= 0.7.1)
+  simplecov
   sqlite3
   therubyracer
   turbolinks

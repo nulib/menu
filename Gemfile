@@ -46,7 +46,7 @@ group :development, :test do
   gem 'sqlite3'
   gem 'rspec-rails', '~> 3'
   gem 'byebug'
-  gem 'simplecov', '0.7.1', :require => false
+  gem 'simplecov', :require => false
   gem 'capybara', '~> 2'
   gem 'pry-rails'
   gem 'pry-byebug'
