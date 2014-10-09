@@ -17,6 +17,7 @@
 
 # Ignore database.yml and menu.yml
 config/database.yml
+config/database.yml.pg
 config/menu.yml
 
 # Ignore test specific items

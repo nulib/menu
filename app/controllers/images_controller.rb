@@ -82,6 +82,7 @@ class ImagesController < ApplicationController
   end
 
   def publish_record
+    @image.image_xml = TransformXML.add_display_elements( @image.image_xml )
 
     if @image.valid_vra?
       response = dil_api_call( @image.image_xml, @image.path )

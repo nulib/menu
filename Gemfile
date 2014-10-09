@@ -48,6 +48,8 @@ group :development, :test do
   gem 'byebug'
   gem 'simplecov', '0.7.1', :require => false
   gem 'capybara', '~> 2'
+  gem 'pry'
+  gem 'pry-byebug'
 end
 
 group :test do
@@ -59,5 +61,8 @@ group :staging, :production do
 end
 
 gem 'paperclip'
-gem 'pry'
 gem 'rest-client'
+
+group :test do
+  gem 'equivalent-xml', :git => "https://github.com/mbklein/equivalent-xml.git"
+end

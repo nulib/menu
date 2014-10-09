@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/mbklein/equivalent-xml.git
+  revision: 43a7110d4c6d74ad649d9151df76059c28566f56
+  specs:
+    equivalent-xml (0.5.1)
+      nokogiri (>= 1.4.3)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -108,6 +115,9 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    pry-byebug (2.0.0)
+      byebug (~> 3.4)
+      pry (~> 0.10)
     rack (1.5.2)
     rack-test (0.6.2)
       rack (>= 1.0)
@@ -208,12 +218,14 @@ DEPENDENCIES
   capistrano-rvm
   capybara (~> 2)
   coffee-rails (~> 4.0)
+  equivalent-xml!
   jbuilder (~> 1.2)
   jquery-rails
   nokogiri
   paperclip
   pg
   pry
+  pry-byebug
   rails (~> 4.1)
   rest-client
   rspec-rails (~> 3)
