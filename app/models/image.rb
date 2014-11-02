@@ -16,7 +16,7 @@ class Image < ActiveRecord::Base
 
   def completed_destination
     completed_directory = "_completed"
-    "#{MENU_CONFIG['images_dir']}/#{completed_directory}/#{job_id}"
+    "#{MENU_CONFIG['images_dir']}/#{completed_directory}/#{ self.job.job_id }"
   end
 
   def valid_vra?

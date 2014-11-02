@@ -1,11 +1,13 @@
 Menu::Application.routes.draw do
   resources :images
+  resources :jobs
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
   root 'jobs#index'
+
   match 'images/:id', to: 'images#save_xml', via: 'post'
 
   get 'images/:id/edit/publish', to: 'images#publish_record', as: :publish_record

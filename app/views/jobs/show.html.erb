@@ -1,0 +1,26 @@
+<h1>Listing images</h1>
+
+<table class="table">
+  <thead class="header">
+    <tr>
+      <th>Thumbnail</th>
+      <th>Filename</th>
+      <th>Job ID</th>
+      <th colspan=3></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @images.each do |image| %>
+      <tr class="image-entry">
+        <td><%= image_tag image.proxy( :thumb ), class: "thumbnail" %></td>
+        <td><%= image.filename %></td>
+        <td><%= image.job_id %></td>
+        <td><%= link_to 'Show', image, class: "btn btn-default" %></td>
+        <td><%= link_to 'Edit', edit_image_path(image), class: "btn btn-default" %></td>
+        <td><%= link_to 'Destroy', image, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
