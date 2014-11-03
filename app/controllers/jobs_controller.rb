@@ -1,5 +1,6 @@
 class JobsController < ApplicationController
   def index
+    GetImages.current_images
     @jobs = Job.all
   end
 
