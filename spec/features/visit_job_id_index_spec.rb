@@ -14,4 +14,15 @@ describe "visiting the home page" do
 
     expect( page ).to have_css( "li.job_link>a" )
   end
+
+  it "displays one listing for each Job ID" do
+    job1 = Job.create( job_id: 123 )
+    job2 = Job.create( job_id: 123 )
+    job3 = Job.create( job_id: 789 )
+    job4 = Job.create( job_id: 789 )
+
+    visit root_path
+
+    expect( page ).to have_css( "li.job_link>a", count: 2 )
+  end
 end
