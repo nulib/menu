@@ -31,8 +31,9 @@ module GetImages
     if File.file?( file ) && path.size == @path_length + 2
       i = Image.find_by( filename: File.basename( file ), job_id: path[ -2 ], location: File.dirname( file ) )
       if i == nil
+        job = Job.find_or_create_by( job_id: path[ -2 ])
         f = File.open( file )
-        i = Image.create( filename: File.basename( file ), job_id: path[ -2 ], proxy: f, location: File.dirname( file ) )
+        i = job.images.create( filename: File.basename( file ), proxy: f, location: File.dirname( file ) )
         f.close
       end
       return i.id
