@@ -61,7 +61,8 @@ RSpec.describe ImagesController, :type => :controller do
     context "with valid vra" do
       before do
         @controller = ImagesController.new
-        @image = Image.create( filename: 'test.tif', location: 'dropbox', job_id: 'test' )
+        job = Job.create( job_id: 123 )
+        @image = job.images.create( filename: 'test.tif', location: 'dropbox' )
         doc = Nokogiri::XML( @image.image_xml )
         doc.xpath( '//vra:earliestDate' )[ 0 ].content = '0000'
         @image.image_xml = doc.to_xml

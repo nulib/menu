@@ -1,0 +1,7 @@
+<h1>Job IDs</h1>
+
+<ul>
+  <% @jobs.each do |job| %>
+    <li class='job_link'><%= link_to( job.job_id, job ) %></li>
+  <% end %>
+</ul>

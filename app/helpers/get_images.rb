@@ -7,7 +7,7 @@ module GetImages
 
     imgs = []
     subdirs = Dir.glob( "#{location}/**/*" )
-    subdirs.delete_if { |dir| dir == "_completed" }
+    subdirs.delete_if { |dir| dir =~ /_completed/ }
     subdirs.each do |file|
       imgs << find_or_create_image(file)
     end
@@ -29,10 +29,11 @@ module GetImages
     path = file.split( '/' )
 
     if File.file?( file ) && path.size == @path_length + 2
-      i = Image.find_by( filename: File.basename( file ), job_id: path[ -2 ], location: File.dirname( file ) )
+      job = Job.find_or_create_by( job_id: path[ -2 ])
+      i = Image.find_by( filename: File.basename( file ), job_id: job, location: File.dirname( file ))
       if i == nil
         f = File.open( file )
-        i = Image.create( filename: File.basename( file ), job_id: path[ -2 ], proxy: f, location: File.dirname( file ) )
+        i = job.images.create( filename: File.basename( file ), proxy: f, location: File.dirname( file ))
         f.close
       end
       return i.id

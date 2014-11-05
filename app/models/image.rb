@@ -1,4 +1,5 @@
 class Image < ActiveRecord::Base
+  belongs_to :job
 
   has_attached_file :proxy, :styles => { :thumb => [ "100x100", :jpg ], :medium => ["1000x1000", :jpg] }
 
@@ -15,7 +16,7 @@ class Image < ActiveRecord::Base
 
   def completed_destination
     completed_directory = "_completed"
-    "#{MENU_CONFIG['images_dir']}/#{completed_directory}/#{job_id}"
+    "#{MENU_CONFIG['images_dir']}/#{completed_directory}/#{ self.job.job_id }"
   end
 
   def valid_vra?
