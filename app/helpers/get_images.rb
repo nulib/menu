@@ -7,8 +7,10 @@ module GetImages
 
     imgs = []
     subdirs = Dir.glob( "#{location}/**/*" )
+    logger.debug( subdirs )
     subdirs.delete_if { |dir| dir =~ /_completed/ }
     subdirs.each do |file|
+      logger.debug( file )
       imgs << find_or_create_image(file)
     end
 
