@@ -43,14 +43,14 @@ module GetImages
   end
 
   def self.prefix_file_name_with_job_id( file, job_id )
-    #TODO: Clean up this messy logic
-    file_name_prefixed_by_job_id = "#{ job_id }_#{ File.basename( file )}" unless File.basename( file ).start_with?( job_id )
-    file_name_full_path = "#{ File.dirname( file )}/#{ file_name_prefixed_by_job_id }"
-    unless File.basename( file ).start_with?( job_id )
-      File.rename( file, file_name_full_path )
-      file = file_name_full_path
+    file_name_prefixed_by_job_id = if File.basename( file ).start_with?( job_id ) then
+      File.basename( file )
+    else
+      "#{ job_id }_#{ File.basename( file )}"
     end
-    file
+    file_name_full_path = "#{ File.dirname( file )}/#{ file_name_prefixed_by_job_id }"
+    File.rename( file, file_name_full_path )
+    file_name_full_path
   end
 
   def self.remove_job_id_from_file_name
