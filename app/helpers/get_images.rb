@@ -6,11 +6,9 @@ module GetImages
     location = MENU_CONFIG["images_dir"]
 
     imgs = []
-    subdirs = Dir.glob( "#{location}/**/*" )
-    puts( subdirs )
-    subdirs.delete_if { |dir| dir =~ /_completed/ }
-    subdirs.each do |file|
-      puts( file )
+    dir_contents = Dir.glob( "#{location}/**/*" )
+    dir_contents.delete_if { |dir| dir =~ /_completed/ }
+    dir_contents.each do |file|
       imgs << find_or_create_image(file)
     end
 
@@ -29,9 +27,11 @@ module GetImages
 
   def self.find_or_create_image( file )
     path = file.split( '/' )
+    job_id = path[ -2 ]
 
     if File.file?( file ) && path.size == @path_length + 2
-      job = Job.find_or_create_by( job_id: path[ -2 ])
+      file = prefix_file_name_with_job_id( file, job_id )
+      job = Job.find_or_create_by( job_id: job_id )
       i = Image.find_by( filename: File.basename( file ), job_id: job, location: File.dirname( file ))
       if i == nil
         f = File.open( file )
@@ -39,6 +39,32 @@ module GetImages
         f.close
       end
       return i.id
+    end
+  end
+
+  def self.prefix_file_name_with_job_id( file, job_id )
+    #TODO: Clean up this messy logic
+    file_name_prefixed_by_job_id = "#{ job_id }_#{ File.basename( file )}" unless File.basename( file ).start_with?( job_id )
+    file_name_full_path = "#{ File.dirname( file )}/#{ file_name_prefixed_by_job_id }"
+    unless File.basename( file ).start_with?( job_id )
+      File.rename( file, file_name_full_path )
+      file = file_name_full_path
+    end
+    file
+  end
+
+  def self.remove_job_id_from_file_name
+    location = MENU_CONFIG[ 'images_dir' ]
+
+    dir_contents = Dir.glob( "#{location}/**/*" )
+    dir_contents.delete_if { |dir| dir =~ /_completed/ }
+    dir_contents.each do |file|
+      path = file.split( '/' )
+      if File.file?( file ) && path.size == @path_length + 2 && File.basename( file ).start_with?( path[ -2 ])
+        file_name = File.basename( file )
+        original_file_name = file_name.slice( file_name.index( '_' ) + 1, file_name.length )
+        File.rename( file, "#{ File.dirname( file )}/#{ original_file_name }")
+      end
     end
   end
 

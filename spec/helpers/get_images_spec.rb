@@ -4,7 +4,8 @@ describe GetImages do
 
   it "persists valid images to the DB" do
     GetImages.current_images
-    expect( Image.all.count ).to eql( 3 )
+    expect( Image.all.count ).to eql( 12 )
+    GetImages.remove_job_id_from_file_name
   end
 
   it "rejects invalid images from persisting to the DB" do
