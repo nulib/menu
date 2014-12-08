@@ -68,4 +68,19 @@ module GetImages
     end
   end
 
+  def self.add_job_id_to_random_files
+    location = MENU_CONFIG[ 'images_dir' ]
+
+    dir_contents = Dir.glob( "#{location}/**/*" )
+    dir_contents.delete_if { |dir| dir =~ /_completed/ }
+    sampled_dir_contents = dir_contents.sample( 4 )
+    sampled_dir_contents.each do |file|
+      path = file.split( '/' )
+      if File.file?( file ) && path.size == @path_length + 2 && !File.basename( file ).start_with?( path[ -2 ])
+        prefixed_file_name = "#{ File.dirname( file )}/#{ path[ -2 ]}_#{ File.basename( file )}"
+        File.rename( file, prefixed_file_name )
+      end
+    end
+  end
+
 end
