@@ -20,9 +20,11 @@ describe "visiting the home page" do
     job2 = Job.create( job_id: 123 )
     job3 = Job.create( job_id: 789 )
     job4 = Job.create( job_id: 789 )
+    job5 = Job.create( job_id: 234 )
+    job6 = Job.create( job_id: 456 )
 
     visit root_path
 
-    expect( page ).to have_css( "li.job_link>a", count: 2 )
+    expect( page ).to have_css( "li.job_link>a", count: 4 )
   end
 end
