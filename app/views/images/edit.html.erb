@@ -33,7 +33,7 @@
     $("#xml_editor").xmlEditor({
       ajaxOptions: {
         xmlRetrievalPath: "<%= url_for(:only_path => false, :controller => 'images', :action => 'show', :id => @image.id, :format => :xml) %>",
-        xmlUploadPath: "<%= url_for(:only_path => false, :controller => 'images', :action => 'update', :id => @image.id, :format => :xml) %>"
+        xmlUploadPath: "<%= url_for(:only_path => false, :controller => 'images', :action => 'save_xml', :id => @image.id, :format => :xml) %>"
       },
       schema: extractor.getSchema()
     });
