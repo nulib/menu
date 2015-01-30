@@ -1,5 +1,12 @@
 Menu::Application.routes.draw do
-  resources :images
+
+  resources :images do
+    member do
+      #post  'save_xml'
+      get   'publish'
+    end
+  end
+
   resources :jobs
 
   # The priority is based upon order of creation: first created -> highest priority.
@@ -8,9 +15,9 @@ Menu::Application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'jobs#index'
 
-  match 'images/:id', to: 'images#save_xml', via: 'post'
-
-  get 'images/:id/edit/publish', to: 'images#publish_record', as: :publish_record
+  # This route is probably incorrect, we should see if we can get the
+  # XML Editor to post to the save_xml action instead of just images
+  post 'images/:id', to: 'images#save_xml'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
