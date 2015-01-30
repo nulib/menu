@@ -35,7 +35,7 @@ end
 # Use Capistrano for deployment
 gem 'capistrano', '~> 3.2'
 gem 'capistrano-rails'
-gem 'capistrano-rvm'
+gem 'capistrano-rbenv'
 gem 'bootstrap-sass', '~> 3'
 gem 'nokogiri'
 gem 'paperclip'
