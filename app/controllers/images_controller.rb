@@ -1,7 +1,7 @@
 require 'rest-client'
 
 class ImagesController < ApplicationController
-  before_action :set_image, only: [:show, :edit, :update, :destroy, :save_xml, :publish_record]
+  before_action :set_image, only: [:show, :edit, :update, :destroy, :save_xml, :publish]
 
   # GET /images
   # GET /images.json
@@ -79,7 +79,7 @@ class ImagesController < ApplicationController
     end
   end
 
-  def publish_record
+  def publish
     @image.image_xml = TransformXML.add_display_elements( @image.image_xml )
 
     if @image.valid_vra?

@@ -79,17 +79,17 @@ RSpec.describe ImagesController, :type => :controller do
 
       it "moves the image to the dropbox root once published" do
         expect(FileUtils).to receive("mv").with(@image.path, "#{@image.completed_destination}/#{@image.filename}")
-        response = get( :publish_record, id: @image )
+        response = get( :publish, id: @image )
       end
 
       it "deletes the image" do
         expect do
-          response = get( :publish_record, id: @image )
+          response = get( :publish, id: @image )
         end.to change(Image, :count).by(-1)
       end
 
       it "redirects to the site root" do
-        expect( get( :publish_record, id: @image ) ).to redirect_to( root_url )
+        expect( get( :publish, id: @image ) ).to redirect_to( root_url )
       end
     end
 
@@ -103,7 +103,7 @@ RSpec.describe ImagesController, :type => :controller do
         @image.image_xml = doc.to_s
         @image.save
 
-        response = get :publish_record, id: @image.id
+        response = get :publish, id: @image.id
         #expect( flash[:error] ).to eq( "Image not saved" )
         expect( flash[ :danger ]).to include( "Image not saved" )
       end
