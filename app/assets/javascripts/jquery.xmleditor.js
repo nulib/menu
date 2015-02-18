@@ -2166,7 +2166,7 @@ ModifyMenuPanel.prototype.initialize = function (parentContainer) {
 
 	// Generate the document status panel, which shows a save/export button as well as if there are changes to the document
 	if (this.editor.options.enableDocumentStatusPanel) {
-		var documentStatusPanel = $("<div>");
+		var documentStatusPanel = $("#persistData");
 		$("<span/>").addClass(submissionStatusClass).html("Document is unchanged")
 			.appendTo(documentStatusPanel);
 		var submitButton = $("<input/>").attr({
