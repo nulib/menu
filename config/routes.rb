@@ -10,7 +10,7 @@ Menu::Application.routes.draw do
 
   match 'images/:id', to: 'images#save_xml', via: 'post'
 
-  get 'images/:id/edit/publish', to: 'images#publish_record', as: :publish_record
+  match 'images/:id/edit/publish', to: 'images#publish_record', as: :publish_record, via: [:post, :patch]
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

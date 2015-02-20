@@ -79,30 +79,37 @@ class ImagesController < ApplicationController
     end
   end
 
-  def publish_record
-    @image.image_xml = TransformXML.add_display_elements( @image.image_xml )
 
-    if @image.valid_vra?
-      response = dil_api_call( @image.image_xml, @image.path )
-      response_xml_doc = Nokogiri::XML( response )
-      if response_xml_doc.at_xpath( '//pid' ) && /Publish successful/.match(response_xml_doc)
-        destination = @image.completed_destination
-        FileUtils.mkdir_p(destination) unless File.exists?(destination)
-        FileUtils.mv(@image.path, "#{destination}/#{@image.filename}") unless Rails.env.development?
-        @image.destroy
-        redirect_to root_path
+  def publish_record
+    @image.image_xml = request.body.read
+    if @image.save
+      @image.image_xml = TransformXML.add_display_elements( @image.image_xml )
+      # might want a condition to pass to images circumventing saves -- or just not do them
+      # if publish is only called from menu and save has always occured prior to it
+      if @image.valid_vra?
+        full_path = "#{Rails.root}/" + "#{@image.path}"
+        response = dil_api_call( @image.image_xml, full_path )
+        response_xml_doc = Nokogiri::XML( response )
+        if response_xml_doc.at_xpath( '//pid' ) && /Publish successful/.match(response_xml_doc)
+          destination = @image.completed_destination
+          FileUtils.mkdir_p(destination) unless File.exists?(destination)
+          FileUtils.mv(@image.path, "#{destination}/#{@image.filename}") unless Rails.env.development?
+          redirect_to root_path
+        else
+          flash_messages = [ response_xml_doc.at_xpath( '//description' ).text.truncate( 50 ) ]
+          flash_messages << "Image not saved"
+          flash[:danger] = flash_messages
+          render action: "edit" and return
+        end
       else
-        flash_messages = [ response_xml_doc.at_xpath( '//description' ).text.truncate( 50 ) ]
-        flash_messages << "Image not saved"
-        flash[:danger] = flash_messages
+        puts "hey there were errors"
+        errors = @image.validate_vra
+        flash[:danger] = errors
         render action: "edit" and return
       end
     else
-      errors = @image.validate_vra
-      flash[:danger] = errors
-      render action: "edit" and return
+      format.xml { render xml: @image.errors, status: :unprocessable_entity }
     end
-
   end
 
   private

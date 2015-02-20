@@ -54,6 +54,7 @@ var addAttrMenuClass = "add_attribute_menu";
 var addElementMenuClass = "add_element_menu";
 var xmlMenuBarClass = "xml_menu_bar";
 var submitButtonClass = "send_xml";
+var saveXMLClass = "save_xml"
 var submissionStatusClass = "xml_submit_status";
 var xmlContentClass = "xml_content";
 
@@ -83,6 +84,7 @@ $.widget( "xml.xmlEditor", {
 		// Document retrieval and upload parameters
 		ajaxOptions : {
 			xmlUploadPath: null,
+			xmlUploadAndPublishPath: null,
 			xmlRetrievalPath: null,
 			xmlRetrievalParams : null
 		},
@@ -406,8 +408,15 @@ $.widget( "xml.xmlEditor", {
 			$(window).bind('scroll', $.proxy(this.modifyMenu.setMenuPosition, this.modifyMenu));
 		}
 
-		$("." + submitButtonClass).click(function() {
-			self.saveXML();
+
+		$("." + saveXMLClass).click(function(e) {
+
+			self.onlySaveXML(e);
+		});
+
+		$("." + submitButtonClass).click(function(e) {
+
+			self.saveXML(e);
 		});
 		this.ready = true;
 	},
@@ -546,14 +555,25 @@ $.widget( "xml.xmlEditor", {
 	},
 
 	// Performs the default action for "saving" the contents of the editor, either to server or file
-	saveXML: function() {
+	saveXML: function(e) {
 		if (this.options.ajaxOptions.xmlUploadPath != null) {
-			this.submitXML();
+			this.submitXML(e);
 		} else {
 			// Implement later when there is more browser support for html5 File API
 			this.exportXML();
 		}
 	},
+
+	// Performs the default action for "saving" the contents of the editor, either to server or file
+	onlySaveXML: function(e) {
+		if (this.options.ajaxOptions.xmlUploadAndPublishPath != null) {
+			this.submitXML(e);
+		} else {
+			// Implement later when there is more browser support for html5 File API
+			this.exportXML();
+		}
+	},
+
 
 	// Export the contents of the editor as text to a file, as supported by browsers
 	exportXML: function() {
@@ -592,62 +612,71 @@ $.widget( "xml.xmlEditor", {
 	},
 
 	// Upload the contents of the editor to a path
-	submitXML: function() {
-		if (this.textEditor.active) {
-			try {
-				this.setXMLFromEditor();
-			} catch (e) {
-				this.xmlState.setDocumentHasChanged(true);
-				$("." + submissionStatusClass).html("Failed to submit<br/>See errors at top").css("background-color", "#ffbbbb").animate({backgroundColor: "#ffffff"}, 1000);
-				this.addProblem("Cannot submit due to invalid xml", e);
-				return false;
+	submitXML: function(e) {
+		if (e){
+			var url;
+			if ($(e.target).hasClass("save_xml")){
+				url = this.options.ajaxOptions.xmlUploadAndPublishPath;
+			} else if ($(e.target).hasClass("send_xml")){
+				url = this.options.ajaxOptions.xmlUploadPath;
 			}
+			if (this.textEditor.active) {
+				try {
+					this.setXMLFromEditor();
+				} catch (e) {
+					this.xmlState.setDocumentHasChanged(true);
+					$("." + submissionStatusClass).html("Failed to submit<br/>See errors at top").css("background-color", "#ffbbbb").animate({backgroundColor: "#ffffff"}, 1000);
+					this.addProblem("Cannot submit due to invalid xml", e);
+					return false;
+				}
+			}
+
+			// convert XML DOM to string
+			var xmlString = this.xml2Str(this.xmlState.xml);
+
+			$("." + submissionStatusClass).html("Submitting...");
+
+			var self = this;
+			$.ajax({
+				'url' : url,
+				'contentType' : "application/xml",
+				'type' : "POST",
+				'data' : xmlString,
+				success : function(response) {
+					// Process the response from the server using the provided response handler
+					// If the result of the handler evaluates true, then it is assumed to be an error
+					var outcome = self.options.submitResponseHandler(response);
+
+					if (!outcome) {
+						//
+						self.xmlState.changesCommittedEvent();
+						self.clearProblemPanel();
+					} else {
+						self.xmlState.syncedChangeEvent();
+						$("." + submissionStatusClass).html("Failed to submit<br/>See errors at top").css("background-color", "#ffbbbb").animate({backgroundColor: "#ffffff"}, 1000);
+						self.addProblem("Failed to submit xml document", outcome);
+					}
+				},
+				error : function(jqXHR, exception) {
+					if (jqXHR.status === 0) {
+						alert('Not connect.\n Verify Network.');
+					} else if (jqXHR.status == 404) {
+						alert('Requested page not found. [404]');
+					} else if (jqXHR.status == 500) {
+						alert('Internal Server Error [500].');
+					} else if (exception === 'parsererror') {
+						alert('Requested JSON parse failed.');
+					} else if (exception === 'timeout') {
+						alert('Time out error.');
+					} else if (exception === 'abort') {
+						alert('Ajax request aborted.');
+					} else {
+						alert('Uncaught Error.\n' + jqXHR.responseText);
+					}
+				}
+			});
 		}
 
-		// convert XML DOM to string
-		var xmlString = this.xml2Str(this.xmlState.xml);
-
-		$("." + submissionStatusClass).html("Submitting...");
-
-		var self = this;
-		$.ajax({
-			'url' : this.options.ajaxOptions.xmlUploadPath,
-			'contentType' : "application/xml",
-			'type' : "POST",
-			'data' : xmlString,
-			success : function(response) {
-				// Process the response from the server using the provided response handler
-				// If the result of the handler evaluates true, then it is assumed to be an error
-				var outcome = self.options.submitResponseHandler(response);
-
-				if (!outcome) {
-					//
-					self.xmlState.changesCommittedEvent();
-					self.clearProblemPanel();
-				} else {
-					self.xmlState.syncedChangeEvent();
-					$("." + submissionStatusClass).html("Failed to submit<br/>See errors at top").css("background-color", "#ffbbbb").animate({backgroundColor: "#ffffff"}, 1000);
-					self.addProblem("Failed to submit xml document", outcome);
-				}
-			},
-			error : function(jqXHR, exception) {
-				if (jqXHR.status === 0) {
-					alert('Not connect.\n Verify Network.');
-				} else if (jqXHR.status == 404) {
-					alert('Requested page not found. [404]');
-				} else if (jqXHR.status == 500) {
-					alert('Internal Server Error [500].');
-				} else if (exception === 'parsererror') {
-					alert('Requested JSON parse failed.');
-				} else if (exception === 'timeout') {
-					alert('Time out error.');
-				} else if (exception === 'abort') {
-					alert('Ajax request aborted.');
-				} else {
-					alert('Uncaught Error.\n' + jqXHR.responseText);
-				}
-			}
-		});
 	},
 
 	// Default server submission response parser, mostly for reference.
@@ -1701,6 +1730,11 @@ function MenuBar(editor) {
 				label : 'Submit to Server',
 				enabled : (self.editor.options.ajaxOptions.xmlUploadPath != null),
 				binding : "alt+shift+s",
+				action : $.proxy(self.editor.submitXML, self.editor)
+			}, {
+				label : 'Publish and Save',
+				enabled : (self.editor.options.ajaxOptions.xmlUploadAndPublishPath != null),
+				binding : "alt+shift+p",
 				action : $.proxy(self.editor.submitXML, self.editor)
 			}, {
 				label : 'Export',
