@@ -1,5 +1,17 @@
-<h1>Editing image</h1>
+  <% flash.each do |key, value| %>
+  <div class="alert alert-<%= key %>" role="alert">
+    <ul>
+    <% if value.respond_to?('each') %>
+      <% value.each do |m| %>
+        <li><%= m %></li>
+      <% end %>
+    <% else %>
+      <li><%= value %></li>
+    <% end %>
+  </div>
+  <% end %>
 
+<h1>Editing image</h1>
 <div class="row">
   <div class="col-xs-6">
     <% image_style = :medium %>
@@ -22,7 +34,7 @@
 
 <div class="row" id="persistData">
   <div id="publishButton" class="col-md-12">
-    <div class='save_xml btn btn-primary' data-url="<%= publish_record_path(@image) %>">Publish</div>
+    <div id='publishUrl' class='btn btn-primary' data-url="<%= publish_record_path(@image) %>">Publish</div>
   </div>
 </div>
 
@@ -33,11 +45,13 @@
     $("#xml_editor").xmlEditor({
       ajaxOptions: {
         xmlRetrievalPath: "<%= url_for(:only_path => false, :controller => 'images', :action => 'show', :id => @image.id, :format => :xml) %>",
-        xmlUploadPath: "<%= url_for(:only_path => false, :controller => 'images', :action => 'update', :id => @image.id, :format => :xml) %>",
-
-        xmlUploadAndPublishPath: '<%= url_for("/images/#{@image.id}/edit/publish") %>'
+        xmlUploadConfig: [
+         {domId: "defaultUrl", createDomElement: true, domClass: 'send_xml', linkText: 'Save', url: "<%= url_for(:only_path => false, :controller => 'images', :action => 'update', :id => @image.id, :format => :xml) %>"},
+         {domId: "publishUrl", createDomElement: false, url: '<%= url_for("/images/#{@image.id}/edit/publish") %>'}
+        ]
       },
-      schema: extractor.getSchema()
+      schema: extractor.getSchema(),
+      documentStatusPanelDomId: "#persistData"
     });
 
   });
