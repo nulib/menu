@@ -412,8 +412,7 @@
 
   	if ( this.options.ajaxOptions.xmlUploadConfig != null ){
   		$.each( this.options.ajaxOptions.xmlUploadConfig, function(index, obj){
-  			console.log(obj["domId"] + ": " + obj["url"]);
-  			$("#" + obj["domId"] ).click(function() {
+  			$("#" + obj["id"] ).click(function() {
   				self.saveXML(obj["url"]);
   			});
   		});
@@ -556,7 +555,6 @@
   },
   // Performs the default action for "saving" the contents of the editor, either to server or file
   saveXML: function(url) {
-    console.log('save yo')
   	if (url) {
   		this.submitXML(url);
   	} else {
@@ -603,7 +601,6 @@
 
   // Upload the contents of the editor to a path
   submitXML: function(url) {
-    console.log('hey url', url);
   	if (url){
   		if (this.textEditor.active) {
   			try {
@@ -2194,9 +2191,9 @@
       $.each(self.editor.options.ajaxOptions.xmlUploadConfig, function(index, el){
         if(el.createDomElement){
           var submitButton = $("<input/>").attr({
-            'id' : el.domId,
+            'id' : el.id,
             'type' : 'button',
-            'class' : el.domClass,
+            'class' : el.cssClass,
             'name' : 'submit',
             'value' : el.linkText
           }).appendTo(documentStatusPanel);

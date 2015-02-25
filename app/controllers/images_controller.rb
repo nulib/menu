@@ -82,8 +82,8 @@ class ImagesController < ApplicationController
 
 
   def publish_record
-    # @image.image_xml = request.body.read
-    #   if @image.save
+    @image.image_xml = request.body.read
+    if @image.save
       @image.image_xml = TransformXML.add_display_elements( @image.image_xml )
       if @image.valid_vra?
           full_path = "#{Rails.root}/" + "#{@image.path}"
@@ -101,15 +101,13 @@ class ImagesController < ApplicationController
             render :edit
           end
       else
-          puts "hey there were errors"
-          errors = @image.validate_vra
-          flash.now[:danger] = errors
-          render :edit
+        errors = @image.validate_vra
+        flash.now[:danger] = errors
+        render :edit
       end
-      # else
-      #  render edit: @image.errors, status: :unprocessable_entity
-      # end
-   # end
+    else
+      render edit: @image.errors, status: :unprocessable_entity
+    end
   end
 
   private
