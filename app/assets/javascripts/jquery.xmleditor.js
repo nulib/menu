@@ -53,7 +53,7 @@
   var addAttrMenuClass = "add_attribute_menu";
   var addElementMenuClass = "add_element_menu";
   var xmlMenuBarClass = "xml_menu_bar";
-  //var submitButtonClass = "send_xml";
+  var submitButtonClass = "send_xml";
   var submissionStatusClass = "xml_submit_status";
   var xmlContentClass = "xml_content";
 
@@ -83,8 +83,6 @@
   	// Document retrieval and upload parameters
   	//okay so i want these to be keys from the hash that gets passed in - hash key is class name and value is url - don't forget you need default values
   	ajaxOptions : {
-  		//xmlUploadPath: null,
-  		//xmlUploadAndPublishPath: null,
   		xmlUploadConfig: null,
   		xmlRetrievalPath: null,
   		xmlRetrievalParams : null
@@ -410,13 +408,17 @@
   		$(window).bind('scroll', $.proxy(this.modifyMenu.setMenuPosition, this.modifyMenu));
   	}
 
-  	if ( this.options.ajaxOptions.xmlUploadConfig != null ){
-  		$.each( this.options.ajaxOptions.xmlUploadConfig, function(index, obj){
-  			$("#" + obj["id"] ).click(function() {
-  				self.saveXML(obj["url"]);
-  			});
-  		});
-  	}
+    if ( this.options.ajaxOptions.xmlUploadConfig != null ){
+        $.each( this.options.ajaxOptions.xmlUploadConfig, function(index, obj){
+          $("#" + obj["id"] ).click(function() {
+            self.saveXML(obj["url"]);
+          });
+        });
+    } else{
+        $("#" + submitButtonClass).click(function() {
+          self.saveXML();
+        });
+    }
 
   	this.ready = true;
   },
@@ -569,7 +571,6 @@
   		this.addProblem("Browser does not support saving files via this editor.  To save, copy and paste the document from the Text view.");
   		return false;
   	}
-
   	var exportDialog = $("<form><input type='text' class='xml_export_filename' placeholder='file.xml'/><input type='submit' value='Export'/></form>")
   			.dialog({modal: true, dialogClass: 'xml_dialog', resizable : false, title: 'Enter file name', height: 80});
   	var self = this;
@@ -2176,7 +2177,7 @@
   this.menuContainer = null;
 
   }
-  //JEN
+
   ModifyMenuPanel.prototype.initialize = function (parentContainer) {
   this.menuColumn = $("<div/>").attr('class', menuColumnClass).appendTo(parentContainer);
 
@@ -2185,29 +2186,37 @@
       var self = this;
       var documentStatusPanel = $(self.editor.options.documentStatusPanelDomId);
 
-  	$("<span/>").addClass(submissionStatusClass).html("Document is unchanged")
-  		.appendTo(documentStatusPanel);
-
-      $.each(self.editor.options.ajaxOptions.xmlUploadConfig, function(index, el){
-        if(el.createDomElement){
-          var submitButton = $("<input/>").attr({
-            'id' : el.id,
-            'type' : 'button',
-            'class' : el.cssClass,
-            'name' : 'submit',
-            'value' : el.linkText
-          }).appendTo(documentStatusPanel);
-          if (self.editor.options.ajaxOptions.xmlUploadConfig == null) {
-            if (typeof(Blob) !== undefined){
-              submitButton.attr("value", "Export");
-            } else {
-              submitButton.attr("disabled", "disabled");
-            }
+    $("<span/>").addClass(submissionStatusClass).html("Document is unchanged")
+      .appendTo(documentStatusPanel);
+      if (self.editor.options.ajaxOptions.xmlUploadConfig != null){
+        $.each(self.editor.options.ajaxOptions.xmlUploadConfig, function(index, el){
+          if(el.createDomElement){
+            var submitButton = $("<input/>").attr({
+              'id' : el.id,
+              'type' : 'button',
+              'class' : el.cssClass,
+              'name' : 'submit',
+              'value' : el.linkText
+            }).appendTo(documentStatusPanel);
           }
-        }
-      });
+        });
+      } else {
+        var submitButton = $("<input/>").attr({
+          'id' : submitButtonClass,
+          'type' : 'button',
+          'class' : 'send_xml',
+          'name' : 'submit',
+          'value' : 'Submit Changes'
+        }).appendTo(documentStatusPanel);
 
-  	documentStatusPanel.appendTo(this.menuColumn);
+        if (typeof(Blob) !== undefined){
+          submitButton.attr("value", "Export");
+        } else {
+          submitButton.attr("disabled", "disabled");
+        }
+
+      }
+    documentStatusPanel.appendTo(this.menuColumn);
   }
 
   this.menuContainer = $("<div class='" + menuContainerClass + "'/>").appendTo(this.menuColumn);

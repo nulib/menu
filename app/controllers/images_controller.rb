@@ -97,12 +97,12 @@ class ImagesController < ApplicationController
           else
             flash_messages = [ response_xml_doc.at_xpath( '//description' ).text.truncate( 50 ) ]
             flash_messages << "Image xml not published"
-            flash.now[:danger] = flash_messages
+            flash.now[:alert] = flash_messages
             render :edit
           end
       else
         errors = @image.validate_vra
-        flash.now[:danger] = errors
+        flash.now[:alert] = errors
         render :edit
       end
     else

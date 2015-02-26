@@ -40,9 +40,11 @@
 .xml_dialog .ui-dialog-titlebar-close {
 	position: absolute;
 	top: 50%;
-	margin: -10px 0 0 0;
+	margin: 0px 0px 0 0;
 	padding: 1px;
-	height: 20px;
+	height: 15px;
+	width: 20%;
+	right: -4px;
 }
 .xml_dialog .ui-dialog-content {
 	position: relative;
@@ -68,7 +70,6 @@
 }
 .xml_dialog .ui-icon {
 	display: block;
-	padding: .4em .3em;
 }
 .xml_dialog .ui-resizable-se {
 	width: 12px;
@@ -164,7 +165,7 @@
 }
 
 .xml_children > .xml_element:last-child {
-	margin-bottom: 0px;	
+	margin-bottom: 0px;
 }
 
 .top_level_element_group.xml_element {
@@ -330,7 +331,7 @@
 	resize: horizontal;
 	min-width: 100px;
 	height: 1.5em;
-	width: 160px;	
+	width: 160px;
 }
 
 .attribute_container > select {
@@ -425,7 +426,7 @@
 	border: 1px solid #aaaabb;
 }
 
-.menu_header.disabled { 
+.menu_header.disabled {
 	color: #999999;
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#cccccc');
 	background: -webkit-gradient(linear, left top, left bottom, from(#eeeeee), to(#cccccc));
@@ -451,7 +452,7 @@
 
 /* XML editor */
 .xml_tab_area {
-	background-color: #ffffff;	
+	background-color: #ffffff;
 }
 
 .text_content {
@@ -459,7 +460,7 @@
 	padding: 5px 18px 0 0;
 }
 
-.xml_tab_area .gui_content { 
+.xml_tab_area .gui_content {
 	padding: 3px 0 0 0;
 	background-color: #fafafa;
 	min-height: 600px;
@@ -495,7 +496,7 @@
 	overflow: hidden;
 	font-size: 18px;
 	white-space: nowrap;
-	margin-bottom: 10px;	
+	margin-bottom: 10px;
 }
 
 .xml_editor_header_backing {
@@ -539,7 +540,7 @@
 }
 
 .xml_menu_bar > ul > li > a > span:hover {
-	background-color: #eeeeee;	
+	background-color: #eeeeee;
 }
 
 .xml_menu_bar > ul > li > ul {
@@ -550,7 +551,7 @@
 	padding: 5px 7px;
 	border: 1px solid #bbbbcc;
 	border-bottom: 0px;
-	z-index: 1002; 
+	z-index: 1002;
 	background-color: #fff;
 	position: relative;
 }
@@ -587,9 +588,9 @@
 }
 
 .xml_menu_bar.active > ul > li > ul > li:hover {
-	background-color: #eeeeee;	
+	background-color: #eeeeee;
 }
- 
+
 .xml_menu_bar.active .binding {
 	float: right;
 	font-style: italic;
@@ -607,7 +608,7 @@
 	transition: border-color 0.2s linear 0s, box-shadow 0.2s linear 0s, color 0.2s linear 0s;
 }
 
-.xml_menu_bar .active_mode_tab {	
+.xml_menu_bar .active_mode_tab {
 	border: 1px solid #FBD850;
 	color: #EB8F00;
 	box-shadow: 0 0 3px #E5E5E5 inset, 0 0 3px #FBD850;
@@ -620,14 +621,14 @@
 	width: 1em;
 }
 
-/************ Default Style Overrides ************/ 
+/************ Default Style Overrides ************/
 
 .xml_editor_container ol, .xml_editor_container ul {
 	list-style: none;
 }
 
 .element_header {
-	background: none !important; 
+	background: none !important;
 }
 
 .xml_element.selected > ul.element_header {
