@@ -25,7 +25,6 @@ class ImagesController < ApplicationController
 
   # GET /images/1/edit
   def edit
-    puts "yo edit"
   end
 
   # POST /images
@@ -97,13 +96,16 @@ class ImagesController < ApplicationController
           else
             flash_messages = [ response_xml_doc.at_xpath( '//description' ).text.truncate( 50 ) ]
             flash_messages << "Image xml not published"
-            flash.now[:alert] = flash_messages
-            render :edit
+            flash[:error] = "Error deleting Image Group"
+            flash.now[:error] = flash_messages
+            redirect_to :edit
           end
       else
         errors = @image.validate_vra
-        flash.now[:alert] = errors
-        render :edit
+        puts "hey there were errors"
+        flash[:error] = errors
+        #render :json => { :success => false }
+        render :template => "images/edit", :status => 400
       end
     else
       render edit: @image.errors, status: :unprocessable_entity

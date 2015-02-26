@@ -635,6 +635,7 @@
   					self.clearProblemPanel();
   				} else {
   					self.xmlState.syncedChangeEvent();
+                              console.log('whoa')
   					$("." + submissionStatusClass).html("Failed to submit<br/>See errors at top").css("background-color", "#ffbbbb").animate({backgroundColor: "#ffffff"}, 1000);
   					self.addProblem("Failed to submit xml document", outcome);
   				}

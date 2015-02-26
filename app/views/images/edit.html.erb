@@ -1,16 +1,3 @@
-  <% flash.each do |key, value| %>
-  <div class="alert alert-<%= key %>" role="alert">
-    <ul>
-    <% if value.respond_to?('each') %>
-      <% value.each do |m| %>
-        <li><%= m %></li>
-      <% end %>
-    <% else %>
-      <li><%= value %></li>
-    <% end %>
-  </div>
-  <% end %>
-
 <h1>Editing image</h1>
 <div class="row">
   <div class="col-xs-6">
