@@ -96,9 +96,8 @@ class ImagesController < ApplicationController
           else
             flash_messages = [ response_xml_doc.at_xpath( '//description' ).text.truncate( 50 ) ]
             flash_messages << "Image xml not published"
-            flash[:error] = "Error deleting Image Group"
-            flash.now[:error] = flash_messages
-            redirect_to :edit
+            flash[:error] = flash_messages
+            render :edit
           end
       else
         errors = @image.validate_vra

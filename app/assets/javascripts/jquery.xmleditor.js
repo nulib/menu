@@ -629,13 +629,14 @@
   				// Process the response from the server using the provided response handler
   				// If the result of the handler evaluates true, then it is assumed to be an error
   				var outcome = self.options.submitResponseHandler(response);
-
+                        if ($("#errors").is(":visible")){
+                            $("#errors").hide();
+                        }
   				if (!outcome) {
   					self.xmlState.changesCommittedEvent();
   					self.clearProblemPanel();
   				} else {
   					self.xmlState.syncedChangeEvent();
-                              console.log('whoa')
   					$("." + submissionStatusClass).html("Failed to submit<br/>See errors at top").css("background-color", "#ffbbbb").animate({backgroundColor: "#ffffff"}, 1000);
   					self.addProblem("Failed to submit xml document", outcome);
   				}
@@ -654,7 +655,13 @@
   				} else if (exception === 'abort') {
   					alert('Ajax request aborted.');
   				} else {
-  					alert('Uncaught Error.\n' + jqXHR.responseText);
+                              // TODO -- make this exposed option as well, success and error js. or just use if/else
+                              // for response header.
+                              var msg = jqXHR.getResponseHeader('X-Message');
+                              if (msg) {
+                                  $(".container").prepend("<div id='errors' class='alert alert-danger'></div>");
+                                  $('#errors').append("<p>" + msg + "</p>");
+                                }
   				}
   			}
   		});
