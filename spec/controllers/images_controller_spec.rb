@@ -1,4 +1,13 @@
 require 'rails_helper'
+require 'pp'
+
+
+ def raw_post(action, params, body)
+    @request.env['RAW_POST_DATA'] = body
+    response = post(action, params)
+    @request.env.delete('RAW_POST_DATA')
+    response
+  end
 
 RSpec.describe ImagesController, :type => :controller do
   describe "CREATE image" do
@@ -99,13 +108,9 @@ RSpec.describe ImagesController, :type => :controller do
              to_return(:status => 200, :body => "<response><returnCode>Error</returnCode><description>Failed record</description></response>", :headers => {})
         @image = Image.create( job_id: 'test' )
         doc = Nokogiri::XML( @image.image_xml )
-        doc.xpath( '//vra:earliestDate' )[ 0 ].content = '0000'
-        @image.image_xml = doc.to_s
-        @image.save
-
-        response = get :publish_record, id: @image.id
-        #expect( flash[:error] ).to eq( "Image not saved" )
-        expect( flash[ :danger ]).to include( "Image not saved" )
+        doc.xpath( '//vra:earliestDate' )[ 0 ].content = 'pres'
+        raw_post :publish_record, {:id => @image.id},  doc.to_s
+        expect(response.status).to eq 400
       end
     end
 
