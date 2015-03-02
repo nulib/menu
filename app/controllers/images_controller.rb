@@ -31,7 +31,6 @@ class ImagesController < ApplicationController
   # POST /images.json
   def create
     @image = Image.new(image_params)
-
     respond_to do |format|
       if @image.save
         format.html { redirect_to @image, notice: 'Image was successfully created.' }
@@ -82,6 +81,7 @@ class ImagesController < ApplicationController
 
   def publish_record
     @image.image_xml = request.body.read
+
     if @image.save
       @image.image_xml = TransformXML.add_display_elements( @image.image_xml )
       if @image.valid_vra?
@@ -92,6 +92,7 @@ class ImagesController < ApplicationController
             destination = @image.completed_destination
             FileUtils.mkdir_p(destination) unless File.exists?(destination)
             FileUtils.mv(@image.path, "#{destination}/#{@image.filename}") unless Rails.env.development?
+            @image.destroy
             redirect_to root_path
           else
             flash_messages = [ response_xml_doc.at_xpath( '//description' ).text.truncate( 50 ) ]
@@ -99,9 +100,9 @@ class ImagesController < ApplicationController
             flash[:error] = flash_messages
             render :edit
           end
+
       else
         errors = @image.validate_vra
-        puts "hey there were errors"
         flash[:error] = errors
         #render :json => { :success => false }
         render :template => "images/edit", :status => 400
