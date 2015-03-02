@@ -31,7 +31,6 @@ class ImagesController < ApplicationController
   # POST /images.json
   def create
     @image = Image.new(image_params)
-
     respond_to do |format|
       if @image.save
         format.html { redirect_to @image, notice: 'Image was successfully created.' }
@@ -79,30 +78,38 @@ class ImagesController < ApplicationController
     end
   end
 
-  def publish_record
-    @image.image_xml = TransformXML.add_display_elements( @image.image_xml )
 
-    if @image.valid_vra?
-      response = dil_api_call( @image.image_xml, @image.path )
-      response_xml_doc = Nokogiri::XML( response )
-      if response_xml_doc.at_xpath( '//pid' ) && /Publish successful/.match(response_xml_doc)
-        destination = @image.completed_destination
-        FileUtils.mkdir_p(destination) unless File.exists?(destination)
-        FileUtils.mv(@image.path, "#{destination}/#{@image.filename}") unless Rails.env.development?
-        @image.destroy
-        redirect_to root_path
+  def publish_record
+    @image.image_xml = request.body.read
+
+    if @image.save
+      @image.image_xml = TransformXML.add_display_elements( @image.image_xml )
+      if @image.valid_vra?
+          full_path = "#{Rails.root}/" + "#{@image.path}"
+          response = dil_api_call( @image.image_xml, full_path )
+          response_xml_doc = Nokogiri::XML( response )
+          if response_xml_doc.at_xpath( '//pid' ) && /Publish successful/.match(response_xml_doc)
+            destination = @image.completed_destination
+            FileUtils.mkdir_p(destination) unless File.exists?(destination)
+            FileUtils.mv(@image.path, "#{destination}/#{@image.filename}") unless Rails.env.development?
+            @image.destroy
+            redirect_to root_path
+          else
+            flash_messages = [ response_xml_doc.at_xpath( '//description' ).text.truncate( 50 ) ]
+            flash_messages << "Image xml not published"
+            flash[:error] = flash_messages
+            render :edit
+          end
+
       else
-        flash_messages = [ response_xml_doc.at_xpath( '//description' ).text.truncate( 50 ) ]
-        flash_messages << "Image not saved"
-        flash[:danger] = flash_messages
-        render action: "edit" and return
+        errors = @image.validate_vra
+        flash[:error] = errors
+        #render :json => { :success => false }
+        render :template => "images/edit", :status => 400
       end
     else
-      errors = @image.validate_vra
-      flash[:danger] = errors
-      render action: "edit" and return
+      render edit: @image.errors, status: :unprocessable_entity
     end
-
   end
 
   private
