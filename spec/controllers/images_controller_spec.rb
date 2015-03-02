@@ -73,32 +73,53 @@ RSpec.describe ImagesController, :type => :controller do
         job = Job.create( job_id: 123 )
         @image = job.images.create( filename: 'test.tif', location: 'dropbox' )
         doc = Nokogiri::XML( @image.image_xml )
-        doc.xpath( '//vra:earliestDate' )[ 0 ].content = '0000'
+        doc.xpath( '//vra:earliestDate' )[ 0 ].content = 'present'
         @image.image_xml = doc.to_xml
-        @image.save
-        allow(FileUtils).to receive(:mv)
-        stub_request(:post, "https://127.0.0.1:3333/multiresimages/menu_publish").
-             to_return(:status => 200, :body => "<response><returnCode>Publish successful</returnCode><pid>inu:dil-8a21a816-ac14-493c-a571-2be8e6dd4745</pid></response>", :headers => {})
+      #   @image.save
+         allow(FileUtils).to receive(:mv)
+         stub_request(:post, "https://127.0.0.1:3333/multiresimages/menu_publish").
+              to_return(:status => 200, :body => "<response><returnCode>Publish successful</returnCode><pid>inu:dil-8a21a816-ac14-493c-a571-2be8e6dd4745</pid></response>", :headers => {})
       end
 
       it "generates an API call to Repository Images" do
+        # @controller = ImagesController.new
+        # job = Job.create( job_id: 123 )
+        # @image = job.images.create( filename: 'test.tif', location: 'dropbox' )
+        # doc = Nokogiri::XML( @image.image_xml )
+        # doc.xpath( '//vra:earliestDate' )[ 0 ].content = 'present'
+        # @image.image_xml = doc.to_xml
         response = @controller.send( :dil_api_call, @image.image_xml, @image.path )
         expect( response ).to include( 'Publish successful' )
       end
 
       it "moves the image to the dropbox root once published" do
-        expect(FileUtils).to receive("mv").with(@image.path, "#{@image.completed_destination}/#{@image.filename}")
-        response = get( :publish_record, id: @image )
+       # response = get( :publish_record, id: @image )
+        # job = Job.create( job_id: 123 )
+        # job.save!
+        # @image = job.images.create( filename: 'test.tif', location: 'dropbox' )
+        # doc = Nokogiri::XML( @image.image_xml )
+        # doc.xpath( '//vra:earliestDate' )[ 0 ].content = 'present'
+        raw_post( :publish_record, {:id => @image.id},  @image.image_xml )
+        expect File.exists?("#{@image.completed_destination}/#{@image.filename}")
+        #expect(FileUtils).to receive("mv").with(@image.path, "#{@image.completed_destination}/#{@image.filename}")
+        #job.delete!
       end
 
-      it "deletes the image" do
-        expect do
-          response = get( :publish_record, id: @image )
-        end.to change(Image, :count).by(-1)
-      end
+      # it doesn't do this anymore.
+      # it "deletes the image" do
+      #   expect do
+      #     response = get( :publish_record, id: @image )
+      #   end.to change(Image, :count).by(-1)
+      # end
 
       it "redirects to the site root" do
-        expect( get( :publish_record, id: @image ) ).to redirect_to( root_url )
+        # job = Job.create( job_id: 123 )
+        # job.save!
+        # @image = job.images.create( filename: 'test.tif', location: 'dropbox' )
+        # doc = Nokogiri::XML( @image.image_xml )
+        # doc.xpath( '//vra:earliestDate' )[ 0 ].content = 'present'
+
+        expect( raw_post( :publish_record, {:id => @image.id},  @image.image_xml ) ).to redirect_to( root_url )
       end
     end
 
