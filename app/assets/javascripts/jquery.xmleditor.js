@@ -631,7 +631,7 @@
   				var outcome = self.options.submitResponseHandler(response);
                         if ($("#errors").is(":visible")){
                             $("#errors").hide();
-                        }
+                         }
   				if (!outcome) {
   					self.xmlState.changesCommittedEvent();
   					self.clearProblemPanel();
@@ -654,14 +654,12 @@
   					alert('Time out error.');
   				} else if (exception === 'abort') {
   					alert('Ajax request aborted.');
-  				} else {
-                              // TODO -- make this exposed option as well, success and error js. or just use if/else
-                              // for response header.
+  		            }else if (jqXHR.getResponseHeader('X-Message')) {
                               var msg = jqXHR.getResponseHeader('X-Message');
-                              if (msg) {
-                                  $(".container").prepend("<div id='errors' class='alert alert-danger'></div>");
-                                  $('#errors').append("<p>" + msg + "</p>");
-                                }
+                              $(".container").prepend("<div id='errors' class='alert alert-danger'></div>");
+                              $('#errors').append("<p>" + msg + "</p>");
+                        } else {
+  					alert('Uncaught Error.\n' + jqXHR.responseText);
   				}
   			}
   		});
