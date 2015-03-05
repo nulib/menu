@@ -88,15 +88,13 @@ RSpec.describe ImagesController, :type => :controller do
       it "moves the image to the dropbox root once published" do
         raw_post( :publish_record, {:id => @image.id},  @image.image_xml )
         expect File.exists?("#{@image.completed_destination}/#{@image.filename}")
-        #expect(FileUtils).to receive("mv").with(@image.path, "#{@image.completed_destination}/#{@image.filename}")
       end
 
-      # it doesn't do this anymore.
-      # it "deletes the image" do
-      #   expect do
-      #     response = get( :publish_record, id: @image )
-      #   end.to change(Image, :count).by(-1)
-      # end
+      it "deletes the image" do
+        expect do
+          raw_post( :publish_record, {:id => @image.id},  @image.image_xml )
+        end.to change(Image, :count).by(-1)
+      end
 
       it "redirects to the site root" do
         expect( raw_post( :publish_record, {:id => @image.id},  @image.image_xml ) ).to redirect_to( root_url )
