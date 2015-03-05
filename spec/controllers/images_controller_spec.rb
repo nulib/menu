@@ -1,4 +1,13 @@
 require 'rails_helper'
+require 'pp'
+
+
+ def raw_post(action, params, body)
+    @request.env['RAW_POST_DATA'] = body
+    response = post(action, params)
+    @request.env.delete('RAW_POST_DATA')
+    response
+  end
 
 RSpec.describe ImagesController, :type => :controller do
   describe "CREATE image" do
@@ -64,12 +73,11 @@ RSpec.describe ImagesController, :type => :controller do
         job = Job.create( job_id: 123 )
         @image = job.images.create( filename: 'test.tif', location: 'dropbox' )
         doc = Nokogiri::XML( @image.image_xml )
-        doc.xpath( '//vra:earliestDate' )[ 0 ].content = '0000'
+        doc.xpath( '//vra:earliestDate' )[ 0 ].content = 'present'
         @image.image_xml = doc.to_xml
-        @image.save
-        allow(FileUtils).to receive(:mv)
-        stub_request(:post, "https://127.0.0.1:3333/multiresimages/menu_publish").
-             to_return(:status => 200, :body => "<response><returnCode>Publish successful</returnCode><pid>inu:dil-8a21a816-ac14-493c-a571-2be8e6dd4745</pid></response>", :headers => {})
+         allow(FileUtils).to receive(:mv)
+         stub_request(:post, "https://127.0.0.1:3333/multiresimages/menu_publish").
+              to_return(:status => 200, :body => "<response><returnCode>Publish successful</returnCode><pid>inu:dil-8a21a816-ac14-493c-a571-2be8e6dd4745</pid></response>", :headers => {})
       end
 
       it "generates an API call to Repository Images" do
@@ -78,18 +86,19 @@ RSpec.describe ImagesController, :type => :controller do
       end
 
       it "moves the image to the dropbox root once published" do
-        expect(FileUtils).to receive("mv").with(@image.path, "#{@image.completed_destination}/#{@image.filename}")
-        response = get( :publish, id: @image )
+        raw_post( :publish, {:id => @image.id},  @image.image_xml )
+        expect File.exists?("#{@image.completed_destination}/#{@image.filename}")
       end
 
-      it "deletes the image" do
-        expect do
-          response = get( :publish, id: @image )
-        end.to change(Image, :count).by(-1)
-      end
+      # it doesn't do this anymore.
+      # it "deletes the image" do
+      #   expect do
+      #     response = get( :publish_record, id: @image )
+      #   end.to change(Image, :count).by(-1)
+      # end
 
       it "redirects to the site root" do
-        expect( get( :publish, id: @image ) ).to redirect_to( root_url )
+        expect( raw_post( :publish, {:id => @image.id},  @image.image_xml ) ).to redirect_to( root_url )
       end
     end
 
@@ -99,13 +108,9 @@ RSpec.describe ImagesController, :type => :controller do
              to_return(:status => 200, :body => "<response><returnCode>Error</returnCode><description>Failed record</description></response>", :headers => {})
         @image = Image.create( job_id: 'test' )
         doc = Nokogiri::XML( @image.image_xml )
-        doc.xpath( '//vra:earliestDate' )[ 0 ].content = '0000'
-        @image.image_xml = doc.to_s
-        @image.save
-
-        response = get :publish, id: @image.id
-        #expect( flash[:error] ).to eq( "Image not saved" )
-        expect( flash[ :danger ]).to include( "Image not saved" )
+        doc.xpath( '//vra:earliestDate' )[ 0 ].content = 'pres'
+        raw_post :publish, {:id => @image.id},  doc.to_s
+        expect(response.status).to eq 400
       end
     end
 

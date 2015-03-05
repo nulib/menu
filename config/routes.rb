@@ -3,7 +3,7 @@ Menu::Application.routes.draw do
   resources :images do
     member do
       post  'save_xml'
-      get   'publish'
+      post   'publish'
     end
   end
 
@@ -15,9 +15,8 @@ Menu::Application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'jobs#index'
 
-  # This route is probably incorrect, we should see if we can get the
-  # XML Editor to post to the save_xml action instead of just images
-  #post 'images/:id', to: 'images#save_xml'
+  #match 'images/:id/edit/publish', to: 'images#publish', as: :publish, via: [:post, :patch]
+
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
