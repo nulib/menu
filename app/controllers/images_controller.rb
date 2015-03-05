@@ -1,7 +1,7 @@
 require 'rest-client'
 
 class ImagesController < ApplicationController
-  before_action :set_image, only: [:show, :edit, :update, :destroy, :save_xml, :publish_record]
+  before_action :set_image, only: [:show, :edit, :update, :destroy, :save_xml, :publish]
 
   # GET /images
   # GET /images.json
@@ -79,7 +79,7 @@ class ImagesController < ApplicationController
   end
 
 
-  def publish_record
+  def publish
     @image.image_xml = request.body.read
 
     if @image.save
@@ -100,11 +100,9 @@ class ImagesController < ApplicationController
             flash[:error] = flash_messages
             render :edit
           end
-
       else
         errors = @image.validate_vra
         flash[:error] = errors
-        #render :json => { :success => false }
         render :template => "images/edit", :status => 400
       end
     else

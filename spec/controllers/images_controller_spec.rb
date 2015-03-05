@@ -86,9 +86,8 @@ RSpec.describe ImagesController, :type => :controller do
       end
 
       it "moves the image to the dropbox root once published" do
-        raw_post( :publish_record, {:id => @image.id},  @image.image_xml )
+        raw_post( :publish, {:id => @image.id},  @image.image_xml )
         expect File.exists?("#{@image.completed_destination}/#{@image.filename}")
-        #expect(FileUtils).to receive("mv").with(@image.path, "#{@image.completed_destination}/#{@image.filename}")
       end
 
       # it doesn't do this anymore.
@@ -99,7 +98,7 @@ RSpec.describe ImagesController, :type => :controller do
       # end
 
       it "redirects to the site root" do
-        expect( raw_post( :publish_record, {:id => @image.id},  @image.image_xml ) ).to redirect_to( root_url )
+        expect( raw_post( :publish, {:id => @image.id},  @image.image_xml ) ).to redirect_to( root_url )
       end
     end
 
@@ -110,7 +109,7 @@ RSpec.describe ImagesController, :type => :controller do
         @image = Image.create( job_id: 'test' )
         doc = Nokogiri::XML( @image.image_xml )
         doc.xpath( '//vra:earliestDate' )[ 0 ].content = 'pres'
-        raw_post :publish_record, {:id => @image.id},  doc.to_s
+        raw_post :publish, {:id => @image.id},  doc.to_s
         expect(response.status).to eq 400
       end
     end

@@ -1,5 +1,12 @@
 Menu::Application.routes.draw do
-  resources :images
+
+  resources :images do
+    member do
+      post  'save_xml'
+      post   'publish'
+    end
+  end
+
   resources :jobs
 
   # The priority is based upon order of creation: first created -> highest priority.
@@ -8,9 +15,8 @@ Menu::Application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'jobs#index'
 
-  match 'images/:id', to: 'images#save_xml', via: 'post'
+  #match 'images/:id/edit/publish', to: 'images#publish', as: :publish, via: [:post, :patch]
 
-  match 'images/:id/edit/publish', to: 'images#publish_record', as: :publish_record, via: [:post, :patch]
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
