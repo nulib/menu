@@ -85,6 +85,7 @@ class ImagesController < ApplicationController
     if @image.save
       @image.image_xml = TransformXML.add_display_elements( @image.image_xml )
       if @image.valid_vra?
+          #TODO - fix this full_path_thing, yo
           full_path = "#{Rails.root}/" + "#{@image.path}"
           response = dil_api_call( @image.image_xml, full_path )
           response_xml_doc = Nokogiri::XML( response )
@@ -98,7 +99,7 @@ class ImagesController < ApplicationController
             flash_messages = [ response_xml_doc.at_xpath( '//description' ).text.truncate( 50 ) ]
             flash_messages << "Image xml not published"
             flash[:error] = flash_messages
-            render :edit
+            render :template => "images/edit", :status => 400
           end
       else
         errors = @image.validate_vra
