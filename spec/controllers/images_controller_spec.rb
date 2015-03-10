@@ -92,7 +92,7 @@ RSpec.describe ImagesController, :type => :controller do
 
       it "deletes the image" do
         expect do
-          raw_post( :publish_record, {:id => @image.id},  @image.image_xml )
+          raw_post( :publish, {:id => @image.id},  @image.image_xml )
         end.to change(Image, :count).by(-1)
       end
 

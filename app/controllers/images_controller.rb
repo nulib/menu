@@ -85,9 +85,9 @@ class ImagesController < ApplicationController
     if @image.save
       @image.image_xml = TransformXML.add_display_elements( @image.image_xml )
       if @image.valid_vra?
-          #TODO - fix this full_path_thing, yo
+          #TODO - fix this full_path_thing, yo -- needs to be in config
           full_path = "#{Rails.root}/" + "#{@image.path}"
-          response = dil_api_call( @image.image_xml, full_path )
+          response = dil_api_call( @image.image_xml, @image.path )
           response_xml_doc = Nokogiri::XML( response )
           if response_xml_doc.at_xpath( '//pid' ) && /Publish successful/.match(response_xml_doc)
             destination = @image.completed_destination
