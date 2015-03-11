@@ -643,6 +643,9 @@ $.widget( "xml.xmlEditor", {
                         if ($("#errors").is(":visible")){
                             $("#errors").hide();
                          }
+                         if ($("." + submissionStatusClass).hasClass("alert alert-danger")){
+                         	$("." + submissionStatusClass).removeClass("alert alert-danger")
+                         }
 					if (!outcome) {
 						self.xmlState.changesCommittedEvent();
 						self.clearProblemPanel();
