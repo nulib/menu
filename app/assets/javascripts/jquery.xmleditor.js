@@ -643,6 +643,9 @@ $.widget( "xml.xmlEditor", {
                         if ($("#errors").is(":visible")){
                             $("#errors").hide();
                          }
+                         if ($("." + submissionStatusClass).hasClass("alert alert-danger")){
+                         	$("." + submissionStatusClass).removeClass("alert alert-danger")
+                         }
 					if (!outcome) {
 						self.xmlState.changesCommittedEvent();
 						self.clearProblemPanel();
@@ -666,6 +669,8 @@ $.widget( "xml.xmlEditor", {
 					} else if (exception === 'abort') {
 						alert('Ajax request aborted.');
   		            }else if (jqXHR.getResponseHeader('X-Message')) {
+  		            	$("." + submissionStatusClass).addClass("alert alert-danger")
+  		            	$("." + submissionStatusClass).html("Errors! This record was not published. Details above.");
                               var msg = jqXHR.getResponseHeader('X-Message');
                               $(".container").prepend("<div id='errors' class='alert alert-danger'></div>");
                               $('#errors').append("<p>" + msg + "</p>");
