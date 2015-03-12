@@ -640,12 +640,12 @@ $.widget( "xml.xmlEditor", {
 					// Process the response from the server using the provided response handler
 					// If the result of the handler evaluates true, then it is assumed to be an error
 					var outcome = self.options.submitResponseHandler(response);
-                        if ($("#errors").is(":visible")){
-                            $("#errors").hide();
-                         }
-                         if ($("." + submissionStatusClass).hasClass("alert alert-danger")){
-                         	$("." + submissionStatusClass).removeClass("alert alert-danger")
-                         }
+	                        if ($("#errors").is(":visible")){
+	                            $("#errors").hide();
+	                         }
+	                         if ($("." + submissionStatusClass).hasClass("alert alert-danger")){
+	                         	$("." + submissionStatusClass).removeClass("alert alert-danger")
+	                         }
 					if (!outcome) {
 						self.xmlState.changesCommittedEvent();
 						self.clearProblemPanel();
@@ -654,6 +654,7 @@ $.widget( "xml.xmlEditor", {
 						$("." + submissionStatusClass).html("Failed to submit<br/>See errors at top").css("background-color", "#ffbbbb").animate({backgroundColor: "#ffffff"}, 1000);
 						self.addProblem("Failed to submit xml document", outcome);
 					}
+					document.location.href = response.localName
 				},
 				error : function(jqXHR, exception) {
 					if (jqXHR.status === 0) {
