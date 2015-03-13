@@ -94,7 +94,9 @@ class ImagesController < ApplicationController
             FileUtils.mkdir_p(destination) unless File.exists?(destination)
             FileUtils.mv(@image.path, "#{destination}/#{@image.filename}") unless Rails.env.development?
             @image.destroy
-            redirect_to root_path
+            job_url = "#{root_url}jobs/#{@image.job_id}"
+
+            render json: {:localName => job_url}
           else
             flash_messages = [ response_xml_doc.at_xpath( '//description' ).text.truncate( 50 ) ]
             flash_messages << "Image xml not published"
