@@ -67,6 +67,7 @@ RSpec.describe ImagesController, :type => :controller do
   end
 
   describe "publishes a record" do
+
     context "with valid vra" do
       before do
         @controller = ImagesController.new
@@ -76,6 +77,7 @@ RSpec.describe ImagesController, :type => :controller do
         doc.xpath( '//vra:earliestDate' )[ 0 ].content = 'present'
         @image.image_xml = doc.to_xml
          allow(FileUtils).to receive(:mv)
+
          stub_request(:post, "https://127.0.0.1:3333/multiresimages/menu_publish").
               to_return(:status => 200, :body => "<response><returnCode>Publish successful</returnCode><pid>inu:dil-8a21a816-ac14-493c-a571-2be8e6dd4745</pid></response>", :headers => {})
       end
@@ -96,8 +98,10 @@ RSpec.describe ImagesController, :type => :controller do
         end.to change(Image, :count).by(-1)
       end
 
-      it "redirects to the site root" do
-        expect( raw_post( :publish, {:id => @image.id},  @image.image_xml ) ).to redirect_to( root_url )
+      it "returns root_url upon success so that ajax can redirect" do
+        resp = raw_post( :publish, {:id => @image.id},  @image.image_xml)
+
+        expect(resp.body).to include(root_url)
       end
     end
 
