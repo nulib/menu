@@ -100,8 +100,9 @@ RSpec.describe ImagesController, :type => :controller do
 
       it "returns root_url upon success so that ajax can redirect" do
         resp = raw_post( :publish, {:id => @image.id},  @image.image_xml)
+        job_url = "#{root_url}jobs/#{@image.job_id}"
 
-        expect(resp.body).to include(root_url)
+        expect(resp.body).to include(job_url)
       end
     end
 
