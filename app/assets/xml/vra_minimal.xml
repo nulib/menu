@@ -9,12 +9,9 @@
       <!--Agents-->
        <vra:agentSet>
          <vra:agent>
-            <vra:name type="corporate" vocab="lcnaf"></vra:name>
+            <vra:name type="personal" vocab="lcnaf"></vra:name>
             <vra:attribution/>
             <vra:role vocab="RDA"/>
-         </vra:agent>
-         <vra:agent>
-            <vra:name type="corporate" vocab="lcnaf"></vra:name>
          </vra:agent>
       </vra:agentSet>
 
