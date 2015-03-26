@@ -81,6 +81,11 @@
          </vra:rights>
       </vra:rightsSet>
 
+      <!-- Source -->
+      <vra:sourceSet>
+         <vra:source/>
+      </vra:sourceSet>
+
       <!--Style Period-->
       <vra:stylePeriodSet>
          <vra:stylePeriod/>
