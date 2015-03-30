@@ -15,7 +15,7 @@
       <tr class="image-entry">
         <td><%= image_tag image.proxy( :thumb ), class: "thumbnail" %></td>
         <td><%= image.filename %></td>
-        <td><%= image.job.job_id %></td>
+        <td><%= image.job_id %></td>
         <td><%= link_to 'Show', image, class: "btn btn-default" %></td>
         <td><%= link_to 'Edit', edit_image_path(image), class: "btn btn-default" %></td>
         <td><%= link_to 'Delete', image, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %></td>

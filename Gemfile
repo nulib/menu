@@ -59,6 +59,7 @@ end
 group :test do
   gem 'webmock'
   gem 'equivalent-xml', :git => "https://github.com/mbklein/equivalent-xml.git"
+  gem 'rspec-activemodel-mocks'
 end
 
 group :staging, :production do
