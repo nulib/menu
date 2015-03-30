@@ -2,6 +2,6 @@
 
 <ul>
   <% @jobs.each do |job| %>
-    <li class='job_link'><%= link_to( job.job_id, job ) %></li>
+    <li class='job_link'><%= link_to( job.job_id, job ) %> (<%= job.images.size %>) </li>
   <% end %>
 </ul>

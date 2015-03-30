@@ -9,3 +9,4 @@ describe 'jobs/show.html.erb', :type => :view do
     expect(rendered).to have_link 'Delete'
   end
 end
+
