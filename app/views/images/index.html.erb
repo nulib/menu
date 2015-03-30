@@ -18,7 +18,7 @@
         <td><%= image.job_id %></td>
         <td><%= link_to 'Show', image, class: "btn btn-default" %></td>
         <td><%= link_to 'Edit', edit_image_path(image), class: "btn btn-default" %></td>
-        <td><%= link_to 'Destroy', image, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %></td>
+        <td><%= link_to 'Delete', image, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %></td>
       </tr>
     <% end %>
   </tbody>
