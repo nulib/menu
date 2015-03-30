@@ -42,6 +42,7 @@ gem 'capistrano-rails'
 gem 'capistrano-rbenv'
 gem 'bootstrap-sass', '~> 3'
 gem 'nokogiri'
+gem 'mini_portile'
 gem 'paperclip'
 gem 'rest-client'
 
