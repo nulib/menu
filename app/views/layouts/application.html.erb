@@ -8,12 +8,14 @@
 </head>
 <body>
 
-  <div class="navbar navbar-default">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
       <div class="navbar-header">
         <%= link_to "menu -- Metadata Editor at Northwestern University Library", root_path, :class => "navbar-brand" %>
       </div>
-      <p class="navbar-text pull-right"><%= link_to "Cataloging Guidelines", "https://docs.google.com/document/d/1tk7cbK2oh1Sxu7TSKiBiSZH073ivF3KRxzSCgODAfek/edit", :target => "_blank" %></p>
-  </div>
+      <h4 class="navbar-text pull-right"><%= link_to "Cataloging Guidelines", "https://docs.google.com/document/d/1tk7cbK2oh1Sxu7TSKiBiSZH073ivF3KRxzSCgODAfek/edit", :target => "_blank", :class => "" %></h4>
+    </div>
+  </nav>
 
   <div class="container">
       <% flash.each do |key, value| %>
