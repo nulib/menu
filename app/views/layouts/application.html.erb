@@ -8,9 +8,11 @@
 </head>
 <body>
 
-  <div class="jumbotron">
-    <h1><%= link_to "menu", root_path %></h1>
-    <p>Metadata Editor at Northwestern University Library</p>
+  <div class="navbar navbar-default">
+      <div class="navbar-header">
+        <%= link_to "menu -- Metadata Editor at Northwestern University Library", root_path, :class => "navbar-brand" %>
+      </div>
+      <p class="navbar-text pull-right"><%= link_to "Cataloging Guidelines", "https://docs.google.com/document/d/1tk7cbK2oh1Sxu7TSKiBiSZH073ivF3KRxzSCgODAfek/edit", :target => "_blank" %></p>
   </div>
 
   <div class="container">
