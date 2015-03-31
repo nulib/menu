@@ -6,6 +6,7 @@ module TransformXML
       next unless node.element?
       next if node.name == 'dateSet'
       next if node.name == 'subjectSet'
+      next if node.name == 'agentSet'
       display = Nokogiri::XML::Node.new 'vra:display', doc
       all_text_nodes = node.xpath( ".//text()" ).to_a
       all_text_nodes.delete_if { |el| el.blank? }
