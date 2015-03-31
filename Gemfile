@@ -52,7 +52,6 @@ group :development, :test do
   gem 'rspec-rails', '~> 3'
   gem 'byebug'
   gem 'simplecov', :require => false
-  gem 'capybara', '~> 2'
   gem 'pry-rails'
   gem 'pry-byebug'
 end
@@ -60,7 +59,9 @@ end
 group :test do
   gem 'webmock'
   gem 'equivalent-xml', :git => "https://github.com/mbklein/equivalent-xml.git"
-  gem 'rspec-activemodel-mocks'
+  gem 'factory_girl_rails'
+  gem 'capybara'
+  gem 'database_cleaner'
 end
 
 group :staging, :production do
