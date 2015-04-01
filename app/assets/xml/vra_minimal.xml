@@ -3,7 +3,7 @@
     xmlns:fn="http://www.w3.org/2005/xpath-functions"
     xmlns:vra="http://www.vraweb.org/vracore4.htm"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    xsi:schemaLocation="http://www.vraweb.org/vracore4.htm http://www.loc.gov/standards/vracore/vra.xsd">
+    xsi:schemaLocation="http://www.vraweb.org/vracore4.htm http://www.loc.gov/standards/vracore/vra-strict.xsd">
    <vra:image>
 
       <!--Agents-->
