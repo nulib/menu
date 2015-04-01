@@ -15,6 +15,15 @@ describe "visiting the home page" do
     expect( page ).to have_css( "li.job_link>a" )
   end
 
+  it "orders the list of jobs by Job ID" do
+    job1 = Job.create( job_id: 456 )
+    job2 = Job.create( job_id: 123 )
+
+    visit root_path
+
+    expect( first('.job_link') ).to have_content( "123" )
+  end
+
   it "displays one listing for each Job ID" do
     job1 = Job.create( job_id: 123 )
     job2 = Job.create( job_id: 123 )
