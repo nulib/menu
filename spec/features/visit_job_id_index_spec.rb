@@ -1,6 +1,11 @@
 require 'rails_helper'
 
 describe "visiting the home page" do
+  it "provides a link to the Cataloging Guidelines" do
+    visit root_path
+    expect( page ).to have_link( "Cataloging Guidelines" )
+  end
+
   it "displays a Job ID header" do
     visit root_path
 
