@@ -10,7 +10,19 @@ module TransformXML
       display = Nokogiri::XML::Node.new 'vra:display', doc
       all_text_nodes = node.xpath( ".//text()" ).to_a
       all_text_nodes.delete_if { |el| el.blank? }
-      display.content = all_text_nodes.join( " ; " )
+
+      if node.name == 'agentSet'
+        agents = node.children.select { | child | child.name == "agent" }
+        joined_agents = []
+        agents.each do | agent |
+          joined_agent = agent.children.to_a.delete_if {|child| child.blank?}.join(", ")
+          joined_agents << joined_agent
+        end
+        display.content = joined_agents.join(" ; ")
+
+      else
+        display.content = all_text_nodes.join( " ; " )
+      end
       node.children.first.add_previous_sibling( display )
     end
     doc.to_xml
