@@ -6,20 +6,15 @@ module TransformXML
       next unless node.element?
       next if node.name == 'dateSet'
       next if node.name == 'subjectSet'
-      next if node.name == 'agentSet'
       display = Nokogiri::XML::Node.new 'vra:display', doc
       all_text_nodes = node.xpath( ".//text()" ).to_a
       all_text_nodes.delete_if { |el| el.blank? }
-
       if node.name == 'agentSet'
         agents = node.children.select { | child | child.name == "agent" }
-        joined_agents = []
-        agents.each do | agent |
-          joined_agent = agent.children.to_a.delete_if {|child| child.blank?}.join(", ")
-          joined_agents << joined_agent
+        joined_agents = agents.collect do | agent |
+          [agent.children.to_a.delete_if {|child| child.blank?}.join(", ")]
         end
         display.content = joined_agents.join(" ; ")
-
       else
         display.content = all_text_nodes.join( " ; " )
       end
