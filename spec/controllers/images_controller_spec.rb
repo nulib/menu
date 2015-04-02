@@ -71,7 +71,7 @@ RSpec.describe ImagesController, :type => :controller do
     context "with valid vra" do
       before do
         @controller = ImagesController.new
-        job = Job.create( job_id: 123 )
+        job = create(:job)
         @image = job.images.create( filename: 'test.tif', location: 'dropbox' )
         doc = Nokogiri::XML( @image.image_xml )
         doc.xpath( '//vra:earliestDate' )[ 0 ].content = 'present'
@@ -110,7 +110,7 @@ RSpec.describe ImagesController, :type => :controller do
       it "fails gracefully" do
         stub_request(:post, "https://127.0.0.1:3333/multiresimages/menu_publish").
              to_return(:status => 200, :body => "<response><returnCode>Error</returnCode><description>Failed record</description></response>", :headers => {})
-        @image = Image.create( job_id: 'test' )
+        @image = Image.create!( job_id: 'test' )
         doc = Nokogiri::XML( @image.image_xml )
         doc.xpath( '//vra:earliestDate' )[ 0 ].content = 'pres'
         raw_post :publish, {:id => @image.id},  doc.to_s

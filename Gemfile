@@ -61,6 +61,7 @@ group :test do
   gem 'equivalent-xml', :git => "https://github.com/mbklein/equivalent-xml.git"
   gem 'factory_girl_rails'
   gem 'capybara'
+  gem 'launchy'
   gem 'database_cleaner'
 end
 
