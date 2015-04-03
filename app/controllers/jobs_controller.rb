@@ -1,7 +1,7 @@
 class JobsController < ApplicationController
   def index
     GetImages.current_images
-    @jobs = Job.all
+    @jobs = Job.order(:job_id)
   end
 
   def show
