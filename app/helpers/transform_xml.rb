@@ -12,7 +12,7 @@ module TransformXML
       if node.name == 'agentSet'
         agents = node.children.select { | child | child.name == "agent" }
         joined_agents = agents.collect do | agent |
-          [agent.children.to_a.delete_if {|child| child.blank?}.join(", ")]
+          [agent.children.to_a.delete_if { |child| child.blank? }.join(", ")]
         end
         display.content = joined_agents.join(" ; ")
       else
