@@ -1,8 +1,10 @@
 require 'rails_helper'
 
 describe "visiting the home page" do
+
   it "provides a link to the Cataloging Guidelines" do
     visit root_path
+
     expect( page ).to have_link( "Cataloging Guidelines" )
   end
 
@@ -13,32 +15,22 @@ describe "visiting the home page" do
   end
 
   it "displays a list of linked Job IDs" do
-    job = Job.create( job_id: 123 )
-
     visit root_path
 
     expect( page ).to have_css( "li.job_link>a" )
   end
 
   it "orders the list of jobs by Job ID" do
-    job1 = Job.create( job_id: 456 )
-    job2 = Job.create( job_id: 123 )
+    job2 = create(:job, job_id: 1 )
+    visit root_path  
 
-    visit root_path
-
-    expect( first('.job_link') ).to have_content( "123" )
+    expect( first('.job_link>a') ).to have_content( "1", exact: true )
   end
 
   it "displays one listing for each Job ID" do
-    job1 = Job.create( job_id: 123 )
-    job2 = Job.create( job_id: 123 )
-    job3 = Job.create( job_id: 789 )
-    job4 = Job.create( job_id: 789 )
-    job5 = Job.create( job_id: 234 )
-    job6 = Job.create( job_id: 456 )
-
+    create(:job, job_id: 100)
     visit root_path
 
-    expect( page ).to have_css( "li.job_link>a", count: 4 )
+    expect( page ).to have_link( "100", count: 1 )
   end
 end
