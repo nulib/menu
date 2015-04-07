@@ -1,72 +1,62 @@
-<vra:vra xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:marc="http://www.loc.gov/MARC21/slim" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:vra="http://www.vraweb.org/vracore4.htm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.vraweb.org/vracore4.htm http://www.vraweb.org/projects/vracore4/vra-4.0-restricted.xsd">
-  <vra:image id="inu-dil-219157_w" refid="inu:dil-86a0e7d3-fdd5-4b12-87a6-6e1fb74e1c4c">
-    
-    <vra:agentSet>
-      <vra:display>Lysippos attributed to</vra:display>
-      <vra:agent>
-        <vra:name type="personal" vocab="ulan">Lysippos attributed to</vra:name>
-        <vra:attribution></vra:attribution>
-      </vra:agent>
-    </vra:agentSet>
-    <vra:culturalContextSet>
-      <vra:display></vra:display>
-      <vra:culturalContext></vra:culturalContext>
-    </vra:culturalContextSet>
-    
-    <vra:dateSet>
-      <vra:display>ca. 325 BCE - 300 BCE</vra:display>
-      <vra:date type="creation">
-        <vra:earliestDate>-0324</vra:earliestDate>
-        <vra:latestDate>-0299</vra:latestDate>
-      </vra:date>
-    </vra:dateSet>
-    <vra:inscriptionSet>
-      <vra:display></vra:display>
-      <vra:inscription>
-        <vra:text></vra:text>
-      </vra:inscription>
-    </vra:inscriptionSet>
-    
-    <vra:locationSet>
-      <vra:display>Delphi Museum ; Delphi ; inu:dil-86a0e7d3-fdd5-4b12-87a6-6e1fb74e1c4c ; attributed to</vra:display>
-      <vra:location type="repository">
-        <vra:name type="corporate">Delphi Museum</vra:name>
-        <vra:name type="geographic">Delphi</vra:name>
-      </vra:location>
-      <vra:location>
-        <vra:refid source="DIL">inu:dil-86a0e7d3-fdd5-4b12-87a6-6e1fb74e1c4c</vra:refid>
-        <vra:refid source="Voyager">attributed to</vra:refid>
-      </vra:location>
-    </vra:locationSet>
-    
-    <vra:materialSet>
-      <vra:display>&quot;marble, after bronze original&quot;</vra:display>
-      <vra:material>&quot;marble, after bronze original&quot;</vra:material>
-    </vra:materialSet>
-    
-    <vra:relationSet>
-      <vra:display>&quot;Agias of Pharsala, the Pankratist, Son of Agnosios&quot;. 3/4 view from right front</vra:display>
-      <vra:relation pref="true" relids="inu:dil-068f652d-3e46-4067-9698-084a9a20813a" type="imageOf">&quot;Agias of Pharsala, the Pankratist, Son of Agnosios&quot;. 3/4 view from right front</vra:relation>
-    </vra:relationSet>
-    
-    <vra:stylePeriodSet>
-      <vra:display>Greek Classical Period</vra:display>
-      <vra:stylePeriod>Greek Classical Period</vra:stylePeriod>
-    </vra:stylePeriodSet>
-    <vra:techniqueSet>
-      <vra:display></vra:display>
-      <vra:technique></vra:technique>
-    </vra:techniqueSet>
-    
-    <vra:titleSet>
-      <vra:display>&quot;Agias of Pharsala, the Pankratist, Son of Agnosios&quot;. 3/4 view from right front</vra:display>
-      <vra:title pref="true">&quot;Agias of Pharsala, the Pankratist, Son of Agnosios&quot;. 3/4 view from right front</vra:title>
-    </vra:titleSet>
-    
-    <vra:worktypeSet>
-      <vra:display>Sculpture</vra:display>
-      <vra:worktype vocab="local">Sculpture</vra:worktype>
-    </vra:worktypeSet>
-  </vra:image>
-</vra:vra>
+<?xml version="1.0"?>
+       <vra:vra xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:marc="http://www.loc.gov/MARC21/slim" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:vra="http://www.vraweb.org/vracore4.htm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.vraweb.org/vracore4.htm http://www.vraweb.org/projects/vracore4/vra-4.0-restricted.xsd">
+         <vra:image id="inu-dil-219157_w" refid="inu:dil-86a0e7d3-fdd5-4b12-87a6-6e1fb74e1c4c">
 
+           <vra:agentSet><vra:display>Lysippos attributed to, </vra:display>
+             <vra:agent>
+               <vra:name type="personal" vocab="ulan">Lysippos attributed to</vra:name>
+               <vra:attribution/>
+             </vra:agent>
+           </vra:agentSet>
+           <vra:culturalContextSet><vra:display/>
+             <vra:culturalContext/>
+           </vra:culturalContextSet>
+
+           <vra:dateSet>
+             <vra:display>ca. 325 BCE - 300 BCE</vra:display>
+             <vra:date type="creation">
+               <vra:earliestDate>-0324</vra:earliestDate>
+               <vra:latestDate>-0299</vra:latestDate>
+             </vra:date>
+           </vra:dateSet>
+           <vra:inscriptionSet><vra:display/>
+             <vra:inscription>
+               <vra:text/>
+             </vra:inscription>
+           </vra:inscriptionSet>
+
+           <vra:locationSet><vra:display>Delphi Museum ; Delphi ; inu:dil-86a0e7d3-fdd5-4b12-87a6-6e1fb74e1c4c ; attributed to</vra:display>
+             <vra:location type="repository">
+               <vra:name type="corporate">Delphi Museum</vra:name>
+               <vra:name type="geographic">Delphi</vra:name>
+             </vra:location>
+             <vra:location>
+               <vra:refid source="DIL">inu:dil-86a0e7d3-fdd5-4b12-87a6-6e1fb74e1c4c</vra:refid>
+               <vra:refid source="Voyager">attributed to</vra:refid>
+             </vra:location>
+           </vra:locationSet>
+
+           <vra:materialSet><vra:display>"marble, after bronze original"</vra:display>
+             <vra:material>"marble, after bronze original"</vra:material>
+           </vra:materialSet>
+
+           <vra:relationSet><vra:display>"Agias of Pharsala, the Pankratist, Son of Agnosios". 3/4 view from right front</vra:display>
+             <vra:relation pref="true" relids="inu:dil-068f652d-3e46-4067-9698-084a9a20813a" type="imageOf">"Agias of Pharsala, the Pankratist, Son of Agnosios". 3/4 view from right front</vra:relation>
+           </vra:relationSet>
+
+           <vra:stylePeriodSet><vra:display>Greek Classical Period</vra:display>
+             <vra:stylePeriod>Greek Classical Period</vra:stylePeriod>
+           </vra:stylePeriodSet>
+           <vra:techniqueSet><vra:display/>
+             <vra:technique/>
+           </vra:techniqueSet>
+
+           <vra:titleSet><vra:display>"Agias of Pharsala, the Pankratist, Son of Agnosios". 3/4 view from right front</vra:display>
+             <vra:title pref="true">"Agias of Pharsala, the Pankratist, Son of Agnosios". 3/4 view from right front</vra:title>
+           </vra:titleSet>
+
+           <vra:worktypeSet><vra:display>Sculpture</vra:display>
+             <vra:worktype vocab="local">Sculpture</vra:worktype>
+           </vra:worktypeSet>
+         </vra:image>
+       </vra:vra>
