@@ -626,3 +626,7 @@
 .xml_editor_container ol, .xml_editor_container ul {
 	list-style: none;
 }
+
+.attribute_container > textarea {
+    height: 2em;
+ }
