@@ -623,6 +623,10 @@
 
 /************ Default Style Overrides ************/
 
+.xml_menu_column {
+	width: 215px;
+}
+
 .xml_editor_container ol, .xml_editor_container ul {
 	list-style: none;
 }
