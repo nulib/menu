@@ -10,6 +10,10 @@ class Image < ActiveRecord::Base
   validates :filename, :uniqueness => true
 
 
+def job_id_display
+  self.job.job_id
+end
+
   def path
     "#{location}/#{filename}"
   end
