@@ -11,7 +11,6 @@ class Image < ActiveRecord::Base
 
 
 def job_id_display
-  puts "whats up!! #{self.job.job_id}"
   self.job.job_id
 end
 
