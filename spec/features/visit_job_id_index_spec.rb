@@ -21,16 +21,18 @@ describe "visiting the home page" do
   end
 
   it "orders the list of jobs by Job ID" do
-    job2 = create(:job, job_id: 1 )
-    visit root_path  
+    job2 = create(:job, job_id: 7890 )
+    visit root_path
 
-    expect( first('.job_link>a') ).to have_content( "1", exact: true )
+    expect( first('.job_link>a') ).to have_content( "7890", exact: true)
+    job2.delete
   end
 
   it "displays one listing for each Job ID" do
-    create(:job, job_id: 100)
+    job1 = create(:job)
     visit root_path
 
-    expect( page ).to have_link( "100", count: 1 )
+    expect( page ).to have_link( job1.job_id, count: 1 )
+    job1.delete
   end
 end

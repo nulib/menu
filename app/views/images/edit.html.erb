@@ -1,27 +1,47 @@
-<h1>Editing image</h1>
-<div class="row">
-  <div class="col-xs-6">
-    <% image_style = :medium %>
-    <%= image_tag @image.proxy( image_style ), class: "thumbnail #{image_style}" %>
-  </div>
-  <div class="col-xs-6">
-    <%= render 'form' %>
-  </div>
-</div>
+<h1>VRA Editor</h1>
 
-<div class="row">
-  <div class="col-md-12">
-    <h1>VRA Editor</h1>
+<div role="tabpanel">
 
-    <div id="xml_editor">
-      <vra:vra xmlns:vra="http://www.vraweb.org/vracore4.htm"></vra:vra>
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#editor" aria-controls="editor" role="tab" data-toggle="tab">Editor</a></li>
+    <li role="presentation"><a href="#image" aria-controls="image" role="tab" data-toggle="tab">Image</a></li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    
+    <!-- Editor tab -->
+    <div role="tabpanel" class="tab-pane active" id="editor">
+      <div class="row">
+        <div class="col-lg-11">
+
+          <div id="xml_editor">
+            <vra:vra xmlns:vra="http://www.vraweb.org/vracore4.htm"></vra:vra>
+          </div>
+        </div>
+      </div>
+
+      <!-- Publish button and image thumbnail -->
+      <div id="persistData">
+        <div id="publishButton">
+          <div id='publishUrl' class='btn btn-primary' data-url="<%= publish_image_path(@image) %>">Publish</div>
+        </div>
+        <%= image_tag @image.proxy( "thumb" ), class: "thumbnail thumb" %>
+      </div>
     </div>
-  </div>
-</div>
-
-<div class="row" id="persistData">
-  <div id="publishButton" class="col-md-12">
-    <div id='publishUrl' class='btn btn-primary' data-url="<%= publish_image_path(@image) %>">Publish</div>
+    
+    <!-- Image tab -->
+    <div role="tabpanel" class="tab-pane" id="image">
+      <div class="row">
+        <div class="col-lg-6">
+          <%= image_tag @image.proxy( "medium" ), class: "img-responsive thumbnail medium" %>
+        </div>
+        <div class="col-lg-6">
+          <%= render 'form' %>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
