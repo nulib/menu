@@ -84,10 +84,12 @@ class ImagesController < ApplicationController
 
     if @image.save
       @image.image_xml = TransformXML.add_display_elements( @image.image_xml )
+      @accession_nbr = TransformXML.get_accession_nbr( @image.image_xml )
+      # @image.accession_nbr = TransformXML.get_accession_nbr( @image.image_xml )
       if @image.valid_vra?
           #TODO - fix this full_path_thing, yo -- needs to be in config
           full_path = "#{Rails.root}/" + "#{@image.path}"
-          response = dil_api_call( @image.image_xml, @image.path )
+          response = dil_api_call( @image.image_xml, @image.path, @accession_nbr )
           response_xml_doc = Nokogiri::XML( response )
           if response_xml_doc.at_xpath( '//pid' ) && /Publish successful/.match(response_xml_doc)
             destination = @image.completed_destination
@@ -99,7 +101,7 @@ class ImagesController < ApplicationController
             render json: {:localName => job_url}
           else
             flash_messages = [ response_xml_doc.at_xpath( '//description' ).text.truncate( 50 ) ]
-            flash_messages << "Image xml not published"
+            flash_messages << "Image not published"
             flash[:error] = flash_messages
             render :template => "images/edit", :status => 400
           end
@@ -124,13 +126,13 @@ class ImagesController < ApplicationController
       params.require(:image).permit(:filename, :location, :proxy, :job_id)
     end
 
-    def dil_api_call( xml, path )
+    def dil_api_call( xml, path, accession_nbr )
 
       RestClient::Resource.new(
         MENU_CONFIG["dil_url"],
         verify_ssl: OpenSSL::SSL::VERIFY_NONE ,
 
-      ).post xml: xml , path: path
+      ).post xml: xml , path: path , accession_nbr: accession_nbr
 
 
     end

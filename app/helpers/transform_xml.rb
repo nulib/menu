@@ -22,5 +22,10 @@ module TransformXML
     end
     doc.to_xml
   end
+
+  def self.get_accession_nbr( xml )
+    doc = Nokogiri::XML.parse( xml )
+    doc.xpath("//vra:refid[@source='Accession']").text
+  end
 end
 
