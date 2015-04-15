@@ -611,6 +611,7 @@ $.widget( "xml.xmlEditor", {
 
 	// Upload the contents of the editor to a path
 	uploadXML: function(config) {
+		console.log(config)
 		if (!config || !config.url) {
 			if (this.submitButtonConfigs.length > 0 && this.submitButtonConfigs[0].url) {
 				config = this.submitButtonConfigs[0];
@@ -2211,6 +2212,8 @@ ModifyMenuPanel.prototype.initialize = function (parentContainer) {
 
 		if (self.editor.submitButtonConfigs != null){
 			$.each(self.editor.submitButtonConfigs, function(index, config){
+				// console.log(!('createDomElement' in config))
+				// console.log((!('createDomElement' in config) || config.createDomElement))
 				if (!('createDomElement' in config) || config.createDomElement){
 					var submitButton = $("<input/>").attr({
 						id : config.id,
@@ -2224,11 +2227,15 @@ ModifyMenuPanel.prototype.initialize = function (parentContainer) {
 						config.responseHandler = this.options.submitResponseHandler
 							|| this.swordSubmitResponseHandler;
 					}
-
 					submitButton.click(function() {
 						self.editor.submitXML(config);
 					});
+				} else {
+					$("#"+config.id).click(function(){
+						self.editor.submitXML(config);
+					});
 				}
+
 			});
 		}
 		documentStatusPanel.appendTo(this.menuColumn);

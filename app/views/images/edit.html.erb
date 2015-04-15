@@ -61,6 +61,10 @@
       alert('hey error');
     }    
 
+    function submitThis(){
+      alert('golfing yo');
+    }
+
     var extractor = new Xsd2Json("vra-strict.xsd", {"schemaURI":"<%= root_path %>"});
 
     $("#xml_editor").xmlEditor({
@@ -69,13 +73,23 @@
       },
       submitButtonConfigs: [
           {
-          createDomElement: false,
           id: "publishUrl",
-          submitFunction: alert('golfing yo'),
+          createDomElement: false,
+          submitHandler: submitThis,
           url: '<%= publish_image_path(@image) %>',
           responseHandler: publishSuccess,
           errorHandler: publishError
-        }
+        },
+          {
+          id: "defaultUrl", 
+          createDomElement: true, 
+          cssClass: 'send_xml', 
+          label: 'Save', 
+          url: "<%= save_xml_image_path(@image) %>",
+          submitHandler: submitThis,
+          responseHandler: publishSuccess,
+          errorHandler: publishError
+          }
       ],
       schema: extractor.getSchema(),
       documentStatusPanelDomId: "#persistData"
