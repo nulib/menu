@@ -53,17 +53,26 @@
 
   $(function() {
 
-    function publishSuccess(){
-      alert('hey success');
+    function publishSuccess(response){
+      if ($("#errors").is(":visible")){
+        $("#errors").hide();
+      }
+
+      if ($(".xml_submit_status").hasClass("alert alert-danger")){
+        $(".xml_submit_status").removeClass("alert alert-danger");
+      }
+      if (response.localName){
+        document.location.href = response.localName;
+      }
     }
 
-    function publishError(){
-      alert('hey error');
+    function publishError(jqXHR){
+      $(".xml_submit_status").addClass("alert alert-danger");
+      $(".xml_submit_status").html("Errors! This record was not published. Details above.");
+      var msg = jqXHR.getResponseHeader('X-Message');
+      $(".container").prepend("<div id='errors' class='alert alert-danger'></div>");
+      $('#errors').append("<p>" + msg + "</p>");
     }    
-
-    function submitThis(){
-      alert('golfing yo');
-    }
 
     var extractor = new Xsd2Json("vra-strict.xsd", {"schemaURI":"<%= root_path %>"});
 
@@ -75,7 +84,7 @@
           {
           id: "publishUrl",
           createDomElement: false,
-          submitHandler: submitThis,
+          onSubmit: submitThis,
           url: '<%= publish_image_path(@image) %>',
           responseHandler: publishSuccess,
           errorHandler: publishError
