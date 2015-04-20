@@ -1,20 +1,3 @@
-
-  def yay_mom thing
-    byebug
-    names = []
-    Dir.foreach("lib/assets/dropbox") do |x| 
-
-      if Dir.exist?(x.to_s)
-        puts "we exist!"
-        puts x.to_s
-        names << x.to_s
-      end
-    end
-    puts "names are - #{names}"
-    "#{thing}"
-  end
-
-
 FactoryGirl.define do
 
   factory :image do
@@ -23,7 +6,7 @@ FactoryGirl.define do
   end
 
   factory :job do
-    sequence(:job_id) { |n| yay_mom(n) }
+    sequence(:job_id) { |n| "#{n}" }
     
     factory :job_with_images do
       transient do
