@@ -84,7 +84,7 @@
           {
           id: "publishUrl",
           createDomElement: false,
-          onSubmit: submitThis,
+          //onSubmit: submitThis,
           url: '<%= publish_image_path(@image) %>',
           responseHandler: publishSuccess,
           errorHandler: publishError
@@ -95,7 +95,7 @@
           cssClass: 'send_xml', 
           label: 'Save', 
           url: "<%= save_xml_image_path(@image) %>",
-          submitHandler: submitThis,
+          //submitHandler: submitThis,
           responseHandler: publishSuccess,
           errorHandler: publishError
           }
