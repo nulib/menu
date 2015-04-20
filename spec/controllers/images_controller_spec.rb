@@ -76,6 +76,7 @@ RSpec.describe ImagesController, :type => :controller do
         doc = Nokogiri::XML( @image.image_xml )
         doc.xpath( '//vra:earliestDate' )[ 0 ].content = 'present'
         @image.image_xml = doc.to_xml
+        @accession_nbr = TransformXML.get_accession_nbr( @image.image_xml )
          allow(FileUtils).to receive(:mv)
 
          stub_request(:post, "https://127.0.0.1:3333/multiresimages/menu_publish").
@@ -83,7 +84,7 @@ RSpec.describe ImagesController, :type => :controller do
       end
 
       it "generates an API call to Repository Images" do
-        response = @controller.send( :dil_api_call, @image.image_xml, @image.path )
+        response = @controller.send( :dil_api_call, @image.image_xml, @image.path, @accession_nbr )
         expect( response ).to include( 'Publish successful' )
       end
 
@@ -99,7 +100,7 @@ RSpec.describe ImagesController, :type => :controller do
       end
 
       it "returns root_url upon success so that ajax can redirect" do
-        resp = raw_post( :publish, {:id => @image.id},  @image.image_xml)
+        resp = raw_post( :publish, {:id => @image.id},  @image.image_xml )
         job_url = "#{root_url}jobs/#{@image.job_id}"
 
         expect(resp.body).to include(job_url)
@@ -113,7 +114,7 @@ RSpec.describe ImagesController, :type => :controller do
         @image = Image.create!( job_id: 'test' )
         doc = Nokogiri::XML( @image.image_xml )
         doc.xpath( '//vra:earliestDate' )[ 0 ].content = 'pres'
-        raw_post :publish, {:id => @image.id},  doc.to_s
+        raw_post(:publish, {:id => @image.id}, doc.to_s )
         expect(response.status).to eq 400
       end
     end
