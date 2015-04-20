@@ -13,6 +13,15 @@ describe TransformXML, :type => :helper do
 
       expect(TransformXML.add_display_elements(xml_with_agentSet)).to include(xml_with_agentSet_display)
     end
+
+    it "adds locationSet display with source attributes prepended with a colon" do
+
+      xml_with_locationSet = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<vra:vra\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:fn=\"http://www.w3.org/2005/xpath-functions\"\n    xmlns:vra=\"http://www.vraweb.org/vracore4.htm\"\n    xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xsi:schemaLocation=\"http://www.vraweb.org/vracore4.htm http://www.loc.gov/standards/vracore/vra-strict.xsd\">\n    <vra:image><!--Location--><vra:locationSet><vra:location type=\"creation\"><vra:name type=\"geographic\">London</vra:name></vra:location><vra:location type=\"repository\"><vra:name type=\"geographic\">Posters from the Herskovits Library</vra:name></vra:location><vra:location source=\"MARC 590\"><vra:refid type=\"shelfList\">Object no. SA.5.</vra:refid></vra:location><vra:location><vra:refid source=\"DIL\"/><vra:refid source=\"Voyager\">1234567</vra:refid><vra:refid source=\"Accession\">7654321</vra:refid></vra:location></vra:locationSet>\n        <!--Dates-->\n        <vra:dateSet>\n            <vra:display/>\n            <vra:date type=\"creation\">\n                <vra:earliestDate>present</vra:earliestDate>\n            </vra:date>\n        </vra:dateSet></vra:image>\n    </vra:vra>"
+
+      xml_with_locationSet_display = "<vra:locationSet><vra:display>London ; Posters from the Herskovits Library ; Object no. SA.5. ; Voyager:1234567 ; Accession:7654321</vra:display>"
+
+      expect(TransformXML.add_display_elements(xml_with_locationSet)).to include(xml_with_locationSet_display)
+    end
   end
 
   describe "#get_accession_nbr" do

@@ -35,23 +35,28 @@ module TransformXML
   private
 
   def self.add_location_set_display( nokogiri_doc )
-    display = Nokogiri::XML::Node.new 'vra:display', nokogiri_doc
-    locations = nokogiri_doc.xpath("//vra:locationSet/*").children
-    location_set_display = []
+    if nokogiri_doc.xpath("//vra:locationSet/*").children.any?
+      display = Nokogiri::XML::Node.new 'vra:display', nokogiri_doc
+      locations = nokogiri_doc.xpath("//vra:locationSet/*").children
+      location_set_display = []
 
-    # loop through locationSet child elements and prepend certain cases with source attribute
-    locations.each do |child|
-      case
-      when child['source'] == 'Voyager'
-        location_set_display << "Voyager:#{child.text}"
-      when child['source'] == 'Accession'
-        location_set_display << "Accession:#{child.text}"
-      else
-        location_set_display<< child.text
+      # loop through locationSet child elements and prepend certain cases with source attribute
+      locations.each do |child|
+        next unless child.element?
+        case
+        when child['source'] == 'Voyager'
+          location_set_display << "Voyager:#{child.text}"
+        when child['source'] == 'Accession'
+          location_set_display << "Accession:#{child.text}"
+        else
+          location_set_display<< child.text
+        end
       end
+      display.content = location_set_display.delete_if { |el| el.blank? }.join( " ; " )
+      nokogiri_doc.xpath("//vra:locationSet").children.first.add_previous_sibling( display )
+    else
+      nokogiri_doc
     end
-    display.content = location_set_display.delete_if { |el| el.blank? }.join( " ; " )
-    nokogiri_doc.xpath("//vra:locationSet").children.first.add_previous_sibling( display )
   end
 
 end
