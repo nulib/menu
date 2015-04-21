@@ -75,6 +75,9 @@ RSpec.describe ImagesController, :type => :controller do
         @image = job.images.create( filename: 'test.tif', location: 'dropbox' )
         doc = Nokogiri::XML( @image.image_xml )
         doc.xpath( '//vra:earliestDate' )[ 0 ].content = 'present'
+        doc.xpath( '//vra:agent//vra:name' )[ 0 ].content = 'Sculley'
+        doc.xpath( '//vra:title' )[ 0 ].content = 'X-Files'
+
         @image.image_xml = doc.to_xml
         @accession_nbr = TransformXML.get_accession_nbr( @image.image_xml )
          allow(FileUtils).to receive(:mv)

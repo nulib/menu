@@ -28,12 +28,13 @@ describe "visiting the home page" do
     expect(page).to have_selector(".job_link:nth-child(3) a", text: "456")
   end
 
-  # lib/assets/dropbox should contain an empty directory called "555"
+  # lib/assets/dropbox should contain an empty directory 
   # and a directory named "123" with images in it
   it "displays one listing for each job that has images" do
 
     visit root_path
-    expect( page ).to_not have_link( "555" )
+
+    expect( page ).to_not have_content( "(0)" )
 
     visit root_path
     expect( page ).to have_link( "123" )
