@@ -29,12 +29,10 @@ class Image < ActiveRecord::Base
     true if validate_vra.empty?
   end
     
-  def validate_preferred_fields
+  def validate_preferred_fields(nokogiri_doc)
     #date, title, agent
-    doc = Nokogiri::XML(self.image_xml)
-
     invalid = []
-    sets = doc.xpath( "//*" ).children[ 1 ].xpath( "./*" )
+    sets = nokogiri_doc.xpath( "//*" ).children[ 1 ].xpath( "./*" )
 
     sets.each do |node|
       if node.name == 'dateSet' 
@@ -74,9 +72,8 @@ class Image < ActiveRecord::Base
     XSD.validate(doc).each do |error|
       invalid << "Validation error: #{error.message}"
     end
-    preferred_fields = validate_preferred_fields
+    preferred_fields = validate_preferred_fields(doc)
     invalid << preferred_fields unless preferred_fields.nil?
-
 
     invalid.each do |error|
       next if error =~ /is not a valid value of the list type 'xs:IDREFS'/
