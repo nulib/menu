@@ -30,7 +30,6 @@ describe "visiting the home page" do
   it "displays one listing for each Job ID" do
     create(:job, job_id: 100)
     visit root_path
-
     expect( page ).to have_link( "100", count: 1 )
   end
 end
