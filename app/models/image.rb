@@ -28,6 +28,16 @@ class Image < ActiveRecord::Base
   def valid_vra?
     true if validate_vra.empty?
   end
+
+  def find_required_child(node, child_sought)
+    generalNode = node.children.select { | child | child.name == child_sought[:generalNode] }
+    specificNode = generalNode[0].children.select { | child | child.name == child_sought[:specificNode] }
+    if specificNode.blank?
+      error = "#{child_sought[:errorMsgName]} is required"
+    end
+
+    error unless error.nil?
+  end
     
   def validate_preferred_fields(nokogiri_doc)
     #date, title, agent
@@ -36,21 +46,23 @@ class Image < ActiveRecord::Base
 
     sets.each do |node|
       if node.name == 'dateSet' 
-        date = node.children.select { | child | child.name == "date" }
-        earliestDate = date[0].children.select { | child | child.name == "earliestDate" }
-        if earliestDate.blank?
-          error = "Creation date is required"
-          invalid << error
-        end
+        child_sought = {}
+        child_sought[:generalNode] = "date"
+        child_sought[:specificNode] = "earliestDate"
+        child_sought[:errorMsgName] = "Creation date"
+
+        error = find_required_child(node, child_sought)
+        invalid << error unless error.nil?
       end
      
       if node.name == 'agentSet'
-        agent = node.children.select { | child | child.name == "agent" }
-        agentName = agent[0].children.select { | child | child.name == "name" }
-        if agentName.blank?
-          error = "Agent Name is required"
-          invalid << error
-        end
+        child_sought = {}
+        child_sought[:generalNode] = "agent"
+        child_sought[:specificNode] = "name"
+        child_sought[:errorMsgName] = "Agent Name"
+
+        error = find_required_child(node, child_sought)
+        invalid << error unless error.nil?
       end
 
       if node.name == 'titleSet'
@@ -60,6 +72,7 @@ class Image < ActiveRecord::Base
           invalid << error
         end
       end
+
     end
     invalid unless invalid.empty? 
 
