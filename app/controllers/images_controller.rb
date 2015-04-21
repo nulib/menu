@@ -82,8 +82,9 @@ class ImagesController < ApplicationController
   def publish
     @image.image_xml = request.body.read
 
-    if @image.save
+    if @image.save 
       @image.image_xml = TransformXML.add_display_elements( @image.image_xml )
+      puts @image.image_xml
       @accession_nbr = TransformXML.get_accession_nbr( @image.image_xml )
       # @image.accession_nbr = TransformXML.get_accession_nbr( @image.image_xml )
       if @image.valid_vra?

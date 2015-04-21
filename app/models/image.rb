@@ -10,9 +10,11 @@ class Image < ActiveRecord::Base
   validates :filename, :uniqueness => true
 
 
-def job_id_display
-  self.job.job_id
-end
+
+
+  def job_id_display
+    self.job.job_id
+  end
 
   def path
     "#{location}/#{filename}"
@@ -26,6 +28,44 @@ end
   def valid_vra?
     true if validate_vra.empty?
   end
+    
+  def validate_preferred_fields
+    #date, title, agent
+    doc = Nokogiri::XML(self.image_xml)
+
+    invalid = []
+    sets = doc.xpath( "//*" ).children[ 1 ].xpath( "./*" )
+
+    sets.each do |node|
+      if node.name == 'dateSet' 
+        date = node.children.select { | child | child.name == "date" }
+        earliestDate = date[0].children.select { | child | child.name == "earliestDate" }
+        if earliestDate.blank?
+          error = "Creation date is required"
+          invalid << error
+        end
+      end
+     
+      if node.name == 'agentSet'
+        agent = node.children.select { | child | child.name == "agent" }
+        agentName = agent[0].children.select { | child | child.name == "name" }
+        if agentName.blank?
+          error = "Agent Name is required"
+          invalid << error
+        end
+      end
+
+      if node.name == 'titleSet'
+        title = node.children.select { | child | child.name == "title" }
+        if title[0].children.empty?
+          error = "Title is required"
+          invalid << error
+        end
+      end
+    end
+    invalid unless invalid.empty? 
+
+  end
 
   def validate_vra
     doc = Nokogiri::XML(self.image_xml)
@@ -34,12 +74,16 @@ end
     XSD.validate(doc).each do |error|
       invalid << "Validation error: #{error.message}"
     end
+    preferred_fields = validate_preferred_fields
+    invalid << preferred_fields unless preferred_fields.nil?
+
 
     invalid.each do |error|
       next if error =~ /is not a valid value of the list type 'xs:IDREFS'/
       next if error =~ /is not a valid value of the atomic type 'xs:IDREF'/
       #raise StandardError
     end
+
     invalid
   end
 
