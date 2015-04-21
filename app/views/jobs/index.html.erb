@@ -1,9 +1,11 @@
 <div class="container">
   <h1>Job IDs</h1>
-
   <ul>
     <% @jobs.each do |job| %>
-      <li class='job_link'><%= link_to( job.job_id, job ) %> (<%= job.images.size %>) </li>
+      <% unless job.images.empty? %>
+        <li class='job_link'><%= link_to( job.job_id, job ) %> (<%= job.images.size %>) </li>
+        <% end %>
     <% end %>
   </ul>
 </div>
+

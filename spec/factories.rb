@@ -6,8 +6,8 @@ FactoryGirl.define do
   end
 
   factory :job do
-    sequence(:job_id) { |n| "#{n}"}
-
+    sequence(:job_id) { |n| "#{n}" }
+    
     factory :job_with_images do
       transient do
         images_count 2
