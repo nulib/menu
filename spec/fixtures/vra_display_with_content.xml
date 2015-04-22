@@ -25,7 +25,7 @@
              </vra:inscription>
            </vra:inscriptionSet>
 
-           <vra:locationSet><vra:display>Delphi Museum ; Delphi ; inu:dil-86a0e7d3-fdd5-4b12-87a6-6e1fb74e1c4c ; attributed to</vra:display>
+           <vra:locationSet><vra:display>Delphi Museum ; Delphi ; inu:dil-86a0e7d3-fdd5-4b12-87a6-6e1fb74e1c4c ; Voyager:attributed to</vra:display>
              <vra:location type="repository">
                <vra:name type="corporate">Delphi Museum</vra:name>
                <vra:name type="geographic">Delphi</vra:name>

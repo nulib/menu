@@ -12,4 +12,5 @@ describe 'jobs/index.html.erb', :type => :view do
 
     expect(rendered).to have_content "#{job1.job_id} (#{job1.images.size})"
   end
+
 end
