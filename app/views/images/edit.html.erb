@@ -71,7 +71,7 @@
       $(".xml_submit_status").html("Errors! This record was not published. Details above.");
       var msg = jqXHR.getResponseHeader('X-Message');
       $(".container").prepend("<div id='errors' class='alert alert-danger'></div>");
-      $('#errors').append("<p>" + msg + "</p>");
+      $('#errors').html("<p>" + msg + "</p>");
     }    
 
     var extractor = new Xsd2Json("vra-strict.xsd", {"schemaURI":"<%= root_path %>"});
