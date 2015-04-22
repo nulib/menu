@@ -70,8 +70,12 @@
       $(".xml_submit_status").addClass("alert alert-danger");
       $(".xml_submit_status").html("Errors! This record was not published. Details above.");
       var msg = jqXHR.getResponseHeader('X-Message');
-      $(".container").prepend("<div id='errors' class='alert alert-danger'></div>");
-      $('#errors').html("<p>" + msg + "</p>");
+      if ($(".container").children("#errors").length == 0){
+        $(".container").prepend("<div id='errors' class='alert alert-danger'></div>"); 
+        $('#errors').html("<p>" + msg + "</p>");
+      } else {       
+        $('#errors').html("<p>" + msg + "</p>"); 
+      }    
     }    
 
     var extractor = new Xsd2Json("vra-strict.xsd", {"schemaURI":"<%= root_path %>"});
