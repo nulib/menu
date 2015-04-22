@@ -32,7 +32,7 @@ class Image < ActiveRecord::Base
   def find_required_child(node, child_sought)
     generalNode = node.children.select { | child | child.name == child_sought[:generalNode] }
     specificNode = generalNode[0].children.select { | child | child.name == child_sought[:specificNode] }
-    if specificNode.blank?
+    if specificNode.blank? or specificNode[0].children.empty?
       error = "#{child_sought[:errorMsgName]} is required"
     end
 
@@ -43,7 +43,9 @@ class Image < ActiveRecord::Base
     #date, title, agent
     invalid = []
     sets = nokogiri_doc.xpath( "//*" ).children[ 1 ].xpath( "./*" )
+    #ok -- title is working but shows up in same div, which is not good, you can miss it.
 
+    # so maybe remove error divs if they're there
     sets.each do |node|
       if node.name == 'dateSet' 
         child_sought = {}

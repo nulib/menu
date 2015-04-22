@@ -46,17 +46,64 @@
 </div>
 
 <script>
+  var xmlUploadConfig = [
+   {id: "defaultUrl", createDomElement: true, cssClass: 'send_xml', linkText: 'Save', url: "<%= save_xml_image_path(@image) %>"},
+   {id: "publishUrl", createDomElement: false, url: '<%= publish_image_path(@image) %>'}]
+
+
   $(function() {
+
+    function publishSuccess(response){
+      if ($("#errors").is(":visible")){
+        $("#errors").hide();
+      }
+
+      if ($(".xml_submit_status").hasClass("alert alert-danger")){
+        $(".xml_submit_status").removeClass("alert alert-danger");
+      }
+      if (response.localName){
+        document.location.href = response.localName;
+      }
+    }
+
+    function publishError(jqXHR){
+      $(".xml_submit_status").addClass("alert alert-danger");
+      $(".xml_submit_status").html("Errors! This record was not published. Details above.");
+      var msg = jqXHR.getResponseHeader('X-Message');
+      if ($(".container").children("#errors").length == 0){
+        $(".container").prepend("<div id='errors' class='alert alert-danger'></div>"); 
+        $('#errors').html("<p>" + msg + "</p>");
+      } else {       
+        $('#errors').html("<p>" + msg + "</p>"); 
+      }    
+    }    
+
     var extractor = new Xsd2Json("vra-strict.xsd", {"schemaURI":"<%= root_path %>"});
 
     $("#xml_editor").xmlEditor({
       ajaxOptions: {
-        xmlRetrievalPath: "<%= url_for(:only_path => false, :controller => 'images', :action => 'show', :id => @image.id, :format => :xml) %>",
-        xmlUploadConfig: [
-         {id: "defaultUrl", createDomElement: true, cssClass: 'send_xml', linkText: 'Save', url: "<%= save_xml_image_path(@image) %>"},
-         {id: "publishUrl", createDomElement: false, url: '<%= publish_image_path(@image) %>'}
-        ]
+        xmlRetrievalPath: "<%= url_for(:only_path => false, :controller => 'images', :action => 'show', :id => @image.id, :format => :xml) %>"
       },
+      submitButtonConfigs: [
+          {
+          id: "publishUrl",
+          createDomElement: false,
+          //onSubmit: submitThis,
+          url: '<%= publish_image_path(@image) %>',
+          responseHandler: publishSuccess,
+          errorHandler: publishError
+        },
+          {
+          id: "defaultUrl", 
+          createDomElement: true, 
+          cssClass: 'send_xml', 
+          label: 'Save', 
+          url: "<%= save_xml_image_path(@image) %>",
+          //submitHandler: submitThis,
+          responseHandler: publishSuccess,
+          errorHandler: publishError
+          }
+      ],
       schema: extractor.getSchema(),
       documentStatusPanelDomId: "#persistData"
     });
