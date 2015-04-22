@@ -2,6 +2,7 @@
 
 
 /*
+
 	Copyright 2008 The University of North Carolina at Chapel Hill
 
 	Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,17 +20,17 @@
  */
 /*
  * jQuery xml Editor
- *
+ * 
  * Dependencies:
  *   jquery 1.7+
  *   jquery.ui 1.7+
  *   ajax ace editor
  *   jquery.autosize.js (optional)
  *   vkbeautify.js (optional)
- *
+ * 
  * @author Ben Pennell
  */
-
+ 
 // Selector and class name constants
 var menuContainerClass = "xml_menu_container";
 var menuHeaderClass = "menu_header";
@@ -81,12 +82,14 @@ $.widget( "xml.xmlEditor", {
 		libPath: null,
 		// Document retrieval and upload parameters
 		ajaxOptions : {
-			xmlUploadConfig: null,
+			xmlUploadPath: null,
 			xmlRetrievalPath: null,
 			xmlRetrievalParams : null
 		},
 		// Function triggered after uploading XML document, to interpret if the response was successful or not.  If upload failed, an error message should be returned.
 		submitResponseHandler : null,
+
+		submitButtonConfigs : null,
 		// Event function trigger after an xml element is update via the gui
 		elementUpdated : undefined,
 		// Title for the document, displayed in the header
@@ -96,8 +99,8 @@ $.widget( "xml.xmlEditor", {
 		addElementMenuHeaderText : 'Add Subelement',
 		xmlEditorLabel : 'XML',
 		textEditorLabel : 'Text',
-
-		// Set to false to get rid of the
+		
+		// Set to false to get rid of the 
 		enableDocumentStatusPanel : true,
 		documentStatusPanelDomId : "<div>",
 		confirmExitWhenUnsubmitted : true,
@@ -105,7 +108,7 @@ $.widget( "xml.xmlEditor", {
 		floatingMenu : true,
 		// Requires jquery.autosize, defaults to false if plugin isn't detected
 		expandingTextAreas: true,
-
+		
 		// Pretty formatting of XML output.  Requires vkbeauty.js, defaults to false is not available
 		prettyXML : true,
 		// Number of history states held for the undo feature
@@ -114,14 +117,14 @@ $.widget( "xml.xmlEditor", {
 		menuEntries: undefined,
 		enforceOccurs: true,
 		prependNewElements: false,
-
+		
 		targetNS: null
 	},
-
+	
 	_create: function() {
 		var self = this;
 		this.instanceNumber = $("xml-xmlEditor").length;
-
+		
 		// Tree of xml element types
 		this.schemaTree = null;
 		// State of the XML document
@@ -155,13 +158,13 @@ $.widget( "xml.xmlEditor", {
 		var index = url.lastIndexOf("/");
 		if (index != -1)
 			this.baseUrl = url.substring(0, index + 1);
-
+		
 		// Detect optional features
 		if (!$.isFunction($.fn.autosize))
 			this.options.expandingTextAreas = false;
 		if (!vkbeautify)
 			this.options.prettyXML = false;
-
+		
 		if (typeof(this.options.schema) != 'function') {
 			// Turn relative paths into absolute paths for the sake of web workers
 			if (this.options.libPath) {
@@ -173,14 +176,27 @@ $.widget( "xml.xmlEditor", {
 					&& this.options.schema.indexOf('http') != 0)
 				this.options.schema = this.baseUrl + this.options.schema;
 		}
-
+		
 		this.loadSchema(this.options.schema);
 	},
-
+ 
 	_init: function() {
-		if (this.options.submitResponseHandler == null)
-			this.options.submitResponseHandler = this.swordSubmitResponseHandler;
+		if (this.options.submitButtonConfigs) {
+			// User provided button configuration
+			this.submitButtonConfigs = this.options.submitButtonConfigs;
+		} else {
+			// Simple button configuration, generate defaults
+			var exporting = !this.options.ajaxOptions.xmlUploadPath;
 
+			// Either an upload button or an export button
+			this.submitButtonConfigs = [{
+				url : this.options.ajaxOptions.xmlUploadPath,
+				label : exporting? "Export" : "Submit changes",
+				onSubmit : exporting? this.exportXML : null,
+				disabled : typeof(Blob) === undefined && exporting
+			}];
+		}
+		
 		// Retrieve the local xml content before we start populating the editor.
 		var localXMLContent = null;
 		if (this.element.is("textarea")) {
@@ -203,26 +219,26 @@ $.widget( "xml.xmlEditor", {
 				// Content is probably XML encoded
 				localXMLContent = this.element.text();
 			}
-
+			
 			// Clear out the contents of the element being initialized on
 			this.element.text("");
-
+			
 			// Add the editor into the dom
 			this.xmlEditorContainer = $("<div/>").attr('class', xmlEditorContainerClass).appendTo(this.element);
 		}
 		this.xmlState = null;
 		this.xmlWorkAreaContainer = null;
 		this.xmlTabContainer = null;
-
+		
 		this.editorHeader = null;
 		this.problemsPanel = null;
-
+		
 		this.guiEditor = new GUIEditor(this);
 		this.textEditor = new TextEditor(this);
 		this.activeEditor = this.guiEditor;
-
+		
 		var self = this;
-
+		
 		this.menuBar = new MenuBar(this);
 		this.menuBar.updateFunctions.push(this.refreshMenuUndo);
 		this.menuBar.updateFunctions.push(this.refreshMenuSelected);
@@ -232,7 +248,7 @@ $.widget( "xml.xmlEditor", {
 			});
 		}
 		this.modifyMenu = new ModifyMenuPanel(this);
-
+		
 		if (this.options.confirmExitWhenUnsubmitted) {
 			$(window).bind('beforeunload', function(e) {
 				if (self.xmlState != null && self.xmlState.isChanged()) {
@@ -240,10 +256,10 @@ $.widget( "xml.xmlEditor", {
 				}
 			});
 		}
-
+		
 		this.loadDocument(this.options.ajaxOptions, localXMLContent);
 	},
-
+	
 	// Load the schema object
 	loadSchema: function(schema) {
 		var self = this;
@@ -305,7 +321,7 @@ $.widget( "xml.xmlEditor", {
 			}
 		}
 	},
-
+	
 	// Load the XML document for editing
 	loadDocument: function(ajaxOptions, localXMLContent) {
 		if (ajaxOptions != null && ajaxOptions.xmlRetrievalPath != null) {
@@ -323,7 +339,7 @@ $.widget( "xml.xmlEditor", {
 			this._documentReady(localXMLContent);
 		}
 	},
-
+	
 	// XML Document loaded event
 	_documentReady : function(xmlString) {
 		var self = this;
@@ -335,7 +351,7 @@ $.widget( "xml.xmlEditor", {
 		});
 		this._documentAndSchemaReady();
 	},
-
+	
 	// Schema object loaded event
 	_schemaReady : function() {
 		if (!this.options.targetNS) {
@@ -345,9 +361,9 @@ $.widget( "xml.xmlEditor", {
 		this.schemaTree.build();
 		this._documentAndSchemaReady();
 	},
-
+	
 	// Performs initialization of editor after rejoining document and schema loading workflows
-	// to support asychronous/multithreaded loading
+	// to support asychronous/multithreaded loading 
 	_documentAndSchemaReady : function() {
 		// Join back up asynchronous loading of document and schema
 		if (!this.schemaTree || !this.xmlState)
@@ -355,18 +371,18 @@ $.widget( "xml.xmlEditor", {
 		this.xmlState.namespaces.namespaceURIs = $.extend({}, this.schemaTree.namespaces.namespaceURIs, this.xmlState.namespaces.namespaceURIs);
 		this.xmlState.namespaces.namespaceToPrefix = $.extend({}, this.schemaTree.namespaces.namespaceToPrefix, this.xmlState.namespaces.namespaceToPrefix);
 		this.targetPrefix = this.xmlState.namespaces.getNamespacePrefix(this.options.targetNS);
-
+		
 		this.constructEditor();
 		this.refreshDisplay();
 		// Capture baseline undo state
 		this.undoHistory.captureSnapshot();
 	},
-
+	
 	// Construct user interface components of the editor
 	constructEditor: function() {
 		// Work Area
 		this.xmlWorkAreaContainer = $("<div/>").attr('class', xmlWorkAreaContainerClass).appendTo(this.xmlEditorContainer);
-
+		
 		// Menu bar
 		var editorHeaderBacking = $("<div/>").addClass(editorHeaderClass + "_backing").appendTo(this.xmlWorkAreaContainer);
 		this.editorHeader = $("<div/>").attr('class', editorHeaderClass).appendTo(this.xmlWorkAreaContainer);
@@ -376,25 +392,25 @@ $.widget( "xml.xmlEditor", {
 		editorHeaderBacking.height(this.editorHeader.outerHeight());
 		// Create grouping of header elements that need to be positioned together
 		this.editorHeaderGroup = this.editorHeader.add(editorHeaderBacking);
-
+		
 		this.xmlTabContainer = $("<div/>").attr("class", editorTabAreaClass).css("padding-top", this.editorHeader.height() + "px").appendTo(this.xmlWorkAreaContainer);
 		this.problemsPanel = $("<pre/>").attr('class', problemsPanelClass).hide().appendTo(this.xmlTabContainer);
-
+		
 		this.guiEditor.initialize(this.xmlTabContainer);
 		this.modeChange(0);
-
+		
 		var self = this;
 		$(window).resize($.proxy(this.resize, this));
-
+		
 		this.modifyMenu.initialize(this.xmlEditorContainer);
-		this.modifyMenu.addMenu(addElementMenuClass, this.options.addElementMenuHeaderText,
+		this.modifyMenu.addMenu(addElementMenuClass, this.options.addElementMenuHeaderText, 
 				true, false, true);
-		this.modifyMenu.addAttributeMenu(addAttrMenuClass, this.options.addAttrMenuHeaderText,
+		this.modifyMenu.addAttributeMenu(addAttrMenuClass, this.options.addAttrMenuHeaderText, 
 				true, false, true);
-		this.addTopLevelMenu = this.modifyMenu.addMenu(addTopMenuClass, this.options.addTopMenuHeaderText,
+		this.addTopLevelMenu = this.modifyMenu.addMenu(addTopMenuClass, this.options.addTopMenuHeaderText, 
 				true, true, false, function(target) {
 			var selectedElement = self.guiEditor.selectedElement;
-			if (!selectedElement || selectedElement.length == 0 || selectedElement.isRootElement)
+			if (!selectedElement || selectedElement.length == 0 || selectedElement.isRootElement) 
 				return null;
 			var currentElement = selectedElement;
 			while (!currentElement.isTopLevel)
@@ -403,26 +419,15 @@ $.widget( "xml.xmlEditor", {
 				return currentElement;
 			return null;
 		}).populate(this.guiEditor.rootElement);
-
+		
 		this.setEnableKeybindings(this.options.enableGUIKeybindings);
 		if (this.options.floatingMenu) {
 			$(window).bind('scroll', $.proxy(this.modifyMenu.setMenuPosition, this.modifyMenu));
 		}
 
-		if ( this.options.ajaxOptions.xmlUploadConfig != null ){
-			$.each( this.options.ajaxOptions.xmlUploadConfig, function(index, obj){
-				$("#" + obj["id"] ).click(function() {
-					self.saveXML(obj["url"]);
-				});
-			});
-		} else {
-			$("#" + submitButtonClass).click(function() {
-				self.saveXML();
-			});
-		}
 		this.ready = true;
 	},
-
+	
 	// Resize event for refreshing menu and editor sizes
 	resize: function () {
 		this.xmlTabContainer.width(this.xmlEditorContainer.outerWidth() - this.modifyMenu.menuColumn.outerWidth());
@@ -434,14 +439,14 @@ $.widget( "xml.xmlEditor", {
 			this.modifyMenu.setMenuPosition();
 		}
 	},
-
+	
 	// Event which triggers the creation of a new child element, as defined by an instigator such as a menu
 	addChildElementCallback: function (instigator, relativeTo, prepend) {
 		if ($(instigator).hasClass("disabled"))
 			return;
 		var xmlElement = $(instigator).data("xml").target;
 		var objectType = $(instigator).data("xml").objectType;
-
+		
 		// If in the text editor view, synchronous the text to the xml model and ensure wellformedness
 		if (this.textEditor.active) {
 			if (this.xmlState.changesNotSynced()) {
@@ -453,11 +458,11 @@ $.widget( "xml.xmlEditor", {
 				}
 			}
 		}
-
+		
 		// Determine if it is valid to add this child element to the given parent element
 		if (!xmlElement.childCanBeAdded(objectType))
 			return;
-
+		
 		// Add the namespace of the new element to the root if it is not already present
 		this.xmlState.addNamespace(objectType);
 		// Create the new element as a child of its parent
@@ -465,7 +470,7 @@ $.widget( "xml.xmlEditor", {
 		// Trigger post element creation event in the currently active editor to handle UI updates
 		this.activeEditor.addElementEvent(xmlElement, newElement);
 	},
-
+	
 	// Event which adds an attribute to an element, as defined by an instigator such as a menu
 	addAttributeButtonCallback: function(instigator) {
 		if ($(instigator).hasClass("disabled"))
@@ -486,7 +491,7 @@ $.widget( "xml.xmlEditor", {
 		// Inform the active editor of the newly added attribute
 		this.activeEditor.addAttributeEvent(data.target, data.objectType, $(instigator));
 	},
-
+	
 	// Triggered when a document has been loaded or reloaded
 	documentLoadedEvent : function(newDocument) {
 		if (this.guiEditor != null && this.guiEditor.rootElement != null)
@@ -494,13 +499,13 @@ $.widget( "xml.xmlEditor", {
 		if (this.problemsPanel != null)
 			this.clearProblemPanel();
 	},
-
+	
 	// Switch the currently active editor to the editor identified
 	modeChange: function(mode) {
 		// Can't change mode to current mode
 		if ((mode == 0 && this.guiEditor.active) || (mode == 1 && this.textEditor.active))
 			return this;
-
+			
 		if (mode == 0) {
 			if (this.textEditor.isInitialized() && this.xmlState.isChanged()) {
 				// Try to reconstruct the xml object before changing tabs.  Cancel change if parse error to avoid losing changes.
@@ -513,7 +518,7 @@ $.widget( "xml.xmlEditor", {
 				this.undoHistory.captureSnapshot();
 			}
 		}
-
+		
 		$(".active_mode_tab").removeClass("active_mode_tab");
 		this.modifyMenu.clearContextualMenus();
 		if (this.activeEditor != null) {
@@ -531,49 +536,50 @@ $.widget( "xml.xmlEditor", {
 			this.resize();
 		return this;
 	},
-
+	
 	refreshDisplay: function() {
 		if (this.activeEditor == null)
 			return;
 		this.activeEditor.refreshDisplay();
-
+		
 		if (this.options.floatingMenu) {
 			this.modifyMenu.setMenuPosition();
 		}
 		this.xmlWorkAreaContainer.width(this.xmlEditorContainer.outerWidth() - this.modifyMenu.menuColumn.outerWidth());
 	},
-
+	
 	setTextArea : function(xmlString) {
 		if (this.isTextAreaEditor)
 			this.element.val(xmlString);
 	},
-
-	// Refresh the state of the XML document from the contents of text editor
+	
+	// Refresh the state of the XML document from the contents of text editor 
 	setXMLFromEditor: function() {
 		var xmlString = this.textEditor.aceEditor.getValue();
 		this.xmlState.setXMLFromString(xmlString);
 		this.guiEditor.setRootElement(this.xmlState.xml.children()[0]);
 		this.addTopLevelMenu.populate(this.guiEditor.rootElement)
 	},
+	
+	// Callback for submit button pressing.  Performs a submit function and then uploads the 
+	// document to the provided URL, if configured to do either
+	submitXML: function(config) {
+		if (config.onSubmit) {
+			config.onSubmit.call(this, config);
+		}
 
-	// Performs the default action for "saving" the contents of the editor, either to server or file
-	//pass an object with url, success and error functions.
-	saveXML: function(url) {
-		if (url) {
-			this.submitXML(url);
-		} else {
-			// Implement later when there is more browser support for html5 File API
-			this.exportXML();
+		if (config.url) {
+			this.uploadXML(config);
 		}
 	},
-
+	
 	// Export the contents of the editor as text to a file, as supported by browsers
 	exportXML: function() {
 		if (typeof(Blob) === "undefined") {
 			this.addProblem("Browser does not support saving files via this editor.  To save, copy and paste the document from the Text view.");
 			return false;
 		}
-
+		
 		var exportDialog = $("<form><input type='text' class='xml_export_filename' placeholder='file.xml'/><input type='submit' value='Export'/></form>")
 				.dialog({modal: true, dialogClass: 'xml_dialog', resizable : false, title: 'Enter file name', height: 80});
 		var self = this;
@@ -589,9 +595,9 @@ $.widget( "xml.xmlEditor", {
 				}
 			}
 			var xmlString = self.xml2Str(self.xmlState.xml);
-			var blob = new Blob([xmlString], { type: "text/xml" });
+			var blob = new Blob([xmlString], { type: "text/xml" }); 
 			var url = URL.createObjectURL(blob);
-
+			
 			exportDialog.dialog('option', 'title', '');
 			var fileName = exportDialog.find('input[type="text"]').val();
 			if (!fileName)
@@ -604,79 +610,75 @@ $.widget( "xml.xmlEditor", {
 	},
 
 	// Upload the contents of the editor to a path
-	submitXML: function(url) {
-		if (url){
-			if (this.textEditor.active) {
-				try {
-					this.setXMLFromEditor();
-				} catch (e) {
-					this.xmlState.setDocumentHasChanged(true);
+	uploadXML: function(config) {
+		if (!config || !config.url) {
+			if (this.submitButtonConfigs.length > 0 && this.submitButtonConfigs[0].url) {
+				config = this.submitButtonConfigs[0];
+			} else {
+				this.addProblem("Cannot submit because no post Options");
+				return;
+			}
+		}
+
+		if (this.textEditor.active) {
+			try {
+				this.setXMLFromEditor();
+			} catch (e) {
+				this.xmlState.setDocumentHasChanged(true);
+				$("." + submissionStatusClass).html("Failed to submit<br/>See errors at top").css("background-color", "#ffbbbb").animate({backgroundColor: "#ffffff"}, 1000);
+				this.addProblem("Cannot submit due to invalid xml", e);
+				return false;
+			}
+		}
+		// convert XML DOM to string
+		var xmlString = this.xml2Str(this.xmlState.xml);
+		$("." + submissionStatusClass).html("Submitting...");
+		var self = this;
+		$.ajax({
+			url : config.url,
+			contentType : "application/xml",
+			type : "POST",
+			data : xmlString,
+			success : function(response) {
+				// Process the response from the server using the provided response handler
+				// If the result of the handler evaluates true, then it is assumed to be an error
+				var outcome = config.responseHandler(response);
+
+				if (!outcome) {
+					self.xmlState.changesCommittedEvent();
+					self.clearProblemPanel();
+				} else {
+					self.xmlState.syncedChangeEvent();
 					$("." + submissionStatusClass).html("Failed to submit<br/>See errors at top").css("background-color", "#ffbbbb").animate({backgroundColor: "#ffffff"}, 1000);
-					this.addProblem("Cannot submit due to invalid xml", e);
-					return false;
+					self.addProblem("Failed to submit xml document", outcome);
+				}
+			},
+			error : function(jqXHR, exception) {
+				if (config.errorHandler) {
+					config.errorHandler(jqXHR, exception);
+					return;
+				}
+
+				if (jqXHR.status === 0) {
+					alert('Not connect.\n Verify Network.');
+				} else if (jqXHR.status == 404) {
+					alert('Requested page not found. [404]');
+				} else if (jqXHR.status == 500) {
+					alert('Internal Server Error [500].');
+				} else if (exception === 'parsererror') {
+					alert('Requested JSON parse failed.');
+				} else if (exception === 'timeout') {
+					alert('Time out error.');
+				} else if (exception === 'abort') {
+					alert('Ajax request aborted.');
+				} else {
+					alert('Uncaught Error.\n' + jqXHR.responseText);
 				}
 			}
-			// convert XML DOM to string
-			var xmlString = this.xml2Str(this.xmlState.xml);
-			$("." + submissionStatusClass).html("Submitting...");
-			var self = this;
-			$.ajax({
-				'url' : url,
-				'contentType' : "application/xml",
-				'type' : "POST",
-				'data' : xmlString,
-				success : function(response) {
-					// Process the response from the server using the provided response handler
-					// If the result of the handler evaluates true, then it is assumed to be an error
-					var outcome = self.options.submitResponseHandler(response);
-	                        if ($("#errors").is(":visible")){
-	                            $("#errors").hide();
-	                         }
-	                         if ($("." + submissionStatusClass).hasClass("alert alert-danger")){
-	                         	$("." + submissionStatusClass).removeClass("alert alert-danger")
-	                         }
-					if (!outcome) {
-						self.xmlState.changesCommittedEvent();
-						self.clearProblemPanel();
-					} else {
-						self.xmlState.syncedChangeEvent();
-						$("." + submissionStatusClass).html("Failed to submit<br/>See errors at top").css("background-color", "#ffbbbb").animate({backgroundColor: "#ffffff"}, 1000);
-						self.addProblem("Failed to submit xml document", outcome);
-					}
-					if (response.localName){
-						document.location.href = response.localName;
-					}
-				},
-				error : function(jqXHR, exception) {
-					if (jqXHR.status === 0) {
-						alert('Not connect.\n Verify Network.');
-					} else if (jqXHR.status == 404) {
-						alert('Requested page not found. [404]');
-					} else if (jqXHR.status == 500) {
-						alert('Internal Server Error [500].');
-					} else if (exception === 'parsererror') {
-						alert('Requested JSON parse failed.');
-					} else if (exception === 'timeout') {
-						alert('Time out error.');
-					} else if (exception === 'abort') {
-						alert('Ajax request aborted.');
-  		            }else if (jqXHR.getResponseHeader('X-Message')) {
-  		            	$("." + submissionStatusClass).addClass("alert alert-danger")
-  		            	$("." + submissionStatusClass).html("Errors! This record was not published. Details above.");
-                              var msg = jqXHR.getResponseHeader('X-Message');
-                              $(".container").prepend("<div id='errors' class='alert alert-danger'></div>");
-                              $('#errors').append("<p>" + msg + "</p>");
-					} else {
-						alert('Uncaught Error.\n' + jqXHR.responseText);
-					}
-				}
-			});
-		} else {
-			this.addProblem("Cannot submit because no post Options");
-		}
+		});
 	},
-
-	// Default server submission response parser, mostly for reference.
+	
+	// Default server submission response parser, mostly for reference.  
 	swordSubmitResponseHandler: function(response) {
 		var responseObject = $(response);
 		if (responseObject.length > 0 && localName(responseObject[responseObject.length - 1]) == "sword:error") {
@@ -708,7 +710,7 @@ $.widget( "xml.xmlEditor", {
 			xmlStr = vkbeautify.xml(xmlStr);
 		return xmlStr;
 	},
-
+	
 	// Add a error/problem message to the error display
 	addProblem: function(message, problem) {
 		this.problemsPanel.html(message + "<br/>");
@@ -721,12 +723,12 @@ $.widget( "xml.xmlEditor", {
 		}
 		this.refreshProblemPanel();
 	},
-
+	
 	// Clear the listing of errors
 	clearProblemPanel: function() {
 		this.problemsPanel.hide();
 	},
-
+	
 	// Update whether or not the error panel is displayed
 	refreshProblemPanel: function() {
 		if (this.problemsPanel.html() == "") {
@@ -742,13 +744,13 @@ $.widget( "xml.xmlEditor", {
 			return element == localName(node) && elementNS == node.namespaceURI;
 		return localName(element) == localName(node) && node.namespaceURI == element.namespace;
 	},
-
+	
 	// Strips the namespace prefix off an element name
 	stripPrefix: function(name) {
 		var index = name.indexOf(":");
 		return index == -1? name: name.substring(index + 1);
 	},
-
+	
 	setEnableKeybindings : function(enable) {
 		if (enable) {
 			this.options.enableGUIKeybindings = true;
@@ -760,12 +762,12 @@ $.widget( "xml.xmlEditor", {
 			$(window).off("keydown.xml_keybindings");
 		}
 	},
-
+	
 	// Initialize key bindings
 	keydownCallback: function(e) {
 		if (this.guiEditor.active) {
 			var focused = $("input:focus, textarea:focus, select:focus");
-
+			
 			// Escape key, blur the currently selected input or deselect selected element
 			if (e.keyCode == 27) {
 				if (focused.length > 0)
@@ -773,27 +775,27 @@ $.widget( "xml.xmlEditor", {
 				else this.guiEditor.selectElement(null);
 				return false;
 			}
-
+			
 			// Enter, focus the first visible input
 			if (e.keyCode == 13 && focused.length == 0) {
 				e.preventDefault();
 				this.guiEditor.focusSelectedText();
 				return false;
 			}
-
+			
 			// Tab, select the next input
 			if (e.keyCode == 9) {
 				e.preventDefault();
 				this.guiEditor.focusInput(e.shiftKey);
 				return false;
 			}
-
+			
 			// Delete key press while item selected but nothing is focused.
 			if (e.keyCode == 46 && focused.length == 0) {
 				this.guiEditor.deleteSelected();
 				return false;
 			}
-
+			
 			if (e.keyCode > 36 && e.keyCode < 41 && focused.length == 0){
 				e.preventDefault();
 				if (e.altKey) {
@@ -816,7 +818,7 @@ $.widget( "xml.xmlEditor", {
 				}
 				return false;
 			}
-
+			
 			if ((e.metaKey || e.ctrlKey) && focused.length == 0 && e.keyCode == 'Z'.charCodeAt(0)) {
 				// Undo
 				this.undoHistory.changeHead(e.shiftKey? 1: -1);
@@ -827,33 +829,33 @@ $.widget( "xml.xmlEditor", {
 				return false;
 			}
 		}
-
+		
 		// Save, on either tab.
 		if (e.altKey && e.shiftKey && e.keyCode == 'S'.charCodeAt(0)) {
 			$("." + submitButtonClass).click();
 			return false;
 		}
-
+		
 		if (e.altKey && e.shiftKey && e.keyCode == 'E'.charCodeAt(0)) {
 			this.exportXML();
 			return false;
 		}
-
+		
 		// Switch to the GUI editor
 		if (e.altKey && e.shiftKey && e.keyCode == 'X'.charCodeAt(0)) {
 			this.modeChange(0);
 			return false;
 		}
-
+		
 		// Switch to the text editor
 		if (e.altKey && e.shiftKey && e.keyCode == 'T'.charCodeAt(0)) {
 			this.modeChange(1);
 			return false;
 		}
-
+		
 		return true;
 	},
-
+	
 	// Menu Update functions
 	refreshMenuUndo: function(self) {
 		if (self.undoHistory.headIndex > 0) {
@@ -867,11 +869,11 @@ $.widget( "xml.xmlEditor", {
 			$("#" + xmlMenuHeaderPrefix + "Redo").addClass("disabled").data("menuItemData").enabled = false;
 		}
 	},
-
+	
 	// Performs updates to the menu for changing element/attribute selection
 	refreshMenuSelected: function(self) {
-		var suffixes = ['Deselect', 'Next_Element', 'Previous_Element', 'Parent', 'First_Child', 'Next_Sibling',
-						'Previous_Sibling', 'Next_Attribute', 'Previous_Attribute', 'Delete', 'Move_Element_Up',
+		var suffixes = ['Deselect', 'Next_Element', 'Previous_Element', 'Parent', 'First_Child', 'Next_Sibling', 
+						'Previous_Sibling', 'Next_Attribute', 'Previous_Attribute', 'Delete', 'Move_Element_Up', 
 						'Move_Element_Down'];
 		var hasSelected = self.guiEditor.selectedElement != null && self.guiEditor.active;
 		$.each(suffixes, function(){
@@ -1716,19 +1718,28 @@ function MenuBar(editor) {
 	this.parentElement = null;
 	// Functions which are executed when the menu is activated for updating the menu state
 	this.updateFunctions = [];
-
+	
 	var self = this;
+	var defaultSubmitConfig = null;
+	$.each(self.editor.submitButtonConfigs, function(index, config) {
+		if (config.url) {
+			defaultSubmitConfig = config;
+			return false;
+		}
+	});
+
 	// Default menu entries
-	// TODO this would need to get changed to allow for anything in the ajax options hash toothis.editor.options.enableDocumentStatusPanel
 	this.headerMenuData = [ {
 		label : 'File',
 		enabled : true,
-		action : function(event) {self.activateMenu(event);},
+		action : function(event) {self.activateMenu(event);}, 
 		items : [ {
 				label : 'Submit to Server',
-				enabled : (self.editor.options.ajaxOptions.xmlUploadPath != null),
+				enabled : defaultSubmitConfig != null,
 				binding : "alt+shift+s",
-				action : $.proxy(self.editor.submitXML, self.editor)
+				action : function() {
+					self.editor.uploadXML.call(self.editor, defaultSubmitConfig);
+				}
 			}, {
 				label : 'Export',
 				enabled : (typeof(Blob) !== undefined),
@@ -1778,7 +1789,7 @@ function MenuBar(editor) {
 	}, {
 		label : 'Select',
 		enabled : true,
-		action : function(event) {self.activateMenu(event);},
+		action : function(event) {self.activateMenu(event);}, 
 		items : [ {
 				label : 'Deselect',
 				enabled : true,
@@ -1846,7 +1857,7 @@ function MenuBar(editor) {
 	}, {
 		label : 'View',
 		enabled : true,
-		action : function(event) {self.activateMenu(event);},
+		action : function(event) {self.activateMenu(event);}, 
 		items : [ {
 			label : 'Switch to XML View',
 			enabled : true,
@@ -1865,7 +1876,7 @@ function MenuBar(editor) {
 	}, {
 		label : 'Options',
 		enabled : true,
-		action : function(event) {self.activateMenu(event);},
+		action : function(event) {self.activateMenu(event);}, 
 		items : [ {
 			label : 'Pretty XML Formatting',
 			enabled : (vkbeautify !== undefined),
@@ -1903,7 +1914,7 @@ function MenuBar(editor) {
 	}/*, {
 		label : 'Help',
 		enabled : true,
-		action : function(event) {self.activateMenu(event);},
+		action : function(event) {self.activateMenu(event);}, 
 		items : [ {
 			label : 'MODS Outline of Elements',
 			enabled : true,
@@ -1912,14 +1923,14 @@ function MenuBar(editor) {
 		} ]
 	}*/, {
 		label : self.editor.options.xmlEditorLabel,
-		enabled : true,
+		enabled : true, 
 		itemClass : 'header_mode_tab',
 		action : function() {
 			self.editor.modeChange(0);
 		}
 	}, {
 		label : self.editor.options.textEditorLabel,
-		enabled : true,
+		enabled : true, 
 		itemClass : 'header_mode_tab',
 		action : function() {
 			self.editor.modeChange(1);
@@ -1948,11 +1959,11 @@ MenuBar.prototype.activateMenu = function(event) {
 MenuBar.prototype.render = function(parentElement) {
 	this.parentElement = parentElement;
 	this.menuBarContainer = $("<div/>").addClass(xmlMenuBarClass).appendTo(parentElement);
-
+	
 	this.headerMenu = $("<ul/>");
 	this.menuBarContainer.append(this.headerMenu);
 	this.initEventHandlers();
-
+	
 	var menuBar = this;
 	$.each(this.headerMenuData, function() {
 		menuBar.generateMenuItem(this, menuBar.headerMenu);
@@ -1962,7 +1973,7 @@ MenuBar.prototype.render = function(parentElement) {
 MenuBar.prototype.initEventHandlers = function() {
 	this.headerMenu.on("click", "li", { "menuBar" : this}, function(event) {
 		var menuItem = $(this).data("menuItemData");
-		if (Object.prototype.toString.call(menuItem.action) == '[object Function]'){
+		if (menuItem.enabled && Object.prototype.toString.call(menuItem.action) == '[object Function]'){
 			menuItem.action.call(this, event);
 		}
 	});
@@ -1972,7 +1983,7 @@ MenuBar.prototype.initEventHandlers = function() {
 MenuBar.prototype.generateMenuItem = function(menuItemData, parentMenu) {
 	var menuItem = $("<li/>").appendTo(parentMenu);
 	var checkArea = $("<span/>").addClass("xml_menu_check").appendTo(menuItem);
-
+		
 	var menuItemLink = $("<a/>").appendTo(menuItem).html("<span>" + menuItemData.label + "</span>");
 	if (menuItemData.binding) {
 		menuItemLink.append("<span class='binding'>" + menuItemData.binding + "</span>");
@@ -1987,7 +1998,7 @@ MenuBar.prototype.generateMenuItem = function(menuItemData, parentMenu) {
 	if (menuItemData.itemClass) {
 		menuItem.addClass(menuItemData.itemClass);
 	}
-
+	
 	var menuBar = this;
 	menuItem.data("menuItemData", menuItemData).attr("id", xmlMenuHeaderPrefix + menuItemData.label.replace(/ /g, "_"));
 	if (menuItemData.items !== undefined && menuItemData.items.length > 0) {
@@ -1996,7 +2007,7 @@ MenuBar.prototype.generateMenuItem = function(menuItemData, parentMenu) {
 			menuBar.generateMenuItem(this, subMenu);
 		});
 	}
-
+	
 	if (menuItemData.checked)
 		this.checkEntry(menuItem, true);
 };
@@ -2198,32 +2209,30 @@ ModifyMenuPanel.prototype.initialize = function (parentContainer) {
 		$("<span/>").addClass(submissionStatusClass).html("Document is unchanged")
 			.appendTo(documentStatusPanel);
 
-		if (self.editor.options.ajaxOptions.xmlUploadConfig != null){
-			$.each(self.editor.options.ajaxOptions.xmlUploadConfig, function(index, el){
-				if(el.createDomElement){
-					var submitButton = $("<input/>").attr({
-						'id' : el.id,
+		if (self.editor.submitButtonConfigs != null){
+			$.each(self.editor.submitButtonConfigs, function(index, config){
+				var submitButton;
+				if (config.id && ('createDomElement' in config) && !config.createDomElement) {
+					submitButton = $("#" + config.id);
+				} else {
+					submitButton = $("<input/>").attr({
+						id : config.id,
 						'type' : 'button',
-						'class' : el.cssClass,
-						'name' : 'submit',
-						'value' : el.linkText
+						'class' : config.cssClass || submitButtonClass,
+						name : config.name || 'submit',
+						value : config.label || 'Submit'
 					}).appendTo(documentStatusPanel);
 				}
-			});
-		} else {
-			var submitButton = $("<input/>").attr({
-				'id' : submitButtonClass,
-				'type' : 'button',
-				'class' : 'send_xml',
-				'name' : 'submit',
-				'value' : 'Submit Changes'
-			}).appendTo(documentStatusPanel);
 
-			if (typeof(Blob) !== undefined){
-				submitButton.attr("value", "Export");
-			} else {
-				submitButton.attr("disabled", "disabled");
-			}
+				if (!('responseHandler' in config) && config.url) {
+					config.responseHandler = this.options.submitResponseHandler
+						|| this.swordSubmitResponseHandler;
+				}
+
+				submitButton.click(function() {
+					self.editor.submitXML(config);
+				});
+			});
 		}
 		documentStatusPanel.appendTo(this.menuColumn);
 	}
