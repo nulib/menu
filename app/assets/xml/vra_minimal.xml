@@ -50,7 +50,6 @@
          </vra:location>
          <vra:location>
             <vra:refid source="DIL"></vra:refid>
-            <vra:refid source="Voyager"></vra:refid>
          </vra:location>
       </vra:locationSet>
 
