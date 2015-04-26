@@ -14,6 +14,7 @@ Menu::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   root 'jobs#index'
+  get 'images/edit_this/:pid' => 'images#edit_this'
 
   #match 'images/:id/edit/publish', to: 'images#publish', as: :publish, via: [:post, :patch]
 
