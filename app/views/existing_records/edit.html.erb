@@ -1,0 +1,74 @@
+<h1>VRA Editor</h1>
+
+<div role="tabpanel">
+
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#editor" aria-controls="editor" role="tab" data-toggle="tab">Editor</a></li>
+    <li role="presentation"><a href="#image" aria-controls="image" role="tab" data-toggle="tab">Image</a></li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    
+    <!-- Editor tab -->
+    <div role="tabpanel" class="tab-pane active" id="editor">
+      <div class="row">
+        <div class="col-lg-11">
+        <textarea id="xml_editor"><%= @xml %></textarea>
+        </div>
+      </div>
+
+      <!-- Publish button and image thumbnail -->
+      <div id="persistData">
+        <div id="publishButton">
+          <div id='publishUrl' class='btn btn-primary' data-url="<%#= publish_image_path(@image) %>">Publish</div>
+        </div>
+        <%#= image_tag @image.proxy( "thumb" ), class: "thumbnail thumb" %>
+      </div>
+    </div>
+   
+  </div>
+</div>
+
+<script>
+
+
+
+  $(function() {
+
+    function publishSuccess(response){
+      if ($("#errors").is(":visible")){
+        $("#errors").hide();
+      }
+
+      if ($(".xml_submit_status").hasClass("alert alert-danger")){
+        $(".xml_submit_status").removeClass("alert alert-danger");
+      }
+      if (response.localName){
+        document.location.href = response.localName;
+      }
+    }
+
+    function publishError(jqXHR){
+      $(".xml_submit_status").addClass("alert alert-danger");
+      $(".xml_submit_status").html("Errors! This record was not published. Details above.");
+      var msg = jqXHR.getResponseHeader('X-Message');
+      if ($(".container").children("#errors").length == 0){
+        $(".container").prepend("<div id='errors' class='alert alert-danger'></div>"); 
+        $('#errors').html("<p>" + msg + "</p>");
+      } else {       
+        $('#errors').html("<p>" + msg + "</p>"); 
+      }    
+    }    
+
+    var extractor = new Xsd2Json("vra-strict.xsd", {"schemaURI":"<%= root_path %>"});
+
+    $("#xml_editor").xmlEditor({
+      schema: extractor.getSchema(),
+      documentStatusPanelDomId: "#persistData",
+      enableDocumentStatusPanel: false
+    });
+
+  });
+</script>

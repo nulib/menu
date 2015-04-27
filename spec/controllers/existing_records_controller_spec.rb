@@ -9,8 +9,8 @@ RSpec.describe ExistingRecordsController, :type => :controller do
   # to_return(:status => 200, :body => "<response><returnCode>Error</returnCode><description>Failed record</description></response>", :headers => {})
 
     it "gets the record's vra from Images app" do
-    # GET /ExistingRecords/1/edit
-
+    
+      #expect 
     end
   end
 end
