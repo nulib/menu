@@ -33,9 +33,9 @@ describe Image do
     it "has the default VRA XML in the xml attribute" do
       job = create(:job_with_images)
       image = job.images.first
-      default_xml = File.read( 'app/assets/xml/vra_minimal.xml' )
+      default_xml = Nokogiri::XML(File.read( 'app/assets/xml/vra_minimal.xml' ))
 
-      expect( image.image_xml ).to eql( default_xml )
+      expect( Nokogiri::XML(image.image_xml) ).to be_equivalent_to( default_xml )
     end
 
   end

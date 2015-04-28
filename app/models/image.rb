@@ -9,9 +9,6 @@ class Image < ActiveRecord::Base
   validates :job_id, :presence => true
   validates :filename, :uniqueness => true
 
-
-
-
   def job_id_display
     self.job.job_id
   end
@@ -103,14 +100,7 @@ class Image < ActiveRecord::Base
   private
 
     def add_minimal_xml
-      if self.image_xml.nil?
-        doc = Nokogiri::XML.parse(File.read( "#{Rails.root}/app/assets/xml/vra_minimal.xml" ))
-        accession_nbr = Nokogiri::XML::Node.new "vra:refid", doc
-        accession_nbr['source'] = "Accession"
-        accession_nbr.content = File.basename( filename.slice( filename.index( '_' ) + 1, filename.length ), ".*" )
-        doc.xpath("//vra:refid[@source='DIL']").first.add_next_sibling(accession_nbr)
-        self.image_xml = doc.to_s
-      end
+      self.image_xml = Nokogiri::XML.parse(File.read( "#{Rails.root}/app/assets/xml/vra_minimal.xml" )) if self.image_xml.nil?
     end
 
 end

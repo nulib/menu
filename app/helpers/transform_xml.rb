@@ -27,6 +27,19 @@ module TransformXML
     doc.to_xml
   end
 
+  def self.add_refid_accession_nbr( xml, filename )
+    doc = Nokogiri::XML.parse( xml )
+    if doc.xpath("//vra:refid[@source='DIL']")
+      puts filename
+
+      refid = Nokogiri::XML::Node.new("vra:refid", doc)
+      refid['source'] = "Accession"
+      refid.content = File.basename( filename.slice( filename.index( '_' ) + 1, filename.length ), ".*" )
+      doc.xpath("//vra:refid[@source='DIL']").first.add_next_sibling(refid)
+    end
+    doc.to_xml
+  end
+
   def self.get_accession_nbr( xml )
     doc = Nokogiri::XML.parse( xml )
     doc.xpath("//vra:refid[@source='Accession']").text
