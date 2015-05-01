@@ -85,7 +85,6 @@ class ImagesController < ApplicationController
       @image.image_xml = TransformXML.add_refid_accession_nbr( @image.image_xml, @image.filename )
       @image.image_xml = TransformXML.add_display_elements( @image.image_xml )
       
-      puts "IMAGE XML: #{@image.image_xml}"
       @accession_nbr = TransformXML.get_accession_nbr( @image.image_xml )
       # @image.accession_nbr = TransformXML.get_accession_nbr( @image.image_xml )
       if @image.valid_vra?
