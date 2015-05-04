@@ -1,7 +1,7 @@
 FactoryGirl.define do
 
   factory :image do
-    sequence(:filename) { |n| "#{n}.tiff"}
+    sequence(:filename) { |n| "#{n}.tiff" }
     job
   end
 

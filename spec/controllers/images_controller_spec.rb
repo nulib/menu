@@ -14,7 +14,7 @@ RSpec.describe ImagesController, :type => :controller do
 
     it "creates a new Image" do
       expect do
-        post(:create, image: {filename: 'test.tif', location: 'gandalf', job_id: 'test'})
+        post(:create, image: {filename: '001_test.tif', location: 'gandalf', job_id: 'test'})
       end.to change(Image, :count).by(1)
     end
   end
@@ -72,7 +72,7 @@ RSpec.describe ImagesController, :type => :controller do
       before do
         @controller = ImagesController.new
         job = create(:job)
-        @image = job.images.create( filename: 'test.tif', location: 'dropbox' )
+        @image = job.images.create( filename: '001_test.tif', location: 'dropbox' )
         doc = Nokogiri::XML( @image.image_xml )
         doc.xpath( '//vra:earliestDate' )[ 0 ].content = 'present'
         doc.xpath( '//vra:agent//vra:name' )[ 0 ].content = 'Sculley'
@@ -114,14 +114,13 @@ RSpec.describe ImagesController, :type => :controller do
       it "fails gracefully" do
         stub_request(:post, "https://127.0.0.1:3333/multiresimages/menu_publish").
              to_return(:status => 200, :body => "<response><returnCode>Error</returnCode><description>Failed record</description></response>", :headers => {})
-        @image = Image.create!( job_id: 'test' )
+        @image = Image.create!( filename: '001_test.tif', job_id: 'test' )
         doc = Nokogiri::XML( @image.image_xml )
         doc.xpath( '//vra:earliestDate' )[ 0 ].content = 'pres'
         raw_post(:publish, {:id => @image.id}, doc.to_s )
         expect(response.status).to eq 400
       end
     end
-
 
   end
 end
