@@ -14,8 +14,6 @@ class ExistingRecordsController < ApplicationController
   	doc = Nokogiri::XML.parse( request.body.read )
   	doc.children[0]['prefix'] = "//vra:agentSet/vra:display"
   	doc.children[0]['prefix'] = "/vra:vra/vra:work:"
-  	doc['prefix'] = "//vra:agentSet/vra:display"
-  	doc['prefix'] = "/vra:vra/vra:work:"
 
   	resp = dil_api_update_image( pid, doc.children )
 
