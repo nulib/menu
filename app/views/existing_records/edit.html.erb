@@ -22,7 +22,7 @@
       <!-- Publish button and image thumbnail -->
       <div id="persistData">
         <div id="publishButton">
-          <div id='publishUrl' class='btn btn-primary' data-url="<%= existing_records_update_path(@existing_record) %>">Publish</div>
+          <div id='publishUrl' class='btn btn-primary' data-url="<%= existing_records_update_path(:pid => @existing_record.pid) %>">Publish</div>
         </div>
         <%#= image_tag @image.proxy( "thumb" ), class: "thumbnail thumb" %>
       </div>
@@ -72,7 +72,7 @@
           id: "publishUrl",
           createDomElement: false,
           //onSubmit: submitThis,
-          url: '<%= existing_records_update_path(@existing_record) %>',
+          url: '<%= existing_records_update_path(:pid => @existing_record.pid) %>',
           responseHandler: publishSuccess,
           errorHandler: publishError
         }]

@@ -9,14 +9,21 @@ class ExistingRecordsController < ApplicationController
 
   # PATCH/PUT /images/1
   # PATCH/PUT /images/1.json
-  def update
-  	
-  	dil_api_update_image( request.body.read )
+  def update  	
+  	pid = params[:pid]
+  	doc = Nokogiri::XML.parse( request.body.read )
+  	doc.children[0]['prefix'] = "//vra:agentSet/vra:display"
+  	doc.children[0]['prefix'] = "/vra:vra/vra:work:"
+  	doc['prefix'] = "//vra:agentSet/vra:display"
+  	doc['prefix'] = "/vra:vra/vra:work:"
 
-  	#render edit again if failure 
+  	resp = dil_api_update_image( pid, doc.children )
 
-    #then we need to publish it, which requires a different method then the dil post. a dil put. which we don't have yet in images, we have a dil create or update fedora method that needs to be broken into create and update fedora.
-
+	  if resp.include?("Error")
+	  	render action: 'edit', :pid => pid      
+    else
+      render json: {:localName => "#{root_url}"}
+    end
   end
 
 
@@ -29,11 +36,11 @@ class ExistingRecordsController < ApplicationController
       ).get({:params => {pid: pid}})
     end
 
-    def dil_api_update_image( xml )
+    def dil_api_update_image( pid, xml )
       RestClient::Resource.new(
         MENU_CONFIG["dil_update"],
         verify_ssl: OpenSSL::SSL::VERIFY_NONE
-      ).put({xml: xml})
+      ).put({pid: pid, xml: xml})
     end    
 
 end
