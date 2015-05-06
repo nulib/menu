@@ -3,7 +3,7 @@ Menu::Application.routes.draw do
   resources :images do
     member do
       post  'save_xml'
-      post   'publish'
+      post  'publish'
     end
   end
 
@@ -14,7 +14,8 @@ Menu::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   root 'jobs#index'
-
+  get 'existing_records/edit/:pid' => 'existing_records#edit'
+  post 'existing_records/update/' => 'existing_records#update'
   #match 'images/:id/edit/publish', to: 'images#publish', as: :publish, via: [:post, :patch]
 
 

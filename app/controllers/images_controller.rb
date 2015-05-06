@@ -27,6 +27,22 @@ class ImagesController < ApplicationController
   def edit
   end
 
+
+  # PATCH/PUT /images/1
+  # PATCH/PUT /images/1.json
+  def update
+    respond_to do |format|
+      if @image.update_attributes(image_params)
+        format.html { redirect_to @image, notice: 'Image was successfully updated.' }
+        format.json { head :no_content }
+      else
+        format.html { render action: 'edit' }
+        format.json { render json: @image.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+
   # POST /images
   # POST /images.json
   def create
@@ -42,19 +58,6 @@ class ImagesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /images/1
-  # PATCH/PUT /images/1.json
-  def update
-    respond_to do |format|
-      if @image.update_attributes(image_params)
-        format.html { redirect_to @image, notice: 'Image was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @image.errors, status: :unprocessable_entity }
-      end
-    end
-  end
 
   # POST /images/1.xml
   def save_xml
@@ -131,9 +134,10 @@ class ImagesController < ApplicationController
 
       RestClient::Resource.new(
         MENU_CONFIG["dil_url"],
-        verify_ssl: OpenSSL::SSL::VERIFY_NONE ,
+        verify_ssl: OpenSSL::SSL::VERIFY_NONE,
 
       ).post xml: xml , path: path , accession_nbr: accession_nbr
 
     end
+
 end

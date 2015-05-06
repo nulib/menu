@@ -11,7 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150219164520) do
+ActiveRecord::Schema.define(version: 20150427181600) do
+
+  create_table "existing_records", force: :cascade do |t|
+    t.string "pid"
+    t.string "accession_number"
+    t.text   "record_xml"
+  end
 
   create_table "images", force: :cascade do |t|
     t.string   "filename",           limit: 255
