@@ -8,6 +8,12 @@ describe "visiting the home page" do
     expect( page ).to have_link( "Cataloging Guidelines" )
   end
 
+  it "contains a search_box for existing_records" do
+    visit root_path
+
+    expect( find('.navbar-form') ).to have_button( 'Search' )
+  end
+
   it "displays a Job ID header" do
     visit root_path
 
