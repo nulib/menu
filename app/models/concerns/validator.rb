@@ -1,3 +1,6 @@
+ 
+module Validator
+
  def find_required_child(node, child_sought)
     generalNode = node.children.select { | child | child.name == child_sought[:generalNode] }
     specificNode = generalNode[0].children.select { | child | child.name == child_sought[:specificNode] }
@@ -67,3 +70,4 @@
 
     invalid
   end
+end
