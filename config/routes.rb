@@ -14,7 +14,7 @@ Menu::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   root 'jobs#index'
-  get 'existing_records/edit', to: 'existing_records#edit'
+  get 'existing_records/edit', to: 'existing_records#edit', as: :existing_records_edit
   post 'existing_records/update/' => 'existing_records#update'
   #match 'images/:id/edit/publish', to: 'images#publish', as: :publish, via: [:post, :patch]
 

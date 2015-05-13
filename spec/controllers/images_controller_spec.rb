@@ -82,7 +82,7 @@ RSpec.describe ImagesController, :type => :controller do
         @accession_nbr = TransformXML.get_accession_nbr( @image.image_xml )
          allow(FileUtils).to receive(:mv)
 
-         stub_request(:post, "https://127.0.0.1:3333/multiresimages/menu_publish").
+         stub_request(:post, "http://127.0.0.1:3333/multiresimages/menu_publish").
               to_return(:status => 200, :body => "<response><returnCode>Publish successful</returnCode><pid>inu:dil-8a21a816-ac14-493c-a571-2be8e6dd4745</pid></response>", :headers => {})
       end
 
@@ -112,7 +112,7 @@ RSpec.describe ImagesController, :type => :controller do
 
     context "with invalid vra" do
       it "fails gracefully" do
-        stub_request(:post, "https://127.0.0.1:3333/multiresimages/menu_publish").
+        stub_request(:post, "http://127.0.0.1:3333/multiresimages/menu_publish").
              to_return(:status => 200, :body => "<response><returnCode>Error</returnCode><description>Failed record</description></response>", :headers => {})
         @image = Image.create!( filename: '001_test.tif', job_id: 'test' )
         doc = Nokogiri::XML( @image.image_xml )
