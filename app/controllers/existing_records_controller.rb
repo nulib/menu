@@ -2,13 +2,14 @@ require 'rest-client'
 
 class ExistingRecordsController < ApplicationController
 
+  # GET /existing_records/
 	def edit
 	 		@existing_record = ExistingRecord.where(pid: params[:pid]).first_or_create
 	    @existing_record.record_xml = dil_api_get_vra( params[:pid] )
   end
 
-  # PATCH/PUT /images/1
-  # PATCH/PUT /images/1.json
+  # PATCH/PUT /existing_records/1
+  # PATCH/PUT /existing_records/1.json
   def update  	
   	pid = params[:pid]
   	doc = Nokogiri::XML.parse( request.body.read )

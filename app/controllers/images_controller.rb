@@ -136,7 +136,7 @@ class ImagesController < ApplicationController
         MENU_CONFIG["dil_url"],
         verify_ssl: OpenSSL::SSL::VERIFY_NONE,
 
-      ).post xml: xml , path: path , accession_nbr: accession_nbr
+      ).post xml: xml , path: path , accession_nbr: accession_nbr, from_menu: true
 
     end
 
