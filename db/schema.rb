@@ -11,12 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150427181600) do
+ActiveRecord::Schema.define(version: 20150512193447) do
 
   create_table "existing_records", force: :cascade do |t|
     t.string "pid"
     t.string "accession_number"
-    t.text   "record_xml"
+    t.text   "xml"
   end
 
   create_table "images", force: :cascade do |t|
@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 20150427181600) do
     t.string   "location",           limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "image_xml"
+    t.text     "xml"
     t.string   "proxy_file_name",    limit: 255
     t.string   "proxy_content_type", limit: 255
     t.integer  "proxy_file_size"

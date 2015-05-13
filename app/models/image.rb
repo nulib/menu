@@ -32,7 +32,7 @@ class Image < ActiveRecord::Base
   private
 
     def add_minimal_xml
-      self.image_xml = Nokogiri::XML.parse(File.read( "#{Rails.root}/app/assets/xml/vra_minimal.xml" )) if self.image_xml.nil?
+      self.xml = Nokogiri::XML.parse(File.read( "#{Rails.root}/app/assets/xml/vra_minimal.xml" )) if self.xml.nil?
     end
 
 end
