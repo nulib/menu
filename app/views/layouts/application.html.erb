@@ -14,7 +14,7 @@
         <%= link_to "menu -- Metadata Editor at Northwestern University Library", root_path, :class => "navbar-brand" %>
       </div>
       <h4 class="navbar-text pull-right"><%= link_to "Cataloging Guidelines", "https://docs.google.com/document/d/1tk7cbK2oh1Sxu7TSKiBiSZH073ivF3KRxzSCgODAfek/edit", :target => "_blank" %></h4>
-      <%= form_tag('existing_records/edit', method: "get", class: "navbar-form pull-right") do %>
+      <%= form_tag(existing_records_edit_path, method: "get", class: "navbar-form pull-right") do %>
         <div class="form-group">
           <%= text_field_tag(:pid, params[:pid], placeholder: "Enter pid...", class: "form-control", id: "pid-field", required: "required") %>
         </div>
