@@ -11,7 +11,7 @@ module Validator
     error unless error.nil?
   end
     
-  def validate_preferred_fields(nokogiri_doc)
+  def validate_required_fields(nokogiri_doc)
     #date, title, agent
     invalid = []
     sets = nokogiri_doc.xpath( "//*" ).children[ 1 ].xpath( "./*" )
@@ -52,22 +52,4 @@ module Validator
 
   end
 
-  def validate_vra
-    doc = Nokogiri::XML(self.image_xml)
-
-    invalid = []
-    XSD.validate(doc).each do |error|
-      invalid << "Validation error: #{error.message}"
-    end
-    preferred_fields = validate_preferred_fields(doc)
-    invalid << preferred_fields unless preferred_fields.nil?
-
-    invalid.each do |error|
-      next if error =~ /is not a valid value of the list type 'xs:IDREFS'/
-      next if error =~ /is not a valid value of the atomic type 'xs:IDREF'/
-      #raise StandardError
-    end
-
-    invalid
-  end
 end
