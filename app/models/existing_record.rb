@@ -7,22 +7,21 @@ class ExistingRecord < ActiveRecord::Base
   end
 
   def validate_vra
-    doc = Nokogiri::XML(self.image_xml)
+    doc = Nokogiri::XML(self.xml)
 
     invalid = []
     XSD.validate(doc).each do |error|
       invalid << "Validation error: #{error.message}"
     end
-    required_fields = validate_required_fields(doc)
-    invalid << required_fields unless required_fields.nil?
 
-    invalid.each do |error|
-      next if error =~ /is not a valid value of the list type 'xs:IDREFS'/
-      next if error =~ /is not a valid value of the atomic type 'xs:IDREF'/
-      #raise StandardError
+    missing_fields = validate_required_fields(doc)
+    invalid << missing_fields unless missing_fields.nil?
+
+    missing_or_invalid = invalid.reject do |error|
+      error.include?("inu:dil") 
     end
 
-    invalid
+    missing_or_invalid
   end
 
 end
