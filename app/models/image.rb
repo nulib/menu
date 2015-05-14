@@ -30,7 +30,6 @@ class Image < ActiveRecord::Base
 
   def validate_vra
     doc = Nokogiri::XML(self.xml)
-    byebug
 
     invalid = []
     XSD.validate(doc).each do |error|
