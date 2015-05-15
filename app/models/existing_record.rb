@@ -20,7 +20,6 @@ class ExistingRecord < ActiveRecord::Base
     missing_or_invalid = invalid.reject do |error|
       error.include?("inu:dil") 
     end
-    puts " you are missing or invalid! #{missing_or_invalid}"
     missing_or_invalid
   end
 
