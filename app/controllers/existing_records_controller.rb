@@ -15,7 +15,7 @@ class ExistingRecordsController < ApplicationController
 
   # PATCH/PUT /existing_records/1
   # PATCH/PUT /existing_records/1.json
-  def update  	
+  def update
   	pid = params[:pid]
     @existing_record = ExistingRecord.find_by_pid(pid)
   	doc = Nokogiri::XML.parse( request.body.read )
@@ -35,7 +35,7 @@ class ExistingRecordsController < ApplicationController
       if resp.include?("Error")
         render action: 'edit', :pid => pid, :status => 400        
       else
-        # @existing_record.save
+        @existing_record.save
         render json: {:localName => "#{root_url}"}
       end
     else
