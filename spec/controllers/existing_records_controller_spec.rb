@@ -26,7 +26,41 @@ RSpec.describe ExistingRecordsController, :type => :controller do
     it "lets you update an existing record" do
 
       dil_record = "inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60"
-      xml = "<vra:vra xsi:schemaLocation='http://www.vraweb.org/vracore4.htm http://www.vraweb.org/projects/vracore4/vra-4.0-restricted.xsd' prefix='/vra:vra/vra:work:'><vra:image id='inu-dil-2559730_w' refid='inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60'><!--Agents--><vra:agentSet><vra:display>United States. War Production Board ; U.S. G.P.O.</vra:display><vra:agent><vra:name type='corporate' vocab='lcnaf'>Bon Bon</vra:name><vra:attribution/></vra:agent><vra:agent><vra:name type='corporate' vocab='lcnaf'>U.S. G.P.O.</vra:name></vra:agent></vra:agentSet><vra:culturalContextSet><vra:display/><vra:culturalContext/></vra:culturalContextSet><!--Dates--><vra:dateSet><vra:display>1942</vra:display><vra:date type='creation'><vra:earliestDate>1942</vra:earliestDate></vra:date></vra:dateSet><!--Description--><vra:descriptionSet><vra:display>Quotation signed by President Roosevelt. ; Photographic collage shows various people walking, including businessmen and men and women factory workers, with graphic design superimposed.</vra:display><vra:notes>Quotation signed by President Roosevelt. ; Photographic collage shows various people walking, including businessmen and men and women factory workers, with graphic design superimposed.</vra:notes><vra:description>Quotation signed by President Roosevelt.</vra:description><vra:description>Photographic collage shows various people walking, including businessmen and men and women factory workers, with graphic design superimposed.</vra:description></vra:descriptionSet><vra:inscriptionSet><vra:display/><vra:inscription><vra:text/></vra:inscription></vra:inscriptionSet><!--Location--><vra:locationSet><vra:display>Washington, D.C. ; World War II Poster Collection at Northwestern University Library ; U.S. Superintendent of Documents Classification number:      Pr32.4812:M1 ; DIL:inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60 ; Voyager:2559730</vra:display><vra:location type='creation'><vra:name type='geographic'>Washington, D.C.</vra:name></vra:location><vra:location type='repository'><vra:name type='geographic'>World War II Poster Collection at Northwestern University Library</vra:name></vra:location><vra:location><vra:refid source='DIL'>inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60</vra:refid><vra:refid source='Voyager'>2559730</vra:refid></vra:location></vra:locationSet><!--Materials--><vra:materialSet><vra:display>1 poster</vra:display><vra:material>1 poster :</vra:material></vra:materialSet><!--Measurements--><vra:measurementsSet><vra:display>71 x 101 cm.</vra:display><vra:measurements>71 x 101 cm</vra:measurements></vra:measurementsSet><!--Relation--><vra:relationSet><vra:display/><vra:relation pref='true' type='imageOf' relids='inu:dil-6b207912-e22f-4331-aad8-4514d4e1b30c'/></vra:relationSet><!--Rights--><vra:rightsSet><vra:display>Materials published by the U.S. Government Printing Office are in the public domain and, as such, not subject to copyright restriction. However, the Library requests users to cite the URL and Northwestern University Library if they wish to reproduce images from its poster database.</vra:display><vra:rights type='publicDomain'><vra:rightsHolder>Public Domain</vra:rightsHolder><vra:text>Materials published by the U.S. Government Printing Office are in the public domain and, as such, not subject to copyright restriction. However, the Library requests users to cite the URL and Northwestern University Library if they wish to reproduce images from its poster database.</vra:text></vra:rights></vra:rightsSet><!--Style Period--><vra:stylePeriodSet><vra:display/><vra:stylePeriod/></vra:stylePeriodSet><!--Subjects--><vra:subjectSet><vra:display>World War, 1939-1945--War work--United States--Posters ; War posters, American ; Defense work</vra:display><vra:subject><vra:term type='descriptiveTopic'>World War, 1939-1945</vra:term></vra:subject><vra:subject><vra:term type='descriptiveTopic'>War posters, American</vra:term></vra:subject><vra:subject><vra:term type='descriptiveTopic'>Defense work</vra:term></vra:subject></vra:subjectSet><vra:techniqueSet><vra:display/><vra:technique/></vra:techniqueSet><!-- Titles --><vra:titleSet><vra:display>'Every man, woman and child is a partner'</vra:display><vra:title pref='true'>'Every man, woman and child is a partner'</vra:title></vra:titleSet><vra:worktypeSet><vra:display/><vra:worktype/></vra:worktypeSet></vra:image></vra:vra>"
+      xml = "<vra:vra xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:fn='http://www.w3.org/2005/xpath-functions' xmlns:marc='http://www.loc.gov/MARC21/slim' xmlns:mods='http://www.loc.gov/mods/v3' xmlns:vra='http://www.vraweb.org/vracore4.htm' xsi:schemaLocation='http://www.vraweb.org/vracore4.htm http://www.vraweb.org/projects/vracore4/vra-4.0-restricted.xsd' prefix='/vra:vra/vra:work:'>
+      <vra:image id='inu-dil-2559730_w' refid='inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60'>
+        <!--Agents-->
+        <vra:agentSet>
+            <vra:display>United States. War Production Board ; U.S. G.P.O.</vra:display>
+            <vra:agent>
+                <vra:name type='corporate' vocab='lcnaf'>Bon Bon</vra:name>
+                <vra:attribution/>
+            </vra:agent>
+            <vra:agent>
+                <vra:name type='corporate' vocab='lcnaf'>U.S. G.P.O.</vra:name>
+            </vra:agent>
+        </vra:agentSet>
+        <vra:culturalContextSet>
+            <vra:display/>
+            <vra:culturalContext/>
+        </vra:culturalContextSet>
+        <!--Dates-->
+        <vra:dateSet>
+            <vra:display>1942</vra:display>
+            <vra:date type='creation'>
+                <vra:earliestDate>1942</vra:earliestDate>
+            </vra:date>
+        </vra:dateSet>
+        <!-- Titles -->
+        <vra:titleSet>
+            <vra:display>'Every man, woman and child is a partner'</vra:display>
+            <vra:title pref='true'>'Every man, woman and child is a partner'</vra:title>
+        </vra:titleSet>
+        <vra:worktypeSet>
+            <vra:display/>
+            <vra:worktype/>
+        </vra:worktypeSet>
+      </vra:image>
+      </vra:vra>"
       stub_request(:get, "http://127.0.0.1:3333/multiresimages/get_vra?pid=inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60").
          to_return(:status => 200, :body => "<response><returnCode>#{xml}</returnCode></response>", :headers => {})
     
@@ -37,13 +71,13 @@ RSpec.describe ExistingRecordsController, :type => :controller do
       xml.sub!('Bon Bon', 'Dana Sculley')
 
       stub_request(:put, "http://127.0.0.1:3333/multiresimages/create_update_fedora_object").
-         with(:body => {"pid"=>"inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60", "xml"=>"<vra:vra xsi:schemaLocation=\"http://www.vraweb.org/vracore4.htm http://www.vraweb.org/projects/vracore4/vra-4.0-restricted.xsd\" prefix=\"/vra:vra/vra:work:\">\n  <vra:image id=\"inu-dil-2559730_w\" refid=\"inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60\">\n    <!--Agents-->\n    <vra:agentSet>\n      <vra:display>United States. War Production Board ; U.S. G.P.O.</vra:display>\n      <vra:agent>\n        <vra:name type=\"corporate\" vocab=\"lcnaf\">Dana Sculley</vra:name>\n        <vra:attribution/>\n      </vra:agent>\n      <vra:agent>\n        <vra:name type=\"corporate\" vocab=\"lcnaf\">U.S. G.P.O.</vra:name>\n      </vra:agent>\n    </vra:agentSet>\n    <vra:culturalContextSet>\n      <vra:display/>\n      <vra:culturalContext/>\n    </vra:culturalContextSet>\n    <!--Dates-->\n    <vra:dateSet>\n      <vra:display>1942</vra:display>\n      <vra:date type=\"creation\">\n        <vra:earliestDate>1942</vra:earliestDate>\n      </vra:date>\n    </vra:dateSet>\n    <!--Description-->\n    <vra:descriptionSet>\n      <vra:display>Quotation signed by President Roosevelt. ; Photographic collage shows various people walking, including businessmen and men and women factory workers, with graphic design superimposed.</vra:display>\n      <vra:notes>Quotation signed by President Roosevelt. ; Photographic collage shows various people walking, including businessmen and men and women factory workers, with graphic design superimposed.</vra:notes>\n      <vra:description>Quotation signed by President Roosevelt.</vra:description>\n      <vra:description>Photographic collage shows various people walking, including businessmen and men and women factory workers, with graphic design superimposed.</vra:description>\n    </vra:descriptionSet>\n    <vra:inscriptionSet>\n      <vra:display/>\n      <vra:inscription>\n        <vra:text/>\n      </vra:inscription>\n    </vra:inscriptionSet>\n    <!--Location-->\n    <vra:locationSet>\n      <vra:display>Washington, D.C. ; World War II Poster Collection at Northwestern University Library ; U.S. Superintendent of Documents Classification number:      Pr32.4812:M1 ; DIL:inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60 ; Voyager:2559730</vra:display>\n      <vra:location type=\"creation\">\n        <vra:name type=\"geographic\">Washington, D.C.</vra:name>\n      </vra:location>\n      <vra:location type=\"repository\">\n        <vra:name type=\"geographic\">World War II Poster Collection at Northwestern University Library</vra:name>\n      </vra:location>\n      <vra:location>\n        <vra:refid source=\"DIL\">inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60</vra:refid>\n        <vra:refid source=\"Voyager\">2559730</vra:refid>\n      </vra:location>\n    </vra:locationSet>\n    <!--Materials-->\n    <vra:materialSet>\n      <vra:display>1 poster</vra:display>\n      <vra:material>1 poster :</vra:material>\n    </vra:materialSet>\n    <!--Measurements-->\n    <vra:measurementsSet>\n      <vra:display>71 x 101 cm.</vra:display>\n      <vra:measurements>71 x 101 cm</vra:measurements>\n    </vra:measurementsSet>\n    <!--Relation-->\n    <vra:relationSet>\n      <vra:display/>\n      <vra:relation pref=\"true\" type=\"imageOf\" relids=\"inu:dil-6b207912-e22f-4331-aad8-4514d4e1b30c\"/>\n    </vra:relationSet>\n    <!--Rights-->\n    <vra:rightsSet>\n      <vra:display>Materials published by the U.S. Government Printing Office are in the public domain and, as such, not subject to copyright restriction. However, the Library requests users to cite the URL and Northwestern University Library if they wish to reproduce images from its poster database.</vra:display>\n      <vra:rights type=\"publicDomain\">\n        <vra:rightsHolder>Public Domain</vra:rightsHolder>\n        <vra:text>Materials published by the U.S. Government Printing Office are in the public domain and, as such, not subject to copyright restriction. However, the Library requests users to cite the URL and Northwestern University Library if they wish to reproduce images from its poster database.</vra:text>\n      </vra:rights>\n    </vra:rightsSet>\n    <!--Style Period-->\n    <vra:stylePeriodSet>\n      <vra:display/>\n      <vra:stylePeriod/>\n    </vra:stylePeriodSet>\n    <!--Subjects-->\n    <vra:subjectSet>\n      <vra:display>World War, 1939-1945--War work--United States--Posters ; War posters, American ; Defense work</vra:display>\n      <vra:subject>\n        <vra:term type=\"descriptiveTopic\">World War, 1939-1945</vra:term>\n      </vra:subject>\n      <vra:subject>\n        <vra:term type=\"descriptiveTopic\">War posters, American</vra:term>\n      </vra:subject>\n      <vra:subject>\n        <vra:term type=\"descriptiveTopic\">Defense work</vra:term>\n      </vra:subject>\n    </vra:subjectSet>\n    <vra:techniqueSet>\n      <vra:display/>\n      <vra:technique/>\n    </vra:techniqueSet>\n    <!-- Titles -->\n    <vra:titleSet>\n      <vra:display>'Every man, woman and child is a partner'</vra:display>\n      <vra:title pref=\"true\">'Every man, woman and child is a partner'</vra:title>\n    </vra:titleSet>\n    <vra:worktypeSet>\n      <vra:display/>\n      <vra:worktype/>\n    </vra:worktypeSet>\n  </vra:image>\n</vra:vra>"},
-              :headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'Content-Length'=>'8155', 'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Ruby'}).
+         with(:body => {"pid"=>"inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60", "xml"=>"<vra:vra xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:fn=\"http://www.w3.org/2005/xpath-functions\" xmlns:marc=\"http://www.loc.gov/MARC21/slim\" xmlns:mods=\"http://www.loc.gov/mods/v3\" xmlns:vra=\"http://www.vraweb.org/vracore4.htm\" xsi:schemaLocation=\"http://www.vraweb.org/vracore4.htm http://www.vraweb.org/projects/vracore4/vra-4.0-restricted.xsd\">\n    <vra:image id=\"inu-dil-2559730_w\" refid=\"inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60\">\n        <!--Agents-->\n        <vra:agentSet>\n            <vra:display>United States. War Production Board ; U.S. G.P.O.</vra:display>\n            <vra:agent>\n                <vra:name type=\"corporate\" vocab=\"lcnaf\">Dana Sculley</vra:name>\n                <vra:attribution/>\n            </vra:agent>\n            <vra:agent>\n                <vra:name type=\"corporate\" vocab=\"lcnaf\">U.S. G.P.O.</vra:name>\n            </vra:agent>\n        </vra:agentSet>\n        <vra:culturalContextSet>\n            <vra:display/>\n            <vra:culturalContext/>\n        </vra:culturalContextSet>\n        <!--Dates-->\n        <vra:dateSet>\n            <vra:display>1942</vra:display>\n            <vra:date type=\"creation\">\n                <vra:earliestDate>1942</vra:earliestDate>\n            </vra:date>\n        </vra:dateSet>\n        <!-- Titles -->\n        <vra:titleSet>\n            <vra:display>'Every man, woman and child is a partner'</vra:display>\n            <vra:title pref=\"true\">'Every man, woman and child is a partner'</vra:title>\n        </vra:titleSet>\n        <vra:worktypeSet>\n            <vra:display/>\n            <vra:worktype/>\n        </vra:worktypeSet>\n    </vra:image>\n</vra:vra>"},
+              :headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'Content-Length'=>'2997', 'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Ruby'}).
          to_return(:status => 200, :body => "", :headers => {})
       
-      resp = raw_post( :update, {:pid => "#{dil_record}"},  xml )
-  
-      expect(resp.body).to include("#{root_url}")
+      resp = raw_post( :update, {:pid => "#{dil_record}"},  "<vra:vra xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:fn=\"http://www.w3.org/2005/xpath-functions\" xmlns:marc=\"http://www.loc.gov/MARC21/slim\" xmlns:mods=\"http://www.loc.gov/mods/v3\" xmlns:vra=\"http://www.vraweb.org/vracore4.htm\" xsi:schemaLocation=\"http://www.vraweb.org/vracore4.htm http://www.vraweb.org/projects/vracore4/vra-4.0-restricted.xsd\">\n    <vra:image id=\"inu-dil-2559730_w\" refid=\"inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60\">\n        <!--Agents-->\n        <vra:agentSet>\n            <vra:display>United States. War Production Board ; U.S. G.P.O.</vra:display>\n            <vra:agent>\n                <vra:name type=\"corporate\" vocab=\"lcnaf\">Dana Sculley</vra:name>\n                <vra:attribution/>\n            </vra:agent>\n            <vra:agent>\n                <vra:name type=\"corporate\" vocab=\"lcnaf\">U.S. G.P.O.</vra:name>\n            </vra:agent>\n        </vra:agentSet>\n        <vra:culturalContextSet>\n            <vra:display/>\n            <vra:culturalContext/>\n        </vra:culturalContextSet>\n        <!--Dates-->\n        <vra:dateSet>\n            <vra:display>1942</vra:display>\n            <vra:date type=\"creation\">\n                <vra:earliestDate>1942</vra:earliestDate>\n            </vra:date>\n        </vra:dateSet>\n        <!-- Titles -->\n        <vra:titleSet>\n            <vra:display>'Every man, woman and child is a partner'</vra:display>\n            <vra:title pref=\"true\">'Every man, woman and child is a partner'</vra:title>\n        </vra:titleSet>\n        <vra:worktypeSet>\n            <vra:display/>\n            <vra:worktype/>\n        </vra:worktypeSet>\n    </vra:image>\n</vra:vra>" )
+
+      expect(resp.body).to eq("{\"localName\":\"#{root_url}\"}") 
 
       stub_request(:get, "http://localhost:8983/fedora/objects/inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60/datastreams/VRA/content").to_return(:status => 200, :body => "#{xml}", :headers => {})
       uri = URI('http://localhost:8983/fedora/objects/inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60/datastreams/VRA/content')
@@ -51,6 +85,56 @@ RSpec.describe ExistingRecordsController, :type => :controller do
 
       expect(updated_vra ).to have_content("Dana Sculley")
 
+    end
+
+    it "won't allow invalid updates to a record" do 
+      dil_record = "inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60"
+      xml = "<vra:vra xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:fn='http://www.w3.org/2005/xpath-functions' xmlns:marc='http://www.loc.gov/MARC21/slim' xmlns:mods='http://www.loc.gov/mods/v3' xmlns:vra='http://www.vraweb.org/vracore4.htm' xsi:schemaLocation='http://www.vraweb.org/vracore4.htm http://www.vraweb.org/projects/vracore4/vra-4.0-restricted.xsd' prefix='/vra:vra/vra:work:'>
+      <vra:image id='inu-dil-2559730_w' refid='inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60'>
+        <!--Agents-->
+        <vra:agentSet>
+            <vra:display>United States. War Production Board ; U.S. G.P.O.</vra:display>
+            <vra:agent>
+                <vra:name type='corporate' vocab='lcnaf'></vra:name>
+                <vra:attribution/>
+            </vra:agent>
+            <vra:agent>
+                <vra:name type='corporate' vocab='lcnaf'>U.S. G.P.O.</vra:name>
+            </vra:agent>
+        </vra:agentSet>
+        <vra:culturalContextSet>
+            <vra:display/>
+            <vra:culturalContext/>
+        </vra:culturalContextSet>
+        <!--Dates-->
+        <vra:dateSet>
+            <vra:display>1942</vra:display>
+            <vra:date type='creation'>
+                <vra:earliestDate>1942</vra:earliestDate>
+            </vra:date>
+        </vra:dateSet>
+        <!-- Titles -->
+        <vra:titleSet>
+            <vra:display>'Every man, woman and child is a partner'</vra:display>
+            <vra:title pref='true'>'Every man, woman and child is a partner'</vra:title>
+        </vra:titleSet>
+        <vra:worktypeSet>
+            <vra:display/>
+            <vra:worktype/>
+        </vra:worktypeSet>
+      </vra:image>
+      </vra:vra>"
+      stub_request(:get, "http://127.0.0.1:3333/multiresimages/get_vra?pid=inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60").
+         to_return(:status => 200, :body => "<response><returnCode>#{xml}</returnCode></response>", :headers => {})
+    
+      response = get( :edit, :pid => "#{dil_record}")
+
+       stub_request(:put, "http://127.0.0.1:3333/multiresimages/create_update_fedora_object").
+         with(:body => {"pid"=>"inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60", "xml"=>"<vra:vra xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:fn=\"http://www.w3.org/2005/xpath-functions\" xmlns:marc=\"http://www.loc.gov/MARC21/slim\" xmlns:mods=\"http://www.loc.gov/mods/v3\" xmlns:vra=\"http://www.vraweb.org/vracore4.htm\" xsi:schemaLocation=\"http://www.vraweb.org/vracore4.htm http://www.vraweb.org/projects/vracore4/vra-4.0-restricted.xsd\">\n      <vra:image id=\"inu-dil-2559730_w\" refid=\"inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60\">\n        <!--Agents-->\n        <vra:agentSet>\n            <vra:display>United States. War Production Board ; U.S. G.P.O.</vra:display>\n            <vra:agent>\n                <vra:name type=\"corporate\" vocab=\"lcnaf\"></vra:name>\n                <vra:attribution/>\n            </vra:agent>\n            <vra:agent>\n                <vra:name type=\"corporate\" vocab=\"lcnaf\">U.S. G.P.O.</vra:name>\n            </vra:agent>\n        </vra:agentSet>\n        <vra:culturalContextSet>\n            <vra:display/>\n            <vra:culturalContext/>\n        </vra:culturalContextSet>\n        <!--Dates-->\n        <vra:dateSet>\n            <vra:display>1942</vra:display>\n            <vra:date type=\"creation\">\n                <vra:earliestDate>1942</vra:earliestDate>\n            </vra:date>\n        </vra:dateSet>\n        <!-- Titles -->\n        <vra:titleSet>\n            <vra:display>'Every man, woman and child is a partner'</vra:display>\n            <vra:title pref=\"true\">'Every man, woman and child is a partner'</vra:title>\n        </vra:titleSet>\n        <vra:worktypeSet>\n            <vra:display/>\n            <vra:worktype/>\n        </vra:worktypeSet>\n      </vra:image>\n      </vra:vra>"},
+              :headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'Content-Length'=>'3022', 'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Ruby'})
+      
+      resp = raw_post( :update, {:pid => "#{dil_record}"},  xml )
+      expect(response.status).to eq 400
     end
   end
 end

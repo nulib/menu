@@ -14,7 +14,7 @@ class ImagesController < ApplicationController
   def show
     respond_to do |format|
       format.html
-      format.xml { render xml: @image.image_xml }
+      format.xml { render xml: @image.xml }
     end
   end
 
@@ -61,7 +61,7 @@ class ImagesController < ApplicationController
 
   # POST /images/1.xml
   def save_xml
-    @image.image_xml = request.body.read
+    @image.xml = request.body.read
     respond_to do |format|
       if @image.save
         format.xml { redirect_to @image, notice: 'Image was successfully updated.'  }
@@ -82,18 +82,18 @@ class ImagesController < ApplicationController
   end
 
   def publish
-    @image.image_xml = request.body.read
+    @image.xml = request.body.read
 
     if @image.save
-      @image.image_xml = TransformXML.add_refid_accession_nbr( @image.image_xml, @image.filename )
-      @image.image_xml = TransformXML.add_display_elements( @image.image_xml )
+      @image.xml = TransformXML.add_refid_accession_nbr( @image.xml, @image.filename )
+      @image.xml = TransformXML.add_display_elements( @image.xml )
       
-      @accession_nbr = TransformXML.get_accession_nbr( @image.image_xml )
-      # @image.accession_nbr = TransformXML.get_accession_nbr( @image.image_xml )
+      @accession_nbr = TransformXML.get_accession_nbr( @image.xml )
+      # @image.accession_nbr = TransformXML.get_accession_nbr( @image.xml )
       if @image.valid_vra?
           #TODO - fix this full_path_thing, yo -- needs to be in config
           full_path = "#{Rails.root}/" + "#{@image.path}"
-          response = dil_api_call( @image.image_xml, @image.path, @accession_nbr )
+          response = dil_api_call( @image.xml, @image.path, @accession_nbr )
           response_xml_doc = Nokogiri::XML( response )
           if response_xml_doc.at_xpath( '//pid' ) && /Publish successful/.match(response_xml_doc)
             destination = @image.completed_destination

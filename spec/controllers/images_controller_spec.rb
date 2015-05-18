@@ -21,7 +21,7 @@ RSpec.describe ImagesController, :type => :controller do
 
   context "with an existing image" do
     before :each do
-      @image = Image.create!( image_xml: '<vra></vra>', job_id: 'test' )
+      @image = Image.create!( xml: '<vra></vra>', job_id: 'test' )
     end
 
     describe "DESTROY image" do
@@ -60,7 +60,7 @@ RSpec.describe ImagesController, :type => :controller do
         request.env['RAW_POST_DATA'] =  '<vra>New</vra>'
         post(:save_xml, id: @image, format: 'xml' )
         @image.reload
-        expect(@image.image_xml.to_s).to eq('<vra>New</vra>')
+        expect(@image.xml.to_s).to eq('<vra>New</vra>')
       end
 
     end
@@ -73,37 +73,37 @@ RSpec.describe ImagesController, :type => :controller do
         @controller = ImagesController.new
         job = create(:job)
         @image = job.images.create( filename: '001_test.tif', location: 'dropbox' )
-        doc = Nokogiri::XML( @image.image_xml )
+        doc = Nokogiri::XML( @image.xml )
         doc.xpath( '//vra:earliestDate' )[ 0 ].content = 'present'
         doc.xpath( '//vra:agent//vra:name' )[ 0 ].content = 'Sculley'
         doc.xpath( '//vra:title' )[ 0 ].content = 'X-Files'
 
-        @image.image_xml = doc.to_xml
-        @accession_nbr = TransformXML.get_accession_nbr( @image.image_xml )
+        @image.xml = doc.to_xml
+        @accession_nbr = TransformXML.get_accession_nbr( @image.xml )
          allow(FileUtils).to receive(:mv)
 
-         stub_request(:post, "http://127.0.0.1:3333/multiresimages/menu_publish").
+         stub_request(:post, "https://127.0.0.1:3333/multiresimages/menu_publish").
               to_return(:status => 200, :body => "<response><returnCode>Publish successful</returnCode><pid>inu:dil-8a21a816-ac14-493c-a571-2be8e6dd4745</pid></response>", :headers => {})
       end
 
       it "generates an API call to Repository Images" do
-        response = @controller.send( :dil_api_call, @image.image_xml, @image.path, @accession_nbr )
+        response = @controller.send( :dil_api_call, @image.xml, @image.path, @accession_nbr )
         expect( response ).to include( 'Publish successful' )
       end
 
       it "moves the image to the dropbox root once published" do
-        raw_post( :publish, {:id => @image.id},  @image.image_xml )
+        raw_post( :publish, {:id => @image.id},  @image.xml )
         expect File.exists?("#{@image.completed_destination}/#{@image.filename}")
       end
 
       it "deletes the image" do
         expect do
-          raw_post( :publish, {:id => @image.id},  @image.image_xml )
+          raw_post( :publish, {:id => @image.id},  @image.xml )
         end.to change(Image, :count).by(-1)
       end
 
       it "returns root_url upon success so that ajax can redirect" do
-        resp = raw_post( :publish, {:id => @image.id},  @image.image_xml )
+        resp = raw_post( :publish, {:id => @image.id},  @image.xml )
         job_url = "#{root_url}jobs/#{@image.job_id}"
 
         expect(resp.body).to include(job_url)
@@ -112,10 +112,10 @@ RSpec.describe ImagesController, :type => :controller do
 
     context "with invalid vra" do
       it "fails gracefully" do
-        stub_request(:post, "http://127.0.0.1:3333/multiresimages/menu_publish").
+        stub_request(:post, "https://127.0.0.1:3333/multiresimages/menu_publish").
              to_return(:status => 200, :body => "<response><returnCode>Error</returnCode><description>Failed record</description></response>", :headers => {})
         @image = Image.create!( filename: '001_test.tif', job_id: 'test' )
-        doc = Nokogiri::XML( @image.image_xml )
+        doc = Nokogiri::XML( @image.xml )
         doc.xpath( '//vra:earliestDate' )[ 0 ].content = 'pres'
         raw_post(:publish, {:id => @image.id}, doc.to_s )
         expect(response.status).to eq 400

@@ -19,7 +19,7 @@ describe Image do
     job = create(:job_with_images)
     image = job.images.first
 
-    expect( image.image_xml ).to be_truthy
+    expect( image.xml ).to be_truthy
   end
 
   it "can return the directory path where the published image file should be moved" do
@@ -35,7 +35,7 @@ describe Image do
       image = job.images.first
       default_xml = Nokogiri::XML(File.read( 'app/assets/xml/vra_minimal.xml' ))
 
-      expect( Nokogiri::XML(image.image_xml) ).to be_equivalent_to( default_xml )
+      expect( Nokogiri::XML(image.xml) ).to be_equivalent_to( default_xml )
     end
 
   end
