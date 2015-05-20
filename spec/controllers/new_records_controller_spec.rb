@@ -82,12 +82,12 @@ RSpec.describe NewRecordsController, :type => :controller do
         @accession_nbr = TransformXML.get_accession_nbr( @new_record.xml )
          allow(FileUtils).to receive(:mv)
 
-         stub_request(:post, "https://127.0.0.1:3333/multiresimages/menu_publish").
+         stub_request(:post, "https://127.0.0.1:3333/multiresimages").
               to_return(:status => 200, :body => "<response><returnCode>Publish successful</returnCode><pid>inu:dil-8a21a816-ac14-493c-a571-2be8e6dd4745</pid></response>", :headers => {})
       end
 
-      it "generates an API call to Repository Images" do
-        response = @controller.send( :dil_api_call, @new_record.xml, @new_record.path, @accession_nbr )
+      it "generates a multiresimages post to Repository Images" do
+        response = @controller.send( :dil_multiresimages_post, @new_record.xml, @new_record.path, @accession_nbr )
         expect( response ).to include( 'Publish successful' )
       end
 
@@ -112,8 +112,7 @@ RSpec.describe NewRecordsController, :type => :controller do
 
     context "with invalid vra" do
       it "fails gracefully" do
-        stub_request(:post, "https://127.0.0.1:3333/multiresimages/menu_publish").
-             to_return(:status => 200, :body => "<response><returnCode>Error</returnCode><description>Failed record</description></response>", :headers => {})
+        stub_request(:post, "http://127.0.0.1:3333/multiresimages").to_return(:status => 200, :body => "<response><returnCode>Error</returnCode><description>Failed record</description></response>", :headers => {})
         @new_record = NewRecord.create!( filename: '001_test.tif', job_id: 'test' )
         doc = Nokogiri::XML( @new_record.xml )
         doc.xpath( '//vra:earliestDate' )[ 0 ].content = 'pres'
