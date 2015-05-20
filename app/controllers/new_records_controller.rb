@@ -93,7 +93,7 @@ class NewRecordsController < ApplicationController
       if @new_record.valid_vra?
           #TODO - fix this full_path_thing, yo -- needs to be in config
           full_path = "#{Rails.root}/" + "#{@new_record.path}"
-          response = dil_api_call( @new_record.xml, @new_record.path, @accession_nbr )
+          response = dil_multiresimages_post( @new_record.xml, @new_record.path, @accession_nbr )
           response_xml_doc = Nokogiri::XML( response )
           if response_xml_doc.at_xpath( '//pid' ) && /Publish successful/.match(response_xml_doc)
             destination = @new_record.completed_destination
@@ -130,7 +130,7 @@ class NewRecordsController < ApplicationController
       params.require(:new_record).permit(:filename, :location, :proxy, :job_id)
     end
 
-    def dil_api_call( xml, path, accession_nbr )
+    def dil_multiresimages_post( xml, path, accession_nbr )
 
       RestClient::Resource.new(
         MENU_CONFIG["dil_url"],
