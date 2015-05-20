@@ -2,8 +2,8 @@
   <h1>Job IDs</h1>
   <ul>
     <% @jobs.each do |job| %>
-      <% unless job.images.empty? %>
-        <li class='job_link'><%= link_to( job.job_id, job ) %> (<%= job.images.size %>) </li>
+      <% unless job.new_records.empty? %>
+        <li class='job_link'><%= link_to( job.job_id, job ) %> (<%= job.new_records.size %>) </li>
         <% end %>
     <% end %>
   </ul>

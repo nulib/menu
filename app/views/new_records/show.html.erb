@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Filename:</strong>
+  <%= @new_record.filename %>
+</p>
+
+<p>
+  <strong>Location:</strong>
+  <%= @new_record.location %>
+</p>
+
+<%= link_to 'Edit', edit_new_record_path(@new_record) %> |
+<%= link_to 'Back', new_records_path %>

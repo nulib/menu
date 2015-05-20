@@ -25,9 +25,9 @@
       <!-- Publish button and image thumbnail -->
       <div id="persistData">
         <div id="publishButton">
-          <div id='publishUrl' class='btn btn-primary' data-url="<%= publish_image_path(@image) %>">Publish</div>
+          <div id='publishUrl' class='btn btn-primary' data-url="<%= publish_new_record_path(@new_record) %>">Publish</div>
         </div>
-        <%= image_tag @image.proxy( "thumb" ), class: "thumbnail thumb" %>
+        <%= image_tag @new_record.proxy( "thumb" ), class: "thumbnail thumb" %>
       </div>
     </div>
     
@@ -35,7 +35,7 @@
     <div role="tabpanel" class="tab-pane" id="image">
       <div class="row">
         <div class="col-lg-6">
-          <%= image_tag @image.proxy( "medium" ), class: "img-responsive thumbnail medium" %>
+          <%= image_tag @new_record.proxy( "medium" ), class: "img-responsive thumbnail medium" %>
         </div>
         <div class="col-lg-6">
           <%= render 'form' %>
@@ -47,8 +47,8 @@
 
 <script>
   var xmlUploadConfig = [
-   {id: "defaultUrl", createDomElement: true, cssClass: 'send_xml', linkText: 'Save', url: "<%= save_xml_image_path(@image) %>"},
-   {id: "publishUrl", createDomElement: false, url: '<%= publish_image_path(@image) %>'}]
+   {id: "defaultUrl", createDomElement: true, cssClass: 'send_xml', linkText: 'Save', url: "<%= save_xml_new_record_path(@new_record) %>"},
+   {id: "publishUrl", createDomElement: false, url: '<%= publish_new_record_path(@new_record) %>'}]
 
 
   $(function() {
@@ -82,14 +82,14 @@
 
     $("#xml_editor").xmlEditor({
       ajaxOptions: {
-        xmlRetrievalPath: "<%= url_for(:only_path => false, :controller => 'images', :action => 'show', :id => @image.id, :format => :xml) %>"
+        xmlRetrievalPath: "<%= url_for(:only_path => false, :controller => 'new_records', :action => 'show', :id => @new_record.id, :format => :xml) %>"
       },
       submitButtonConfigs: [
           {
           id: "publishUrl",
           createDomElement: false,
           //onSubmit: submitThis,
-          url: '<%= publish_image_path(@image) %>',
+          url: '<%= publish_new_record_path(@new_record) %>',
           responseHandler: publishSuccess,
           errorHandler: publishError
         },
@@ -98,7 +98,7 @@
           createDomElement: true, 
           cssClass: 'send_xml', 
           label: 'Save', 
-          url: "<%= save_xml_image_path(@image) %>",
+          url: "<%= save_xml_new_record_path(@new_record) %>",
           //submitHandler: submitThis,
           responseHandler: publishSuccess,
           errorHandler: publishError

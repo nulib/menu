@@ -1,11 +1,11 @@
 require 'rails_helper'
 
-describe "visiting the image edit page" do
+describe "visiting the new_record edit page" do
   
   before :each do
     visit root_url
     click_link( '123' )
-    find('.image-entry', match: :first).click_link( 'Edit')
+    find('.new-record-entry', match: :first).click_link( 'Edit')
   end
 
   it "should not show the up and down arrows in the editor" do

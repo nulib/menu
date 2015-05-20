@@ -1,5 +1,5 @@
 class Job < ActiveRecord::Base
-  has_many :images,-> { order "filename asc" }
+  has_many :new_records,-> { order "filename asc" }
 
   validates :job_id, uniqueness: true
 end

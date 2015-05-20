@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150512193447) do
+ActiveRecord::Schema.define(version: 20150520143515) do
 
   create_table "existing_records", force: :cascade do |t|
     t.string "pid"
@@ -19,27 +19,27 @@ ActiveRecord::Schema.define(version: 20150512193447) do
     t.text   "xml"
   end
 
-  create_table "images", force: :cascade do |t|
-    t.string   "filename",           limit: 255
-    t.string   "location",           limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.text     "xml"
-    t.string   "proxy_file_name",    limit: 255
-    t.string   "proxy_content_type", limit: 255
-    t.integer  "proxy_file_size"
-    t.datetime "proxy_updated_at"
-    t.string   "image_pid",          limit: 255
-    t.string   "work_pid",           limit: 255
-    t.integer  "job_id"
-  end
-
   create_table "jobs", force: :cascade do |t|
     t.integer "job_id"
   end
 
+  create_table "new_records", force: :cascade do |t|
+    t.string   "filename"
+    t.string   "location"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.text     "xml"
+    t.string   "proxy_file_name"
+    t.string   "proxy_content_type"
+    t.integer  "proxy_file_size"
+    t.datetime "proxy_updated_at"
+    t.string   "image_pid"
+    t.string   "work_pid"
+    t.integer  "job_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
-    t.string   "session_id", limit: 255, null: false
+    t.string   "session_id", null: false
     t.text     "data"
     t.datetime "created_at"
     t.datetime "updated_at"
