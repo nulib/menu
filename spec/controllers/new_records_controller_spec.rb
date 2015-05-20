@@ -82,7 +82,7 @@ RSpec.describe NewRecordsController, :type => :controller do
         @accession_nbr = TransformXML.get_accession_nbr( @new_record.xml )
          allow(FileUtils).to receive(:mv)
 
-         stub_request(:post, "http://127.0.0.1:3333/multiresimages").
+         stub_request(:post, "https://127.0.0.1:3333/multiresimages").
               to_return(:status => 200, :body => "<response><returnCode>Publish successful</returnCode><pid>inu:dil-8a21a816-ac14-493c-a571-2be8e6dd4745</pid></response>", :headers => {})
       end
 
