@@ -1,0 +1,29 @@
+<h1>Listing new records</h1>
+
+<table class="table">
+  <thead class="header">
+    <tr>
+      <th>Thumbnail</th>
+      <th>Filename</th>
+      <th>Job ID</th>
+      <th colspan=3></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @new_records.each do |new_record| %>
+      <tr class="new-record-entry">
+        <td><%= image_tag new_record.proxy( :thumb ), class: "thumbnail" %></td>
+        <td><%= new_record.filename %></td>
+        <td><%= new_record.job_id_display %></td>
+        <td><%= link_to 'Show', new_record, class: "btn btn-default" %></td>
+        <td><%= link_to 'Edit', edit_new_record_path(new_record), class: "btn btn-default" %></td>
+        <td><%= link_to 'Delete', new_record, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Record', new_new_record_path, class: "btn btn-default" %>

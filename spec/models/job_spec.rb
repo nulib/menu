@@ -7,17 +7,17 @@ describe Job do
     expect( job.job_id ).to eql( 999 )
   end
 
-  it 'has_many images' do
-    job = create(:job_with_images)
+  it 'has_many new_records' do
+    job = create(:job_with_new_records)
 
-    expect( job.images.count ).to eql( 2 )
+    expect( job.new_records.count ).to eql( 2 )
   end
 
-  it 'orders images by filename' do
+  it 'orders new_record by filename' do
     job = create(:job)
-    image1 = job.images.create( filename: "002.tif" )
-    image2 = job.images.create( filename: "001.tif" )
+    new_record1 = job.new_records.create( filename: "002.tif" )
+    new_record2 = job.new_records.create( filename: "001.tif" )
 
-    expect( job.images.to_a ).to eql( [image2, image1] )
+    expect( job.new_records.to_a ).to eql( [new_record2, new_record1] )
   end
 end

@@ -35,8 +35,8 @@ describe "visiting the home page" do
   end
 
   # lib/assets/dropbox should contain an empty directory 
-  # and a directory named "123" with images in it
-  it "displays one listing for each job that has images" do
+  # and a directory named "123" with new_records in it
+  it "displays one listing for each job that has new_records" do
 
     visit root_path
 

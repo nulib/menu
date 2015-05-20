@@ -1,6 +1,6 @@
 FactoryGirl.define do
 
-  factory :image do
+  factory :new_record do
     sequence(:filename) { |n| "#{n}.tiff" }
     job
   end
@@ -8,13 +8,13 @@ FactoryGirl.define do
   factory :job do
     sequence(:job_id) { |n| "#{n}" }
     
-    factory :job_with_images do
+    factory :job_with_new_records do
       transient do
-        images_count 2
+        new_records_count 2
       end
 
       after(:create) do | job, evaluator |
-        create_list(:image, evaluator.images_count, job: job)
+        create_list(:new_record, evaluator.new_records_count, job: job)
       end
 
     end

@@ -1,10 +1,10 @@
 class JobsController < ApplicationController
   def index
-    GetImages.current_images
+    GetNewRecords.current_new_records
     @jobs = Job.order(:job_id)
   end
 
   def show
-    @images = Job.find( params[ :id ]).images
+    @new_records = Job.find( params[ :id ]).new_records
   end
 end

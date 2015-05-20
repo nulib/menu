@@ -1,6 +1,6 @@
 Menu::Application.routes.draw do
 
-  resources :images do
+  resources :new_records do
     member do
       post  'save_xml'
       post  'publish'
