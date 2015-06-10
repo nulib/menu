@@ -19,7 +19,7 @@ server 'menu-s.library.northwestern.edu', user: 'deploy', roles: %w{web app db},
 
 # rbenv setup
 # ==================
-set :rbenv_ruby, '2.1.5'
+set :rbenv_ruby, '2.2.2'
 
 
 # Custom SSH Options
