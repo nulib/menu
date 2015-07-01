@@ -24,10 +24,19 @@
         <div id="publishButton">
           <div id='publishUrl' class='btn btn-primary' data-url="<%= existing_records_update_path(:pid => @existing_record.pid) %>">Publish</div>
         </div>
-        <%#= image_tag @existing_record.proxy( "thumb" ), class: "thumbnail thumb" %>
+        <%= get_repo_image(@existing_record.pid, 120) %>
       </div>
+    </div>
 
-    </div>  
+    <!-- Image tab -->
+    <div role="tabpanel" class="tab-pane" id="image">
+      <div class="row">
+        <div class="col-lg-12">
+          <%= get_repo_image(@existing_record.pid, 900) %>
+        </div>
+      </div>
+    </div>
+
   </div>
 
 </div>

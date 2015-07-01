@@ -17,4 +17,8 @@ module ApplicationHelper
     nil
   end
 
+  def get_repo_image(pid, size)
+    image_tag "#{Rails.application.secrets.dil_url}/get_image/#{pid}/#{size}", class: "thumbnail thumb"
+  end
+
 end
