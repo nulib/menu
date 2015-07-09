@@ -49,7 +49,7 @@
             <vra:name type="geographic"></vra:name>
          </vra:location>
          <vra:location>
-            <vra:refid source="DIL"></vra:refid>
+            <vra:refid source="Accession"></vra:refid>
          </vra:location>
       </vra:locationSet>
 
