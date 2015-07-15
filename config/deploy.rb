@@ -12,7 +12,6 @@ set :deploy_to, '/var/www/menu'
 
 # Default value for :scm is :git
 set :scm, :git
-set :ssh_options, { :forward_agent => true }
 
 # Default value for :format is :pretty
 set :format, :pretty
