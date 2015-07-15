@@ -281,6 +281,7 @@ DEPENDENCIES
   bootstrap-sass (~> 3)
   byebug
   capistrano (~> 3.2)
+  capistrano-bundler
   capistrano-passenger
   capistrano-rails
   capistrano-rbenv
@@ -300,7 +301,7 @@ DEPENDENCIES
   pry-byebug
   pry-rails
   rails (~> 4.1)
-  rb-readline (~> 0.5.2)
+  rb-readline
   rest-client
   rspec-rails (~> 3)
   sass-rails (~> 4.0)

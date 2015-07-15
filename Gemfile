@@ -37,6 +37,7 @@ end
 
 # Use Capistrano for deployment
 gem 'capistrano', '~> 3.2'
+gem 'capistrano-bundler'
 gem 'capistrano-passenger'
 gem 'capistrano-secrets-yml', '~> 1.0.0'
 gem 'capistrano-rails'
@@ -69,6 +70,6 @@ end
 
 group :staging, :production do
   gem 'pg'
-  gem 'rb-readline', '~> 0.5.2'
+  gem 'rb-readline'
 end
 
