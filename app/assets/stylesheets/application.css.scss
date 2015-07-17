@@ -12,6 +12,9 @@
  *= require_tree .
  */
 
+$grid-float-breakpoint: 1225px;
+
+@import 'bootstrap-sprockets';
 @import "bootstrap";
 
 #publishButton {

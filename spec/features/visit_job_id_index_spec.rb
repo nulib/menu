@@ -8,6 +8,12 @@ describe "visiting the home page" do
     expect( page ).to have_link( "Cataloging Guidelines" )
   end
 
+  it "provides a link to the Help documentation" do
+    visit root_path
+
+    expect( page ).to have_link( "Help Document" )
+  end
+
   it "contains a search_box for existing_records" do
     visit root_path
 
