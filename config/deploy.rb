@@ -77,12 +77,14 @@ namespace :deploy do
   task :recreate_thumbs do
     on roles(:app) do
       within release_path do
-        execute :rake, 'menu:recreate_image_tags'
+        with rails_env: fetch(:rails_env) do
+          #execute :rake, "menu:recreate_image_tags"
+        end
       end
     end
   end
 
-  after :publishing, :recreate_thumbs
+  after :publishing, :restart, :recreate_thumbs
 
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
