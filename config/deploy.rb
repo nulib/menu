@@ -70,12 +70,19 @@ namespace :deploy do
     on roles(:app), in: :sequence, wait: 5 do
       # Your restart mechanism here, for example:
      execute :touch, release_path.join('tmp/restart.txt')
-     execute :rake, 'menu:recreate_image_tags'
      #make thumbnails generate new image paths
     end
   end
 
-  #after :publishing, :restart
+  task :recreate_thumbs do
+    on roles(:app) do
+      within release_path do
+        execute :rake, 'menu:recreate_image_tags'
+      end
+    end
+  end
+
+  after :publishing, :recreate_thumbs
 
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
