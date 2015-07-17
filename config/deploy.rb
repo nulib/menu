@@ -84,7 +84,8 @@ namespace :deploy do
     end
   end
 
-  after :publishing, :restart, :recreate_thumbs
+  after :publishing, :restart,
+  after :restart, :recreate_thumbs
 
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
