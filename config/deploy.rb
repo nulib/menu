@@ -94,7 +94,7 @@ namespace :deploy do
     on roles(:app) do
       within release_path do
         with rails_env: fetch(:rails_env) do
-          execute :rake, "menu:recreate_image_tags"
+          execute :rake, "paperclip:refresh:thumbnails"
         end
       end
     end
