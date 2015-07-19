@@ -75,7 +75,6 @@ namespace :deploy do
 
 
   after :publishing, :restart
-  after :restart, invoke 'deploy:regenerate_thumbs'
 
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
@@ -86,9 +85,12 @@ namespace :deploy do
     end
   end
 
+  after :restart, :correct_thumbs do
+    invoke 'deploy:regenerate_thumbs'
+  end
+
   desc 'Regenerate thumbnails'
   task :regenerate_thumbs do
-   # fail 'no task provided' unless ENV['task']
     on roles(:app) do
       within release_path do
         with rails_env: fetch(:rails_env) do
