@@ -72,20 +72,22 @@ namespace :deploy do
      execute :touch, release_path.join('tmp/restart.txt')
      #make thumbnails generate new image paths
     end
+     invoke "deploy:recreate_thumbs"
+     on roles(:app) { info "Something" }
   end
 
   task :recreate_thumbs do
     on roles(:app) do
       within release_path do
         with rails_env: fetch(:rails_env) do
-          #execute :rake, "menu:recreate_image_tags"
+          execute :rake, "menu:recreate_image_tags"
         end
       end
     end
   end
 
   after :publishing, :restart
-  after :restart, :recreate_thumbs
+  #after :restart, :recreate_thumbs
 
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
