@@ -87,19 +87,19 @@ namespace :deploy do
     end
   end
 
-  after :restart, :correct_thumbs do
-    invoke 'deploy:regenerate_thumbs'
-  end
+  # after :restart, :correct_thumbs do
+  #   invoke 'deploy:regenerate_thumbs'
+  # end
 
-  desc 'Regenerate thumbnails'
-  task :regenerate_thumbs do
-    on roles(:app) do
-      within release_path do
-        with rails_env: fetch(:rails_env) do
-          execute :rake, "paperclip:refresh CLASS=NewRecord"
-        end
-      end
-    end
-  end
+  # desc 'Regenerate thumbnails'
+  # task :regenerate_thumbs do
+  #   on roles(:app) do
+  #     within release_path do
+  #       with rails_env: fetch(:rails_env) do
+  #         execute :rake, "paperclip:refresh:thumbnails CLASS=NewRecord"
+  #       end
+  #     end
+  #   end
+  # end
 
 end
