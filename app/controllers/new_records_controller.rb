@@ -85,8 +85,7 @@ class NewRecordsController < ApplicationController
     @new_record.xml = request.body.read
 
     if @new_record.save
-      @new_record.xml = TransformXML.add_refid_accession_nbr( @new_record.xml, @new_record.filename )
-      @new_record.xml = TransformXML.add_display_elements( @new_record.xml )
+      @new_record.xml = TransformXML.prepare_vra_xml( @new_record.xml, @new_record.filename )
       
       @accession_nbr = TransformXML.get_accession_nbr( @new_record.xml )
       

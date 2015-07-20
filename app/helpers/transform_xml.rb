@@ -1,13 +1,23 @@
 module TransformXML
-  def self.add_display_elements( xml )
-    doc = Nokogiri::XML.parse( xml )
-    sets = doc.xpath( "//*" ).children[ 1 ].xpath( "./*" )
+
+  def self.prepare_vra_xml( xml, filename )
+    nokogiri_doc = Nokogiri::XML.parse( xml )
+
+    add_refid_accession_nbr( nokogiri_doc, filename )
+    add_display_elements( nokogiri_doc )
+    add_empty_work_element( nokogiri_doc )
+
+    return nokogiri_doc.to_xml
+  end
+
+  def self.add_display_elements( nokogiri_doc ) 
+    sets = nokogiri_doc.xpath( "//*" ).children[ 1 ].xpath( "./*" )
     sets.each do |node|
       next unless node.element?
       next if node.name == 'dateSet'
       next if node.name == 'subjectSet'
       next if node.name == 'locationSet'
-      display = Nokogiri::XML::Node.new 'vra:display', doc
+      display = Nokogiri::XML::Node.new 'vra:display', nokogiri_doc
       all_text_nodes = node.xpath( ".//text()" ).to_a
       all_text_nodes.delete_if { |el| el.blank? }
       if node.name == 'agentSet'
@@ -22,25 +32,33 @@ module TransformXML
       node.children.first.add_previous_sibling( display )
     end
 
-    add_location_set_display( doc )
+    add_location_set_display( nokogiri_doc )
 
-    doc.to_xml
+    nokogiri_doc
   end
 
-  def self.add_refid_accession_nbr( xml, filename )
-    doc = Nokogiri::XML.parse( xml )
-    if doc.xpath("//vra:refid[@source='DIL']").present? && filename.present?
-      refid = Nokogiri::XML::Node.new("vra:refid", doc)
+  def self.add_refid_accession_nbr( nokogiri_doc, filename )
+    if nokogiri_doc.xpath("//vra:refid[@source='DIL']").present? && filename.present?
+      refid = Nokogiri::XML::Node.new("vra:refid", nokogiri_doc)
       refid['source'] = "Accession"
       refid.content = File.basename( filename.slice( filename.index( '_' ) + 1, filename.length ), ".*" )
-      doc.xpath("//vra:refid[@source='DIL']").first.add_next_sibling(refid)
+      nokogiri_doc.xpath("//vra:refid[@source='DIL']").first.add_next_sibling(refid)
     end
-    doc.to_xml
+    nokogiri_doc
   end
 
   def self.get_accession_nbr( xml )
     doc = Nokogiri::XML.parse( xml )
     doc.xpath("//vra:refid[@source='Accession']").text
+  end
+
+  def self.add_empty_work_element( nokogiri_doc )
+    remove_work_elements( nokogiri_doc )
+    
+    work_element = Nokogiri::XML::Node.new('vra:work', nokogiri_doc)
+    nokogiri_doc.root.add_child(work_element)
+
+    nokogiri_doc
   end
 
   private
@@ -68,6 +86,10 @@ module TransformXML
     else
       nokogiri_doc
     end
+  end
+
+  def self.remove_work_elements( nokogiri_doc )
+    nokogiri_doc.search('//vra:work').remove if nokogiri_doc.xpath('//vra:work').any?
   end
 
 end

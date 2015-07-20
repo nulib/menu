@@ -41,11 +41,10 @@ class NewRecord < ActiveRecord::Base
     invalid
   end
 
-
   private
 
-    def add_minimal_xml
-      self.xml = Nokogiri::XML.parse(File.read( "#{Rails.root}/app/assets/xml/vra_minimal.xml" )) if self.xml.nil?
-    end
+  def add_minimal_xml
+    self.xml = Nokogiri::XML.parse(File.read( "#{Rails.root}/app/assets/xml/vra_minimal.xml" )) if self.xml.nil?
+  end
 
 end
