@@ -20,6 +20,7 @@ server 'menu-s.library.northwestern.edu', user: 'deploy', roles: %w{web app db},
 # rbenv setup
 # ==================
 set :rbenv_ruby, '2.2.2'
+set :rails_env, 'staging'
 
 
 # Custom SSH Options

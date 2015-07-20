@@ -1,5 +1,5 @@
 # config valid only for Capistrano 3.1
-lock '3.3.5'
+lock '3.4.0'
 
 set :application, 'menu'
 set :repo_url, 'git@github.com:nulib/menu.git'
@@ -30,7 +30,9 @@ set :linked_files, %w{config/database.yml config/secrets.yml}
 
 set :passenger_restart_with_touch, true
 # Default value for linked_dirs is []
-# set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
+
+#we want to enable this, use public/system for sure for default paperclip storage
+set :linked_dirs, %w{public/system}
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
@@ -73,7 +75,8 @@ namespace :deploy do
     end
   end
 
-  #after :publishing, :restart
+
+  after :publishing, :restart
 
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
@@ -83,5 +86,20 @@ namespace :deploy do
       # end
     end
   end
+
+  # after :restart, :correct_thumbs do
+  #   invoke 'deploy:regenerate_thumbs'
+  # end
+
+  # desc 'Regenerate thumbnails'
+  # task :regenerate_thumbs do
+  #   on roles(:app) do
+  #     within release_path do
+  #       with rails_env: fetch(:rails_env) do
+  #         execute :rake, "paperclip:refresh:thumbnails CLASS=NewRecord"
+  #       end
+  #     end
+  #   end
+  # end
 
 end
