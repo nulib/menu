@@ -1,5 +1,5 @@
 require 'rails_helper'
-#these test expect four directories of sample data in lib/assets/dropbox. 
+#these test expect four directories of sample data in lib/assets/dropbox.
 describe "visiting the home page" do
 
   it "provides a link to the Cataloging Guidelines" do
@@ -34,13 +34,13 @@ describe "visiting the home page" do
 
   it "orders the list of jobs by Job ID" do
     visit root_path
-    
-    expect(page).to have_selector(".job_link:nth-child(1) a", text: "123")
-    expect(page).to have_selector(".job_link:nth-child(2) a", text: "234")
-    expect(page).to have_selector(".job_link:nth-child(3) a", text: "456")
+
+    expect(page).to have_selector(".job_link:nth-child(1) a", text: "234")
+    expect(page).to have_selector(".job_link:nth-child(2) a", text: "456")
+    expect(page).to have_selector(".job_link:nth-child(3) a", text: "789")
   end
 
-  # lib/assets/dropbox should contain an empty directory 
+  # lib/assets/dropbox should contain an empty directory
   # and a directory named "123" with new_records in it
   it "displays one listing for each job that has new_records" do
 
@@ -49,6 +49,13 @@ describe "visiting the home page" do
     expect( page ).to_not have_content( "(0)" )
 
     visit root_path
-    expect( page ).to have_link( "123" )
+    expect( page ).to have_link( "456" )
+  end
+
+  it "can handle an 18-digit job id" do
+    visit root_path
+
+    expect(page).to have_selector(".job_link:nth-child(4) a", text: "61120151061120151")
+    expect(page).to_not have_content("is out of range for ActiveRecord")
   end
 end
