@@ -24,8 +24,7 @@ module TransformXML
         agents = node.children.select { | child | child.name == "agent" }
         joined_agents = agents.collect do | agent |
           fine_children = [agent.children.to_a.delete_if { |child| child.blank? }]
-          fine_children[0].delete_if { |child| child.content.blank?}
-          #byebug
+          fine_children[0].delete_if { |child| child.content.blank? }
           fine_children.join(", ")
         end
         display.content = joined_agents.join(" ; ")
