@@ -10,7 +10,7 @@ module TransformXML
     return nokogiri_doc.to_xml
   end
 
-  def self.add_display_elements( nokogiri_doc ) 
+  def self.add_display_elements( nokogiri_doc )
     sets = nokogiri_doc.xpath( "//*" ).children[ 1 ].xpath( "./*" )
     sets.each do |node|
       next unless node.element?
@@ -23,7 +23,10 @@ module TransformXML
       if node.name == 'agentSet'
         agents = node.children.select { | child | child.name == "agent" }
         joined_agents = agents.collect do | agent |
-          [agent.children.to_a.delete_if { |child| child.blank? }.join(", ")]
+          fine_children = [agent.children.to_a.delete_if { |child| child.blank? }]
+          fine_children[0].delete_if { |child| child.content.blank?}
+          #byebug
+          fine_children.join(", ")
         end
         display.content = joined_agents.join(" ; ")
       else
@@ -54,7 +57,7 @@ module TransformXML
 
   def self.add_empty_work_element( nokogiri_doc )
     remove_work_elements( nokogiri_doc )
-    
+
     work_element = Nokogiri::XML::Node.new('vra:work', nokogiri_doc)
     nokogiri_doc.root.add_child(work_element)
 
