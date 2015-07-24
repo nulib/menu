@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 describe "visiting the new_record edit page" do
-  
+
   before :each do
     visit root_url
-    click_link( '123' )
+    click_link( '456' )
     find('.new-record-entry', match: :first).click_link( 'Edit')
   end
 
