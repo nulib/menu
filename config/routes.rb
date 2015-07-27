@@ -7,6 +7,12 @@ Menu::Application.routes.draw do
     end
   end
 
+  # resources :existing_records, except: :show do
+  #   member do
+  #     post  'save_xml'
+  #   end
+  # end
+
   resources :jobs
 
   # The priority is based upon order of creation: first created -> highest priority.
@@ -16,6 +22,10 @@ Menu::Application.routes.draw do
   root 'jobs#index'
   get 'existing_records/edit', to: 'existing_records#edit', as: :existing_records_edit
   post 'existing_records/update/' => 'existing_records#update'
+
+  #get 'exit', to: 'sessions#destroy', as: :logout
+  post 'existing_records/save_xml/:pid', to: 'existing_records#save_xml', as: :existing_records_save_xml
+
   #match 'images/:id/edit/publish', to: 'images#publish', as: :publish, via: [:post, :patch]
 
 
