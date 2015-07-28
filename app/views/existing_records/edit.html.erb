@@ -10,7 +10,7 @@
 
   <!-- Tab panes -->
   <div class="tab-content">
-    
+
     <!-- Editor tab -->
     <div role="tabpanel" class="tab-pane active" id="editor">
       <div class="row">
@@ -42,8 +42,8 @@
 </div>
 
 <script>
-
-
+  var xmlUploadConfig = [
+   {id: "defaultUrl", createDomElement: true, cssClass: 'send_xml', linkText: 'Save', url: "<%= existing_records_save_xml_path(@existing_record.pid) %>"}]
 
   $(function() {
 
@@ -65,12 +65,12 @@
       $(".xml_submit_status").html("Errors! This record was not published. Details above.");
       var msg = jqXHR.getResponseHeader('X-Message');
       if ($(".container").children("#errors").length == 0){
-        $(".container").prepend("<div id='errors' class='alert alert-danger'></div>"); 
+        $(".container").prepend("<div id='errors' class='alert alert-danger'></div>");
         $('#errors').html("<p>" + msg + "</p>");
-      } else {       
-        $('#errors').html("<p>" + msg + "</p>"); 
-      }    
-    }    
+      } else {
+        $('#errors').html("<p>" + msg + "</p>");
+      }
+    }
 
     var extractor = new Xsd2Json("vra-both.xsd", {"schemaURI":"<%= root_path %>"});
 
@@ -84,7 +84,17 @@
           url: '<%= existing_records_update_path(:pid => @existing_record.pid) %>',
           responseHandler: publishSuccess,
           errorHandler: publishError
-        }]
+        },
+        {
+          id: "defaultUrl",
+          createDomElement: true,
+          cssClass: 'send_xml',
+          label: 'Save',
+          url: "<%= existing_records_save_xml_path(:pid => @existing_record.pid) %>",
+          responseHandler: publishSuccess,
+          errorHandler: publishError
+        }
+      ]
     });
 
   });
