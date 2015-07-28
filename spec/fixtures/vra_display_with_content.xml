@@ -1,8 +1,8 @@
-<?xml version="1.0"?>
+       <?xml version="1.0"?>
        <vra:vra xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:marc="http://www.loc.gov/MARC21/slim" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:vra="http://www.vraweb.org/vracore4.htm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.vraweb.org/vracore4.htm http://www.vraweb.org/projects/vracore4/vra-4.0-restricted.xsd">
          <vra:image id="inu-dil-219157_w" refid="inu:dil-86a0e7d3-fdd5-4b12-87a6-6e1fb74e1c4c">
 
-           <vra:agentSet><vra:display>Lysippos attributed to, </vra:display>
+           <vra:agentSet><vra:display>Lysippos attributed to</vra:display>
              <vra:agent>
                <vra:name type="personal" vocab="ulan">Lysippos attributed to</vra:name>
                <vra:attribution/>
