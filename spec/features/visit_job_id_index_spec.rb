@@ -35,7 +35,7 @@ describe "visiting the home page" do
   it "orders the list of jobs by Job ID" do
     visit root_path
 
-    expect(page).to have_selector(".job_link:nth-child(1) a", text: "234")
+    expect(page).to have_selector(".job_link:nth-child(1) a", text: "123")
     expect(page).to have_selector(".job_link:nth-child(2) a", text: "456")
     expect(page).to have_selector(".job_link:nth-child(3) a", text: "789")
   end
