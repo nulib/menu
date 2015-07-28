@@ -26,7 +26,6 @@ coverage
 coverage/*
 
 # Ignore paperclip-generated files
-/public/system/images
+public/system
 
 tags
-
