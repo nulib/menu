@@ -39,6 +39,47 @@ describe TransformXML, :type => :helper do
       expect("#{agent_display_content}").to eql("<vra:display>agent Uno ; Agent duo, role duo ; agent Dre, attribution dre, role dre</vra:display>")
     end
 
+    it "doesn't add the notes element to the descriptionSet display element" do
+      xml_with_description_string = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<vra:vra\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:fn=\"http://www.w3.org/2005/xpath-functions\"\n    xmlns:vra=\"http://www.vraweb.org/vracore4.htm\"\n    xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xsi:schemaLocation=\"http://www.vraweb.org/vracore4.htm http://www.loc.gov/standards/vracore/vra-strict.xsd\">\n    <vra:image>\n<!--Cultural Context-->\n        <vra:culturalContextSet>\n            <vra:culturalContext/>\n        </vra:culturalContextSet>\n        <!--Dates-->\n        <vra:dateSet>\n            <vra:display/>\n            <vra:date type=\"creation\">\n                <vra:earliestDate>present</vra:earliestDate>\n            </vra:date>\n        </vra:dateSet>
+        <!--Description-->
+        <vra:descriptionSet>
+            <vra:notes>I am description notes</vra:notes>
+            <vra:description>Okay I am first description</vra:description>
+            <vra:description>And I am second one</vra:description>
+        </vra:descriptionSet>
+        </vra:image>\n
+        </vra:vra>"
+
+      xml_with_description = Nokogiri::XML(xml_with_description_string)
+      TransformXML.add_display_elements(xml_with_description).to_xml
+      description_display_content = xml_with_description.xpath("//vra:descriptionSet//vra:display")
+
+      expect("#{description_display_content}").to eql("<vra:display>Okay I am first description ; And I am second one</vra:display>")
+    end
+
+    it "doesn't add the rightsHolder element to the rightsSet display element" do
+      xml_with_rights_string =  "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<vra:vra\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:fn=\"http://www.w3.org/2005/xpath-functions\"\n    xmlns:vra=\"http://www.vraweb.org/vracore4.htm\"\n    xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xsi:schemaLocation=\"http://www.vraweb.org/vracore4.htm http://www.loc.gov/standards/vracore/vra-strict.xsd\">\n    <vra:image>\n<!--Rights-->
+        <vra:rightsSet>
+            <vra:rights>
+                <vra:rightsHolder>first holder</vra:rightsHolder>
+                <vra:text>first text</vra:text>
+            </vra:rights>
+            <vra:rights>
+                <vra:rightsHolder>second holder</vra:rightsHolder>
+                <vra:text>second text</vra:text>
+            </vra:rights>
+        </vra:rightsSet>
+        </vra:image>\n
+        </vra:vra>"
+
+        xml_with_rights = Nokogiri::XML(xml_with_rights_string)
+        TransformXML.add_display_elements(xml_with_rights)
+        rights_display_content = xml_with_rights.xpath("//vra:rightsSet//vra:display")
+
+        expect("#{rights_display_content}").to eql("<vra:display>first text ; second text</vra:display>")
+
+    end
+
     it "adds locationSet display with source attributes prepended with a colon" do
 
       xml_with_locationSet_string = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<vra:vra\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:fn=\"http://www.w3.org/2005/xpath-functions\"\n    xmlns:vra=\"http://www.vraweb.org/vracore4.htm\"\n    xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xsi:schemaLocation=\"http://www.vraweb.org/vracore4.htm http://www.loc.gov/standards/vracore/vra-strict.xsd\">\n    <vra:image><!--Location--><vra:locationSet><vra:location type=\"creation\"><vra:name type=\"geographic\">London</vra:name></vra:location><vra:location type=\"repository\"><vra:name type=\"geographic\">Posters from the Herskovits Library</vra:name></vra:location><vra:location source=\"MARC 590\"><vra:refid type=\"shelfList\">Object no. SA.5.</vra:refid></vra:location><vra:location><vra:refid source=\"DIL\"/><vra:refid source=\"Voyager\">1234567</vra:refid><vra:refid source=\"Accession\">7654321</vra:refid></vra:location></vra:locationSet>\n        <!--Dates-->\n        <vra:dateSet>\n            <vra:display/>\n            <vra:date type=\"creation\">\n                <vra:earliestDate>present</vra:earliestDate>\n            </vra:date>\n        </vra:dateSet></vra:image>\n    </vra:vra>"
