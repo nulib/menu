@@ -17,17 +17,16 @@ module TransformXML
       next if node.name == 'dateSet'
       next if node.name == 'subjectSet'
       next if node.name == 'locationSet'
+
       display = Nokogiri::XML::Node.new 'vra:display', nokogiri_doc
       all_text_nodes = node.xpath( ".//text()" ).to_a
       all_text_nodes.delete_if { |el| el.blank? }
       if node.name == 'agentSet'
-        agents = node.children.select { | child | child.name == "agent" }
-        joined_agents = agents.collect do | agent |
-          fine_children = [agent.children.to_a.delete_if { |child| child.blank? }]
-          fine_children[0].delete_if { |child| child.content.blank? }
-          fine_children.join(", ")
-        end
-        display.content = joined_agents.join(" ; ")
+        display.content = transform_agent_set(node)
+      elsif node.name == 'descriptionSet'
+        display.content = transform_description_set(node)
+      elsif node.name == 'rightsSet'
+        display.content = transform_rights_set(node)
       else
         display.content = all_text_nodes.join( " ; " )
       end
@@ -37,6 +36,32 @@ module TransformXML
     add_location_set_display( nokogiri_doc )
 
     nokogiri_doc
+  end
+
+  def self.transform_agent_set(node)
+    agents = node.children.select {| child | child.name == "agent" }
+        joined_agents = agents.collect do | agent |
+          agent_children = [agent.children.to_a.delete_if {| child | child.blank? }]
+          agent_children[0].delete_if {| child | child.content.blank? }
+          agent_children.join(", ")
+        end
+      joined_agents.join(" ; ")
+  end
+
+  def self.transform_description_set(node)
+    description_children = node.children.to_a
+    description_children.delete_if {| child | child.name == "notes" or child.blank? }
+    description_children.join(" ; ")
+  end
+
+  def self.transform_rights_set(node)
+    rights_set = node.children.to_a.map do | item |
+      if item.name == "rights"
+        item.children.to_a.delete_if {|child| child.name == "rightsHolder" or child.blank? }
+      end
+    end.compact!
+
+   rights_set.join(" ; ")
   end
 
   def self.add_refid_accession_nbr( nokogiri_doc, filename )
