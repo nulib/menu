@@ -18,7 +18,7 @@ describe "visiting the new_record edit page" do
   end
 
   it 'is the correct dimension style' do
-    expect( page ).to have_css( '.medium' )
+    expect( page ).to have_css( '.original' )
   end
 
 end

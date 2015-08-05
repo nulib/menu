@@ -1,7 +1,7 @@
 class NewRecord < ActiveRecord::Base
   belongs_to :job
 
-  has_attached_file :proxy, :styles => { :thumb => [ "100x100", :jpg ], :medium => ["1000x1000", :jpg] }
+  has_attached_file :proxy, :styles => { :thumb => [ "100x100", :jpg ], :original => ["1000x1000", :jpg] }
 
   before_create :add_minimal_xml
 
