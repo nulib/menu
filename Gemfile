@@ -47,7 +47,7 @@ gem 'nokogiri'
 gem 'mini_portile'
 gem 'paperclip'
 gem 'rest-client'
-
+gem 'lograge'
 
 group :development, :test do
   gem 'sqlite3'
