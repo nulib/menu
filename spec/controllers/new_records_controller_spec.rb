@@ -10,6 +10,11 @@ require 'pp'
   end
 
 RSpec.describe NewRecordsController, :type => :controller do
+
+  before do
+    sign_in FactoryGirl.create(:user)    
+  end
+
   describe "CREATE new_record" do
 
     it "creates a NewRecord" do
