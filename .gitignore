@@ -20,6 +20,7 @@ config/database.yml
 config/database.yml.pg
 config/menu.yml
 config/secrets.yml
+config/ldap.yml
 
 # Ignore test specific items
 coverage

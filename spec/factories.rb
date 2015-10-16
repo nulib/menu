@@ -59,4 +59,9 @@ FactoryGirl.define do
     end
   end
 
+  factory :user do
+    username Rails.application.secrets["test_user_id"]
+    password Rails.application.secrets["test_user_password"]
+  end
+
 end
