@@ -1,5 +1,6 @@
 Menu::Application.routes.draw do
 
+  devise_for :users
   resources :new_records do
     member do
       post  'save_xml'

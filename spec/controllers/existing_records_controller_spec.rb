@@ -11,16 +11,20 @@ require 'pp'
 
 RSpec.describe ExistingRecordsController, :type => :controller do
 
-    describe "SAVE_XML existing_record" do
-      it "saves the edited xml to the existing_record object" do
-        @existing_record = ExistingRecord.where(pid: "inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60").first_or_create
-        request.env['content_type'] = 'application/xml'
-        request.env['RAW_POST_DATA'] =  '<vra>New</vra>'
-        post(:save_xml, pid: "inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60", format: 'xml' )
-        @existing_record.reload
-        expect(@existing_record.xml.to_s).to eq('<vra>New</vra>')
-      end
+  before do
+    sign_in FactoryGirl.create(:user)    
+  end
+
+  describe "SAVE_XML existing_record" do
+    it "saves the edited xml to the existing_record object" do
+      @existing_record = ExistingRecord.where(pid: "inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60").first_or_create
+      request.env['content_type'] = 'application/xml'
+      request.env['RAW_POST_DATA'] =  '<vra>New</vra>'
+      post(:save_xml, pid: "inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60", format: 'xml' )
+      @existing_record.reload
+      expect(@existing_record.xml.to_s).to eq('<vra>New</vra>')
     end
+  end
 
   describe "Edit an existing record" do
     before do
