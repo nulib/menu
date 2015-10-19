@@ -49,6 +49,7 @@ gem 'paperclip'
 gem 'rest-client'
 gem 'devise'
 gem 'devise_ldap_authenticatable'
+gem 'browse-everything'
 
 group :development, :test do
   gem 'sqlite3'

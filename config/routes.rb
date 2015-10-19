@@ -1,4 +1,5 @@
 Menu::Application.routes.draw do
+  mount BrowseEverything::Engine => '/browse'
 
   devise_for :users
   resources :new_records do

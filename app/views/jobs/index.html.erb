@@ -1,11 +1,11 @@
 <div class="container">
   <h1>Job IDs</h1>
-  <ul>
-    <% @jobs.each do |job| %>
-      <% unless job.new_records.empty? %>
-        <li class='job_link'><%= link_to( job.job_id, job ) %> (<%= job.new_records.size %>) </li>
-        <% end %>
-    <% end %>
-  </ul>
+
+  <form id="myForm" name="myForm"></form>
+
+  <button type="button" data-toggle="browse-everything" data-route="<%=browse_everything_engine.root_path%>"
+  data-target="#myForm" class="btn btn-large btn-success" id="browse">Browse!</button>
+
+
 </div>
 

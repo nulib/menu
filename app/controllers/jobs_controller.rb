@@ -1,7 +1,10 @@
 class JobsController < ApplicationController
+
+  layout "jobs", only: [:index]
+
   def index
-    GetNewRecords.current_new_records
-    @jobs = Job.order(:job_id)
+    #GetNewRecords.current_new_records
+   # @jobs = Job.order(:job_id)
   end
 
   def show
