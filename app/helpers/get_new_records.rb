@@ -29,7 +29,8 @@ module GetNewRecords
     path = file.split( '/' )
     job_id = path[ -2 ]
 
-    if File.file?( file ) && path.size == @path_length + 2
+    if File.file?( file )
+      byebug
       job = Job.find_or_create_by( job_id: job_id )
       i = NewRecord.find_by( filename: File.basename( file ), job_id: job, location: File.dirname( file ))
       if i == nil

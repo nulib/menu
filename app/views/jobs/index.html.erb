@@ -3,9 +3,30 @@
 
   <form id="myForm" name="myForm"></form>
 
-  <button type="button" data-toggle="browse-everything" data-route="<%=browse_everything_engine.root_path%>"
-  data-target="#myForm" class="btn btn-large btn-success" id="browse">Browse!</button>
-
-
+  <button type="button" class="btn btn-large btn-success" id="browse">Browse!</button>
 </div>
 
+<script>
+$().ready(function() {
+  $('#browse').browseEverything({
+    route: "/browse",
+    target: "#myForm"
+  }).done(function(data){
+    //would need to make an object, just like the jobs/index action does now
+    // User has submitted files; data contains an array of URLs and their options
+    console.log(data[0]["url"])
+    file = data[0]["url"].split("://")[1]
+    $.get('/new_records/get_record_id', {'file': file}, function(){console.log('ok')})
+    // limit to only one choice?
+    // call show action with data
+    //new_records/1387/edit
+    //need job id
+    //$.post('/new_records/'+ data +'/edit')
+  }).cancel(function() {
+    // User cancelled the browse operation
+  }).fail(function(status, error, text) {
+    // URL retrieval experienced a techical failure
+  });
+});
+
+</script>
