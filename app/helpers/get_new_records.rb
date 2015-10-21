@@ -29,7 +29,6 @@ module GetNewRecords
     path = file.split( '/' )
     job_id = path[ -2 ]
 
-    byebug
     if File.file?( file )
 
       job = Job.find_or_create_by( job_id: job_id )
@@ -41,6 +40,8 @@ module GetNewRecords
         i = job.new_records.create( filename: File.basename( file ), proxy: f, location: File.dirname( file ))
         f.close
       end
+
+      puts "hey #{i.id}"
       return i.id
     end
   end

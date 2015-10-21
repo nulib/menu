@@ -18,6 +18,12 @@ class NewRecordsController < ApplicationController
     end
   end
 
+  def get_record_id
+    record_id = GetNewRecords.find_or_create_new_record(params[:file])
+    render json: {"record_id": record_id}
+  end
+
+
   # GET /new_records/new
   def new
     @new_record = NewRecord.new
@@ -86,9 +92,9 @@ class NewRecordsController < ApplicationController
 
     if @new_record.save
       @new_record.xml = TransformXML.prepare_vra_xml( @new_record.xml, @new_record.filename )
-      
+
       @accession_nbr = TransformXML.get_accession_nbr( @new_record.xml )
-      
+
       if @new_record.valid_vra?
           #TODO - fix this full_path_thing, yo -- needs to be in config
           full_path = "#{Rails.root}/" + "#{@new_record.path}"
