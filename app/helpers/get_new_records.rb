@@ -29,10 +29,12 @@ module GetNewRecords
     path = file.split( '/' )
     job_id = path[ -2 ]
 
+    byebug
     if File.file?( file )
-      byebug
+
       job = Job.find_or_create_by( job_id: job_id )
       i = NewRecord.find_by( filename: File.basename( file ), job_id: job, location: File.dirname( file ))
+      #this comes back with id in master
       if i == nil
         file = prefix_file_name_with_job_id( file, job_id )
         f = File.open( file )
