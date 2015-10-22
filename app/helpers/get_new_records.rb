@@ -2,20 +2,6 @@ module GetNewRecords
 
   @path_length = MENU_CONFIG["images_dir"].split( '/' ).count
 
-  def self.current_new_records
-    location = MENU_CONFIG["images_dir"]
-
-    records = []
-    dir_contents = Dir.glob( "#{location}/**/*" )
-    dir_contents.delete_if { |dir| dir =~ /_completed/ }
-    dir_contents.each do |file|
-      records << find_or_create_new_record(file)
-    end
-
-    remove_stale_new_records(records)
-
-  end
-
 
   def self.remove_stale_new_records( file_system_new_record_ids )
     stale_records = NewRecord.where.not(id: file_system_new_record_ids)
