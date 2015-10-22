@@ -1,8 +1,6 @@
 Menu::Application.routes.draw do
   mount BrowseEverything::Engine => '/browse'
 
-  get 'new_records/get_record_id/' => 'new_records#get_record_id'
-
   devise_for :users
   resources :new_records do
     member do
