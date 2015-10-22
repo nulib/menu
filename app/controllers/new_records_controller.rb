@@ -2,6 +2,7 @@ require 'rest-client'
 
 class NewRecordsController < ApplicationController
   before_action :set_new_record, only: [:show, :edit, :update, :destroy, :save_xml, :publish]
+  layout "new_records"
 
   # GET /new_records
   # GET /new_records.json
@@ -19,8 +20,8 @@ class NewRecordsController < ApplicationController
   end
 
   def get_record_id
-    record_id = GetNewRecords.find_or_create_new_record(params[:file])
-    render json: {"record_id": record_id}
+    @new_record_id = GetNewRecords.find_or_create_new_record(params[:file])
+    render json: {"new_record_id": @new_record_id}
   end
 
 
@@ -31,6 +32,7 @@ class NewRecordsController < ApplicationController
 
   # GET /new_records/1/edit
   def edit
+
   end
 
 

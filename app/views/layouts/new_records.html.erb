@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Menu</title>
+  <%= stylesheet_link_tag "application", media: "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+  <div class="container">
+    <%= flash_messages %>
+  </div>
+
+  <div class="container-fluid">
+    <%= yield %>
+  <%= debug(params) if Rails.env.development? %>
+  <%= "Server restarted at: " + Menu::Application.config.build_identifier if Rails.env.development? || Rails.env.staging? %>
+  </div>
+</body>
+</html>

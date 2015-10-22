@@ -32,17 +32,18 @@ module GetNewRecords
     if File.file?( file )
 
       job = Job.find_or_create_by( job_id: job_id )
-      i = NewRecord.find_by( filename: File.basename( file ), job_id: job, location: File.dirname( file ))
+
+      location = File.dirname( file ).sub(/#{Rails.root}\//, '')
+      i = NewRecord.find_by( filename: File.basename( file ), job_id: job, location: location)
       #this comes back with id in master
       if i == nil
         file = prefix_file_name_with_job_id( file, job_id )
         f = File.open( file )
-        i = job.new_records.create( filename: File.basename( file ), proxy: f, location: File.dirname( file ))
+        i = job.new_records.create( filename: File.basename( file ), proxy: f, location: location )
         f.close
       end
 
-      puts "hey #{i.id}"
-      return i.id
+     return i.id
     end
   end
 

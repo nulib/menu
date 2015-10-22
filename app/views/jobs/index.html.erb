@@ -16,7 +16,9 @@ $().ready(function() {
     // User has submitted files; data contains an array of URLs and their options
     console.log(data[0]["url"])
     file = data[0]["url"].split("://")[1]
-    $.get('/new_records/get_record_id', {'file': file}, function(){console.log('ok')})
+    $.get('/new_records/get_record_id', {'file': file}, function(data){
+      $(".container").load('/new_records/'+ data["new_record_id"] +'/edit/', function(data){console.log('ok')})
+      console.log('ok')})
     // limit to only one choice?
     // call show action with data
     //new_records/1387/edit
