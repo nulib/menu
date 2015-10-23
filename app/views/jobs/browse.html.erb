@@ -1,0 +1,28 @@
+<div class="container">
+  <h1>Import Image Files</h1>
+  <form id="myForm" name="myForm"></form>
+  <button type="button" class="btn btn-large btn-success" id="browse">Browse!</button>
+</div>
+
+<script>
+$().ready(function() {
+    $.ajaxSetup({
+    headers: {
+      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
+  $('#browse').browseEverything({
+    route: "/browse",
+    target: "#myForm"
+  }).done(function(data){
+    //and this is what i want to delay, too.
+    $.post('/jobs/import', {'file_list': data}, function(data){
+      console.log('ok')
+    })
+  }).cancel(function() {
+    // User cancelled the browse operation
+  }).fail(function(status, error, text) {
+    // URL retrieval experienced a techical failure
+  });
+});
+</script>
