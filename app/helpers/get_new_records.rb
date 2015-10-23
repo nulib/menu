@@ -11,20 +11,20 @@ module GetNewRecords
   end
 
 
-  def self.find_or_create_new_record( file )
-    path = file.split( '/' )
+  def self.find_or_create_new_record( file_string )
+    path = file_string.split( '/' )
     job_id = path[ -2 ]
-
+    file = file_string.split("#{Rails.root}/")[1]
     if File.file?( file )
 
       job = Job.find_or_create_by( job_id: job_id )
 
       location = File.dirname( file ).sub(/#{Rails.root}\//, '')
       i = NewRecord.find_by( filename: File.basename( file ), job_id: job, location: location)
-      #this comes back with id in master
       if i == nil
         file = prefix_file_name_with_job_id( file, job_id )
         f = File.open( file )
+        #delay here?
         i = job.new_records.create( filename: File.basename( file ), proxy: f, location: location )
         f.close
       end
