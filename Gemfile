@@ -50,6 +50,8 @@ gem 'rest-client'
 gem 'devise'
 gem 'devise_ldap_authenticatable'
 gem 'browse-everything'
+gem 'delayed_job_active_record'
+gem 'daemons'
 
 group :development, :test do
   gem 'sqlite3'

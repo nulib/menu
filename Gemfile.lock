@@ -119,7 +119,13 @@ GEM
     columnize (0.9.0)
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
+    daemons (1.2.3)
     database_cleaner (1.4.1)
+    delayed_job (4.1.1)
+      activesupport (>= 3.0, < 5.0)
+    delayed_job_active_record (4.1.0)
+      activerecord (>= 3.0, < 5)
+      delayed_job (>= 3.0, < 5)
     devise (3.5.2)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -392,7 +398,9 @@ DEPENDENCIES
   capistrano-secrets-yml (~> 1.0.0)
   capybara
   coffee-rails (~> 4.0)
+  daemons
   database_cleaner
+  delayed_job_active_record
   devise
   devise_ldap_authenticatable
   equivalent-xml!

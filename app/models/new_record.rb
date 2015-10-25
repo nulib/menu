@@ -11,6 +11,31 @@ class NewRecord < ActiveRecord::Base
   validates :job_id, :presence => true
   validates :filename, :uniqueness => true
 
+  class << self
+    def find_or_create_new_record( file_string )
+      path = file_string.split( '/' )
+      job_id = path[ -2 ]
+      file = file_string.split("#{Rails.root}/")[1]
+      if File.file?( file )
+        job = Job.find_or_create_by( job_id: job_id )
+
+        location = File.dirname( file ).sub(/#{Rails.root}\//, '')
+        i = NewRecord.find_by( filename: File.basename( file ), job_id: job, location: location)
+        if i == nil
+          file = GetNewRecords.prefix_file_name_with_job_id( file, job_id )
+          f = File.open( file )
+          i = job.new_records.create( filename: File.basename( file ), proxy: f, location: location )
+          f.close
+        end
+
+        return i.id
+      end
+    end
+
+  handle_asynchronously :find_or_create_new_record
+
+  end
+
   def job_id_display
     self.job.job_id
   end

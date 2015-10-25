@@ -10,17 +10,16 @@ class JobsController < ApplicationController
   end
 
   def import
-    #location = MENU_CONFIG["images_dir"]
     file_objects = params[:file_list]
     file_list = []
     records = []
-    # dir_contents = Dir.glob( "#{location}/**/*" )
+
     file_objects.each do | item |
      file_list << item[1]["url"]
     end
 
     file_list.each do |file|
-      records << GetNewRecords.find_or_create_new_record(file)
+      records << NewRecord.find_or_create_new_record(file)
     end
      GetNewRecords.remove_stale_new_records(records)
 

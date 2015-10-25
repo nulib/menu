@@ -2,34 +2,10 @@ module GetNewRecords
 
   @path_length = MENU_CONFIG["images_dir"].split( '/' ).count
 
-
   def self.remove_stale_new_records( file_system_new_record_ids )
     stale_records = NewRecord.where.not(id: file_system_new_record_ids)
     stale_records.each do |i|
       i.destroy
-    end
-  end
-
-
-  def self.find_or_create_new_record( file_string )
-    path = file_string.split( '/' )
-    job_id = path[ -2 ]
-    file = file_string.split("#{Rails.root}/")[1]
-    if File.file?( file )
-
-      job = Job.find_or_create_by( job_id: job_id )
-
-      location = File.dirname( file ).sub(/#{Rails.root}\//, '')
-      i = NewRecord.find_by( filename: File.basename( file ), job_id: job, location: location)
-      if i == nil
-        file = prefix_file_name_with_job_id( file, job_id )
-        f = File.open( file )
-        #delay here?
-        i = job.new_records.create( filename: File.basename( file ), proxy: f, location: location )
-        f.close
-      end
-
-     return i.id
     end
   end
 
