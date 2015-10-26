@@ -15,7 +15,7 @@ $().ready(function() {
     route: "/browse",
     target: "#myForm"
   }).done(function(data){
-    //and this is what i want to delay, too.
+
     $.post('/jobs/import', {'file_list': data}, function(data){
       console.log('ok')
     })
