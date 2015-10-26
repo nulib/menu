@@ -12,7 +12,7 @@ require 'pp'
 RSpec.describe NewRecordsController, :type => :controller do
 
   before do
-    sign_in FactoryGirl.create(:user)    
+    sign_in FactoryGirl.create(:user)
   end
 
   describe "CREATE new_record" do

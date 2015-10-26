@@ -22,5 +22,18 @@ module Menu
 
     # This setting is going to be the default in Rails 5 and opting into it now removes a deprecation warning
     config.active_record.raise_in_transactional_callbacks = true
+    config.lograge.enabled = true
+    config.lograge.custom_options = lambda do |event|
+        params = event.payload[:params].reject do |k|
+          ['controller', 'action'].include? k
+        end
+
+        { "params" => params }
+    end
+
+    if Rails.env.test? or Rails.env.development?
+        config.log_level = String("info" || "warn").upcase
+    end
+
   end
 end
