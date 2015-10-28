@@ -27,6 +27,9 @@ gem 'jbuilder', '~> 1.2'
 # our session data is too much for a mere cookie: https://github.com/rails/activerecord-session_store
 gem 'activerecord-session_store', github: 'rails/activerecord-session_store'
 
+#our app is now too much for a mere webrick server
+gem 'thin'
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false

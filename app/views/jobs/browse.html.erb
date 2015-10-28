@@ -14,15 +14,12 @@ $().ready(function() {
   $('#browse').browseEverything({
     route: "/browse",
     target: "#myForm"
-  }).done(function(data){
-
-    $.post('/jobs/import', {'file_list': data}, function(data){
-      console.log('ok')
-    })
-  }).cancel(function() {
+    }).done(function(data){
+      $.post('/jobs/import', {'file_list': data}, function(data){console.log('ok') })
+    }).cancel(function() {
     // User cancelled the browse operation
-  }).fail(function(status, error, text) {
+    }).fail(function(status, error, text) {
     // URL retrieval experienced a techical failure
-  });
+    });
 });
 </script>

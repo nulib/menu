@@ -1,4 +1,3 @@
-
 require 'simplecov'
 require 'webmock/rspec'
 require 'rspec/matchers' # req by equivalent-xml custom matcher `be_equivalent_to`
