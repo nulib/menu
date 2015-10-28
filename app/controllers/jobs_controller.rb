@@ -18,10 +18,12 @@ class JobsController < ApplicationController
      file_list << item[1]["url"]
     end
 
-    file_list.each do |file|
-      records << NewRecord.find_or_create_new_record(file)
-    end
-     GetNewRecords.remove_stale_new_records(records)
+    ImportImagesJob.perform_later(file_list)
+
+    # file_list.each do |file|
+    #   records << NewRecord.find_or_create_new_record(file)
+    # end
+    #  GetNewRecords.remove_stale_new_records(records)
 
   end
 

@@ -23,5 +23,6 @@ module Menu
     # This setting is going to be the default in Rails 5 and opting into it now removes a deprecation warning
     config.active_record.raise_in_transactional_callbacks = true
     config.active_job.queue_adapter = :delayed_job
+    config.active_job.queue_name_prefix = Rails.env
   end
 end
