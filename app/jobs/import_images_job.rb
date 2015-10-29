@@ -1,11 +1,10 @@
 class ImportImagesJob < ActiveJob::Base
-  queue_as :default
+  queue_as :image_importing
 
-
-    rescue_from(ActiveRecord::RecordNotFound) do |exception|
-    # Do something with the exception
-      puts "oh my god, something went wrong #{exception}"
-    end
+    # rescue_from(ActiveRecord::RecordNotFound) do |exception|
+    # # Do something with the exception
+    #   puts "oh my god, something went wrong #{exception}"
+    # end
 
   def perform(file_list)
       file_list.each do |file_string|

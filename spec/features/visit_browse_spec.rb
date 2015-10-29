@@ -8,11 +8,11 @@ feature "browsing and importing images into Menu" do
   include ActiveJob::TestHelper
     scenario "cataloger browses all images available in dropbox", :js => true do
 
-            visit "http://localhost:3000"
-            fill_in 'user_username', :with => Rails.application.secrets["test_user_id"]
-            fill_in 'user_password', :with => Rails.application.secrets["test_user_password"]
+            # visit "http://localhost:3000"
+            # fill_in 'user_username', :with => Rails.application.secrets["test_user_id"]
+            # fill_in 'user_password', :with => Rails.application.secrets["test_user_password"]
 
-            click_button('Log in')
+            # click_button('Log in')
 
             visit "http://localhost:3000/jobs/browse"
             click_button("Browse")
