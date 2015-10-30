@@ -12,7 +12,6 @@ class JobsController < ApplicationController
   def import
     file_objects = params[:file_list]
     file_list = []
-    records = []
 
     file_objects.each do | item |
      file_list << item[1]["url"]
