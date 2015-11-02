@@ -73,6 +73,7 @@ group :test do
   gem 'launchy'
   gem 'database_cleaner'
   gem 'selenium-webdriver'
+  gem 'rspec-activejob'
 end
 
 group :staging, :production do

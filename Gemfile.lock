@@ -290,6 +290,9 @@ GEM
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
     retriable (1.4.1)
+    rspec-activejob (0.6.1)
+      activejob (>= 4.2)
+      rspec-mocks
     rspec-core (3.3.2)
       rspec-support (~> 3.3.0)
     rspec-expectations (3.3.1)
@@ -422,6 +425,7 @@ DEPENDENCIES
   rails (~> 4.1)
   rb-readline
   rest-client
+  rspec-activejob
   rspec-rails (~> 3)
   sass-rails (~> 4.0)
   sdoc
