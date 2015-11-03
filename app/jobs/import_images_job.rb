@@ -1,10 +1,10 @@
 class ImportImagesJob < ActiveJob::Base
   queue_as :image_importing
 
-    # rescue_from(ActiveRecord::RecordNotFound) do |exception|
-    # # Do something with the exception
-    #   puts "oh my god, something went wrong #{exception}"
-    # end
+    rescue_from(StandardError) do |exception|
+    # Do something with the exception
+      logger.error "oh my god something went wrong #{exception}"
+    end
 
   def perform(file_list)
       file_list.each do |file_string|
@@ -19,13 +19,31 @@ class ImportImagesJob < ActiveJob::Base
           if i == nil
             file = GetNewRecords.prefix_file_name_with_job_id( file, job_id )
             f = File.open( file )
-            i = job.new_records.create( filename: File.basename( file ), proxy: f, location: location )
+            i = job.new_records.create( filename: File.basename(file), proxy: f, location: location)
+            raise StandardError.new("Failed to create record for job: #{job_id}")
             f.close
           end
 
           return i.id
         end
       end
-
   end
+
+  # def success(job)
+  #   logger.info("job  #{job_id} was successful rejoice")
+  # end
+
+  # def failure(job)
+  #   email_us_emergency(job)
+  # end
+
+  # def error(job, exception)
+  #   puts "Effffff job #{job_id} failed because #{exception}"
+  #   logger.error("Effffff job #{job_id} failed because #{exception}")
+  # end
+
+  # def email_us_emergency(job, exception)
+  #   #OHMIGOD
+  # end
+
 end
