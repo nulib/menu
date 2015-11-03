@@ -53,7 +53,7 @@ RSpec.describe ImportImagesJob, type: :job do
 
      # ImportImagesJob.perform_later(file_list)
 
-      assert_enqueued_with(job: ImportImagesJob, args: [file_list]) do
+      assert_enqueued_with(job: ImportImagesJob, args: [file_list], queue: "#{Rails.env}_image_importing") do
         ImportImagesJob.perform_later(file_list)
           puts "it should be one: #{enqueued_jobs.size}"
         #Delayed::Job.all.each{|d| d.run_at = Time.now; d.save!}
