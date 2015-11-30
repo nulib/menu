@@ -23,7 +23,7 @@ set :log_level, :debug
 # set :pty, true
 
 # Default value for :linked_files is []
-set :linked_files, %w{config/database.yml config/secrets.yml config/ldap.yml}
+set :linked_files, %w{config/database.yml config/secrets.yml config/ldap.yml config/browse_everything_providers.yml}
 
 # cap-passenger gem allows for deploy:restart hook, requires this to be set to also
 # allow touch tmp/restart.txt to work
