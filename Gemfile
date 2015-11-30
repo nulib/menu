@@ -50,11 +50,14 @@ gem 'nokogiri'
 gem 'mini_portile'
 gem 'paperclip'
 gem 'rest-client'
+
+gem 'lograge'
 gem 'devise'
 gem 'devise_ldap_authenticatable'
 gem 'browse-everything'
 gem 'delayed_job_active_record'
 gem 'daemons'
+
 
 group :development, :test do
   gem 'sqlite3'

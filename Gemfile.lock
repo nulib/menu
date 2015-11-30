@@ -204,10 +204,17 @@ GEM
     launchy (2.4.3)
       addressable (~> 2.3)
     libv8 (3.16.14.11)
+
     little-plugger (1.1.4)
     logging (2.0.0)
       little-plugger (~> 1.1)
       multi_json (~> 1.10)
+
+    lograge (0.3.4)
+      actionpack (>= 3)
+      activesupport (>= 3)
+      railties (>= 3)
+
     loofah (2.0.2)
       nokogiri (>= 1.5.9)
     mail (2.6.3)
@@ -416,6 +423,7 @@ DEPENDENCIES
   jbuilder (~> 1.2)
   jquery-rails
   launchy
+  lograge
   mini_portile
   nokogiri
   paperclip
