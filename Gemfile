@@ -56,6 +56,7 @@ gem 'devise'
 gem 'devise_ldap_authenticatable'
 gem 'browse-everything'
 gem 'delayed_job_active_record'
+gem 'capistrano3-delayed-job', '~> 1.0'
 gem 'daemons'
 
 

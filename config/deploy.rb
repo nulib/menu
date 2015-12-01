@@ -40,6 +40,15 @@ set :linked_dirs, %w{public/system}
 # Default value for keep_releases is 5
 set :keep_releases, 5
 
+set :delayed_job_workers, 2
+
+set :delayed_job_queues, ["#{Rails.env}_delayed_job"]
+
+set :delayed_job_roles, [:app, :background]
+
+set :delayed_job_bin_path, 'script'
+
+
 # Run all rspec tests before deploying
 set :tests, []
 set :bundle_flags, "--deployment"
@@ -72,9 +81,13 @@ namespace :deploy do
     on roles(:app), in: :sequence, wait: 5 do
       # Your restart mechanism here, for example:
      execute :touch, release_path.join('tmp/restart.txt')
+
     end
   end
 
+after 'deploy:published', 'restart' do
+    invoke 'delayed_job:restart'
+end
 
   after :publishing, :restart
 
