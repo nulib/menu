@@ -23,7 +23,7 @@ class JobsController < ApplicationController
     #   records << NewRecord.find_or_create_new_record(file)
     # end
     #  GetNewRecords.remove_stale_new_records(records)
-
+    head :ok
   end
 
   def show
