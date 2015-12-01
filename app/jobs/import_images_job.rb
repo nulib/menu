@@ -6,19 +6,20 @@ class ImportImagesJob < ActiveJob::Base
     end
 
   def perform(file_list)
+    Delayed::Worker.logger.debug(file_list)
     begin
     file_list.each do |file_string|
+
       path = file_string.split( '/' )
       job_id = path[ -2 ]
-      file = file_string.split("#{Rails.root}/")[1]
+      file =  file_string
       if File.file?( file)
         job = Job.find_or_create_by( job_id: job_id )
-        location = File.dirname( file ).sub(/#{Rails.root}\//, '')
-        i = NewRecord.find_by( filename: File.basename( file ), job_id: job, location: location)
+        i = NewRecord.find_by( filename: File.basename( file ), job_id: job, location: File.dirname( file ))
         if i == nil
           file = GetNewRecords.prefix_file_name_with_job_id( file, job_id )
           f = File.open( file )
-          i = job.new_records.create( filename: File.basename(file), proxy: f, location: location)
+          i = job.new_records.create( filename: File.basename(file), proxy: f, location: File.dirname( file ))
           raise StandardError.new("Failed to create record for job: #{job_id}") if i.nil?
           f.close
         end
