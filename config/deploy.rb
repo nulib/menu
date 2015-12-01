@@ -3,6 +3,7 @@ lock '3.4.0'
 
 set :application, 'menu'
 set :repo_url, 'git@github.com:nulib/menu.git'
+set :rails_env, fetch(:stage)
 
 # Default branch is :master
 ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
@@ -41,9 +42,7 @@ set :linked_dirs, %w{public/system}
 set :keep_releases, 5
 
 set :delayed_job_workers, 2
-
-set :delayed_job_queues, ["#{Rails.env}_delayed_job"]
-
+set :delayed_job_queues, ["#{:rails_env}_delayed_job"]
 set :delayed_job_roles, [:app, :background]
 
 set :delayed_job_bin_path, 'script'
