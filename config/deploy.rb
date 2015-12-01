@@ -45,7 +45,7 @@ set :delayed_job_workers, 2
 set :delayed_job_queues, ["#{:rails_env}_delayed_job"]
 set :delayed_job_roles, [:app, :background]
 
-set :delayed_job_bin_path, 'script'
+set :delayed_job_bin_path, 'bin'
 
 
 # Run all rspec tests before deploying
