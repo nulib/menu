@@ -13,11 +13,10 @@ class ImportImagesJob < ActiveJob::Base
       path = file_string.split( '/' )
       job_id = path[ -2 ]
       file =  file_string
-      Delayed::Worker.logger.debug("Am I a file: #{File.file?(file)}")
+
       proper_file = file.split("file://")[1]
 
-
-      Delayed::Worker.logger.debug("Am I a proper file: #{File.file?(proper_file)}")
+      raise StandardError.new(Delayed::Worker.logger.debug("Am I a proper file: #{File.file?(proper_file)}"))
 
 
       if File.file?(proper_file)
@@ -33,7 +32,7 @@ class ImportImagesJob < ActiveJob::Base
 
         return i.id
       else
-        raise StandardError.new("File doesn't exist for job: #{job_id} and file #{file}")
+        raise StandardError.new("File doesn't exist for job: #{job_id} and file #{proper_file}")
       end
     end
     rescue => exception
