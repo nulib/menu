@@ -20,7 +20,7 @@ class ImportImagesJob < ActiveJob::Base
       Delayed::Worker.logger.debug("Am I a proper file: #{File.file?(proper_file)}")
 
 
-      if File.file?(file)
+      if File.file?(proper_file)
         job = Job.find_or_create_by( job_id: job_id )
         i = NewRecord.find_by( filename: File.basename( file ), job_id: job, location: File.dirname( file ))
         if i == nil
