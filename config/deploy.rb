@@ -85,7 +85,11 @@ namespace :deploy do
   end
 
 after 'deploy:published', 'restart' do
-    execute :bundle, :exec, :'bin/delayed_job', fetch(:delayed_job_args, ""), :restart
+  task do
+    on roles(:app) do
+      execute :bundle, :exec, :'bin/delayed_job', fetch(:delayed_job_args, ""), :restart
+    end
+  end
     #execute 'delayed_job:restart'
 end
 
