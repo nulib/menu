@@ -6,14 +6,21 @@ class ImportImagesJob < ActiveJob::Base
     end
 
   def perform(file_list)
-    Delayed::Worker.logger.debug(file_list)
+    Delayed::Worker.logger.debug("I am file list: #{file_list}")
     begin
     file_list.each do |file_string|
 
       path = file_string.split( '/' )
       job_id = path[ -2 ]
       file =  file_string
-      if File.file?( file)
+      Delayed::Worker.logger.debug("Am I a file: #{File.file?(file)}")
+      proper_file = file.split("file://")[1]
+
+
+      Delayed::Worker.logger.debug("Am I a proper file: #{File.file?(proper_file)}")
+
+
+      if File.file?(file)
         job = Job.find_or_create_by( job_id: job_id )
         i = NewRecord.find_by( filename: File.basename( file ), job_id: job, location: File.dirname( file ))
         if i == nil
