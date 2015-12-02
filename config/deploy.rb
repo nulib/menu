@@ -87,9 +87,12 @@ namespace :deploy do
 after 'deploy:published', 'restart' do
   task do
     on roles(:app) do
-      execute :rake, 'delayed_job:kill_the_djs RAILS_ENV=staging '
-      execute :bundle, :exec, :'bin/delayed_job', fetch(:delayed_job_args, ""), :start
-      execute :rake, 'jobs:work RAILS_ENV=staging'
+      puts "hey girl"
+      with RAILS_ENV: fetch(:environment) do
+        execute :bundle, :exec, :'rake delayed_job:kill_the_djs'
+        execute :bundle, :exec, :'bin/delayed_job', fetch(:delayed_job_args, ""), :start
+        execute :bundle, :exec, :'rake jobs:work'
+      end
     end
   end
     #execute 'delayed_job:restart'
