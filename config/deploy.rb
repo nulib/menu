@@ -44,7 +44,6 @@ set :delayed_job_workers, 2
 #get rails_env
 
 set :delayed_job_queues, ["image_importing"]
-set :delayed_job_roles, [:app, :background]
 
 set :delayed_job_bin_path, 'bin'
 
@@ -86,7 +85,8 @@ namespace :deploy do
   end
 
 after 'deploy:published', 'restart' do
-    invoke 'delayed_job:restart'
+    execute :bundle, :exec, :'bin/delayed_job', fetch(:delayed_job_args, ""), :restart
+    #execute 'delayed_job:restart'
 end
 
   after :publishing, :restart

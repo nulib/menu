@@ -18,14 +18,13 @@ class ImportImagesJob < ActiveJob::Base
 
       raise StandardError.new(Delayed::Worker.logger.debug("Am I a proper file: #{File.file?(proper_file)}"))
 
-
       if File.file?(proper_file)
         job = Job.find_or_create_by( job_id: job_id )
-        i = NewRecord.find_by( filename: File.basename( file ), job_id: job, location: File.dirname( file ))
+        i = NewRecord.find_by( filename: File.basename( proper_file ), job_id: job, location: File.dirname( proper_file ))
         if i == nil
-          file = GetNewRecords.prefix_file_name_with_job_id( file, job_id )
-          f = File.open( file )
-          i = job.new_records.create( filename: File.basename(file), proxy: f, location: File.dirname( file ))
+          file = GetNewRecords.prefix_file_name_with_job_id( proper_file, job_id )
+          f = File.open( proper_file )
+          i = job.new_records.create( filename: File.basename(proper_file), proxy: f, location: File.dirname( proper_file ))
           raise StandardError.new("Failed to create record for job: #{job_id}") if i.nil?
           f.close
         end
