@@ -43,7 +43,7 @@ set :keep_releases, 5
 set :delayed_job_workers, 2
 #get rails_env
 
-set :delayed_job_queues, ["#{fetch(:stage)}_image_importing"]
+set :delayed_job_queues, ["image_importing"]
 set :delayed_job_roles, [:app, :background]
 
 set :delayed_job_bin_path, 'bin'
