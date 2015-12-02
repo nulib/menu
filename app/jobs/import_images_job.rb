@@ -16,7 +16,7 @@ class ImportImagesJob < ActiveJob::Base
 
       proper_file = file.split("file://")[1]
 
-      raise StandardError.new(Delayed::Worker.logger.debug("Am I a proper file: #{File.file?(proper_file)}"))
+      Delayed::Worker.logger.debug("Am I a proper file: #{proper_file}")
 
       if File.file?(proper_file)
         job = Job.find_or_create_by( job_id: job_id )

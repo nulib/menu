@@ -87,6 +87,7 @@ namespace :deploy do
 after 'deploy:published', 'restart' do
   task do
     on roles(:app) do
+      #any way to search and kill old processes?
       execute :bundle, :exec, :'bin/delayed_job', fetch(:delayed_job_args, ""), :restart
     end
   end
