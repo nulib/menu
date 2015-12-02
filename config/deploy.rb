@@ -87,8 +87,11 @@ namespace :deploy do
 after 'deploy:published', 'restart' do
   task do
     on roles(:app) do
-      #any way to search and kill old processes?
-      execute :bundle, :exec, :'bin/delayed_job', fetch(:delayed_job_args, ""), :restart
+      #any way to search and kill old processes? yes- check tmp/pids, files with names 0.pid etc will contain
+      #pids
+      execute :bundle, :exec, :'bin/delayed_job', fetch(:delayed_job_args, ""), :stop
+      execute :bundle, :exec, :'bin/delayed_job', fetch(:delayed_job_args, ""), :start
+      execute :bundle, :exec, :'RAILS_ENV=staging rake jobs:work'
     end
   end
     #execute 'delayed_job:restart'
