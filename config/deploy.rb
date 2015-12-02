@@ -89,9 +89,9 @@ after 'deploy:published', 'restart' do
     on roles(:app) do
       puts "hey girl"
       with RAILS_ENV: fetch(:environment) do
-        execute :bundle, :exec, :'rake delayed_job:kill_the_djs'
+        execute :'rake delayed_job:kill_the_djs'
         execute :bundle, :exec, :'bin/delayed_job', fetch(:delayed_job_args, ""), :start
-        execute :bundle, :exec, :'rake jobs:work'
+        execute :'rake jobs:work'
       end
     end
   end
