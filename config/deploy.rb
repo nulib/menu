@@ -41,11 +41,8 @@ set :linked_dirs, %w{public/system}
 set :keep_releases, 5
 
 set :delayed_job_workers, 2
-#get rails_env
 
 set :delayed_job_queues, ["image_importing"]
-
-set :delayed_job_bin_path, 'bin'
 
 
 # Run all rspec tests before deploying
