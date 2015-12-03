@@ -6,17 +6,11 @@ class ImportImagesJob < ActiveJob::Base
     end
 
   def perform(file_list)
-    Delayed::Worker.logger.debug("I am file list: #{file_list}")
     begin
     file_list.each do |file_string|
-
       path = file_string.split( '/' )
       job_id = path[ -2 ]
-      file =  file_string
-
-      proper_file = file.split("file://")[1]
-
-      Delayed::Worker.logger.debug("Am I a proper file: #{proper_file}")
+      proper_file = file_string.split("file://")[1]
 
       if File.file?(proper_file)
         job = Job.find_or_create_by( job_id: job_id )
@@ -28,8 +22,7 @@ class ImportImagesJob < ActiveJob::Base
           raise StandardError.new("Failed to create record for job: #{job_id}") if i.nil?
           f.close
         end
-
-        return i.id
+        i.id
       else
         raise StandardError.new("File doesn't exist for job: #{job_id} and file #{proper_file}")
       end

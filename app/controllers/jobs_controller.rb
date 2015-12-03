@@ -18,11 +18,6 @@ class JobsController < ApplicationController
     end
 
     ImportImagesJob.perform_later(file_list)
-
-    # file_list.each do |file|
-    #   records << NewRecord.find_or_create_new_record(file)
-    # end
-    #  GetNewRecords.remove_stale_new_records(records)
     head :ok
   end
 
