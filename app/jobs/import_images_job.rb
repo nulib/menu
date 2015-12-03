@@ -22,7 +22,7 @@ class ImportImagesJob < ActiveJob::Base
         job = Job.find_or_create_by( job_id: job_id )
         i = NewRecord.find_by( filename: File.basename( proper_file ), job_id: job, location: File.dirname( proper_file ))
         if i == nil
-          file = GetNewRecords.prefix_file_name_with_job_id( proper_file, job_id )
+          proper_file = GetNewRecords.prefix_file_name_with_job_id( proper_file, job_id )
           f = File.open( proper_file )
           i = job.new_records.create( filename: File.basename(proper_file), proxy: f, location: File.dirname( proper_file ))
           raise StandardError.new("Failed to create record for job: #{job_id}") if i.nil?
