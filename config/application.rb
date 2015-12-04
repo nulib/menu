@@ -24,7 +24,6 @@ module Menu
     config.active_record.raise_in_transactional_callbacks = true
 
     config.active_job.queue_adapter = :delayed_job
-    config.active_job.queue_name_prefix = Rails.env
 
     config.lograge.enabled = true
     config.lograge.custom_options = lambda do |event|

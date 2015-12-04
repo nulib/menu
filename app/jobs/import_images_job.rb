@@ -1,11 +1,12 @@
-class ImportImagesJob < ActiveJob::Base
-  queue_as :image_importing
+ImportImagesJob = Struct.new(:file_list) do
 
-    rescue_from(StandardError) do |exception|
-      Delayed::Worker.logger.debug("There was an error: #{exception}")
-    end
 
-  def perform(file_list)
+  def enqueue(job)
+    job.files = file_list
+  end
+
+
+  def perform
     begin
     file_list.each do |file_string|
       path = file_string.split( '/' )
@@ -32,16 +33,20 @@ class ImportImagesJob < ActiveJob::Base
     end
   end
 
+
   def success(job)
-   Delayed::Worker.logger.info("job  #{job_id} was successful rejoice")
+    Delayed::Worker.logger.info("I AM SUCCESS #{job.files}")
+    ImportMailer.successful_import_email(job.files).deliver_now
   end
 
+
   def failure(job)
-    email_us_emergency(job)
+    Delayed::Worker.logger.error("failure really fucking hell")
   end
 
   def error(job, exception)
-    Delayed::Worker.logger.error(" job #{job_id} failed because #{exception}")
+    Delayed::Worker.logger.error("errorrrrrrrr fucking hell")
+    Delayed::Worker.logger.error(" job failed because #{exception}")
     #get Airbrake.notify(exception)
   end
 
