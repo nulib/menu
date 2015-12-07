@@ -1,11 +1,8 @@
-ImportImagesJob = Struct.new(:file_list) do
+ImportImagesJob = Struct.new(:file_list, :current_user) do
 
   def enqueue(job)
     #job.files = file_list
-    @files = file_list
   end
-
-  #need to run the worker as a daemon!!!!!
 
   def perform
     begin
@@ -37,11 +34,13 @@ ImportImagesJob = Struct.new(:file_list) do
 
   def success(job)
     Delayed::Worker.logger.info("I AM SUCCESS #{file_list}")
+    user_email = current_user.get_ldap_email
+    Delayed::Worker.logger.info("I AM SUCCESS #{user_email }")
     imported_files = file_list.collect do |file_string|
       file_string.split("dropbox/")[1]
     end.join(", ")
 
-    ImportMailer.successful_import_email(imported_files).deliver_now
+    ImportMailer.successful_import_email(imported_files, user_email).deliver_now
   end
 
 

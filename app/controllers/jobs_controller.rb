@@ -17,7 +17,7 @@ class JobsController < ApplicationController
      file_list << item[1]["url"]
     end
 
-    Delayed::Job.enqueue ImportImagesJob.new(file_list)
+    Delayed::Job.enqueue ImportImagesJob.new(file_list, current_user)
 
     head :ok
   end
