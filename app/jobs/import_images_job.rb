@@ -1,10 +1,11 @@
 ImportImagesJob = Struct.new(:file_list) do
 
-
   def enqueue(job)
-    job.files = file_list
+    #job.files = file_list
+    @files = file_list
   end
 
+  #need to run the worker as a daemon!!!!!
 
   def perform
     begin
@@ -35,17 +36,21 @@ ImportImagesJob = Struct.new(:file_list) do
 
 
   def success(job)
-    Delayed::Worker.logger.info("I AM SUCCESS #{job.files}")
-    ImportMailer.successful_import_email(job.files).deliver_now
+    Delayed::Worker.logger.info("I AM SUCCESS #{file_list}")
+    imported_files = file_list.collect do |file_string|
+      file_string.split("dropbox/")[1]
+    end.join(", ")
+
+    ImportMailer.successful_import_email(imported_files).deliver_now
   end
 
 
   def failure(job)
-    Delayed::Worker.logger.error("failure really fucking hell")
+    Delayed::Worker.logger.error("failure really not cool")
   end
 
   def error(job, exception)
-    Delayed::Worker.logger.error("errorrrrrrrr fucking hell")
+    Delayed::Worker.logger.error("errorrrrrrrr oh great just great and i mean not great")
     Delayed::Worker.logger.error(" job failed because #{exception}")
     #get Airbrake.notify(exception)
   end
