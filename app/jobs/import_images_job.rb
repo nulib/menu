@@ -1,7 +1,6 @@
-ImportImagesJob = Struct.new(:file_list, :current_user) do
+ImportImagesJob = Struct.new(:file_list, :current_user, :root_url) do
 
   def enqueue(job)
-    #job.files = file_list
   end
 
   def perform
@@ -33,14 +32,14 @@ ImportImagesJob = Struct.new(:file_list, :current_user) do
 
 
   def success(job)
-    Delayed::Worker.logger.info("I AM SUCCESS #{file_list} and #{Rails.root}")
+    Delayed::Worker.logger.info("I AM SUCCESS #{file_list} and #{root_url}")
     user_email = current_user.get_ldap_email
     Delayed::Worker.logger.info("I AM SUCCESS #{user_email }")
     imported_files = file_list.collect do |file_string|
       file_string.split("dropbox/")[1]
     end.join(", ")
 
-    ImportMailer.successful_import_email(imported_files, user_email).deliver_now
+    ImportMailer.successful_import_email(imported_files, user_email, root_url).deliver_now
   end
 
 
