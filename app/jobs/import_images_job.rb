@@ -33,7 +33,7 @@ ImportImagesJob = Struct.new(:file_list, :current_user) do
 
 
   def success(job)
-    Delayed::Worker.logger.info("I AM SUCCESS #{file_list}")
+    Delayed::Worker.logger.info("I AM SUCCESS #{file_list} and #{Rails.root}")
     user_email = current_user.get_ldap_email
     Delayed::Worker.logger.info("I AM SUCCESS #{user_email }")
     imported_files = file_list.collect do |file_string|
@@ -46,6 +46,7 @@ ImportImagesJob = Struct.new(:file_list, :current_user) do
 
   def failure(job)
     Delayed::Worker.logger.error("failure really not cool")
+    ImportMailer.failed_import_email(imported_files, user_email).deliver_now
   end
 
   def error(job, exception)

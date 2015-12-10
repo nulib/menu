@@ -1,31 +1,37 @@
 <div class="container">
 <div class="row">
-  <h1 id="browsing">Which files need metadata today?</h1>
+  <h1 id="browsing">METADATA</h1>
 </div>
 <div class="row">
-  <h4>The button below will show you everything on the shared drive. Select the files you want and click submit.
+  <h4>The button below will show you everything on the shared dropbox for the Menu <%= "#{Rails.env}" %> server.
+    Select the files you want to import and click submit.
 </h4>
 
   <form id="myForm" name="myForm"></form>
   <button type="button" class="btn btn-large btn-success" id="browse">Browse!</button>
 
-  <h4>
-    The files will be viewable on the application's main page shortly. Check your email - MENU will email you when your files are ready.
+  <h4 class="success">
+    The files should be viewable on Menu's main page shortly. Check your email - you'll receive a message with the results of your import.
+  </h4>
+  <h4 class="failure">
+    We're sorry, something went wrong. Please try again or contact the support team.
   </h4>
 </div>
 
 <script>
 $().ready(function() {
     $.ajaxSetup({
-    headers: {
-      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-    }
-  });
+      headers: {
+        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
   $('#browse').browseEverything({
     route: "/browse",
     target: "#myForm"
     }).done(function(data){
-      $.post('/jobs/import', {'file_list': data}, function(data){console.log('ok') })
+      $.post('/jobs/import', {'file_list': data}, function(){ $("h4.success").show(); }).fail(function() {
+        $("h4.failure").show();
+  })
     }).cancel(function() {
     // User cancelled the browse operation
     }).fail(function(status, error, text) {
