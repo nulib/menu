@@ -7,6 +7,7 @@ class JobsController < ApplicationController
   end
 
   def browse
+    @filesystem_location = MENU_CONFIG["images_filesystem_location"]
   end
 
   def import
@@ -16,7 +17,6 @@ class JobsController < ApplicationController
     file_objects.each do | item |
      file_list << item[1]["url"]
     end
-    puts "maurice #{root_url}"
     Delayed::Job.enqueue ImportImagesJob.new(file_list, current_user, root_url)
 
     head :ok
