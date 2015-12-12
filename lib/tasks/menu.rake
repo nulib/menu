@@ -7,8 +7,7 @@ namespace :menu do
 
   desc "make deploy owner of all files in dropbox"
   task :chown_the_dropbox_tiffs => :environment do
-    puts "root:  #{Rails.root}"
-    command = "cd #{Rails.root}/lib/assets/dropbox && find . -type f -name '*.tiff' | xargs chown deploy"
+    command = "cd #{Rails.root}/#{MENU_CONFIG["images_dir"]} && find . -type f -name '*.tiff' | xargs chown deploy"
     puts "#{command}"
     exec command
   end
