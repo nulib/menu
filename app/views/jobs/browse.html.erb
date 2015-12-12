@@ -27,7 +27,8 @@ $().ready(function() {
     });
   $('#browse').browseEverything({
     route: "/browse",
-    target: "#myForm"
+    target: "#myForm",
+    accept: "image/tiff",
     }).done(function(data){
       $.post('/jobs/import', {'file_list': data}, function(){ $("h4.success").show(); }).fail(function() {
         $("h4.failure").show();
