@@ -8,6 +8,7 @@ class JobsController < ApplicationController
 
   def browse
     @filesystem_location = MENU_CONFIG["images_filesystem_location"]
+    @root = root_url
   end
 
   def import

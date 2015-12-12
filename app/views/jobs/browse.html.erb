@@ -3,7 +3,7 @@
   <h1 id="browsing">METADATA</h1>
 </div>
 <div class="row">
-  <h4>Browse! will show you every tiff image in <%= "#{@filesystem_location}" %>, the shared dropbox for the Menu <%= "#{Rails.env}" %> server.
+  <h4>Browse! will show you all the tiffs in <%= "#{@filesystem_location}" %>, the shared dropbox for <%= link_to "Menu #{Rails.env}", @root %>.
 </h4>
 
   <form id="myForm" name="myForm"></form>
@@ -11,7 +11,9 @@
 
   <h4>Check the files you want to import, submit them and get ready to work with your metadata.</h4>
   <h4 class="success">
-    The files should be viewable on Menu's main page shortly. Check your email - you'll receive a message with the results of your import.
+    Yay! These files should be ready to go on Menu's home page soon.
+
+    You'll be emailed when your submission is complete.
   </h4>
   <h4 class="failure">
     We're sorry, something went wrong. Please try again or contact the support team.
