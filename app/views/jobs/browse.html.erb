@@ -3,17 +3,16 @@
   <h1 id="browsing">METADATA</h1>
 </div>
 <div class="row">
-  <h4>Browse! will show you all the tiffs in <%= "#{@filesystem_location}" %>, the shared dropbox for <%= link_to "Menu #{Rails.env}", @root %>.
+  <h4><button type="button" class="btn btn-large btn-success" id="browse">Browse!</button> will show you all the tiffs in <%= "#{@filesystem_location}" %>, the shared dropbox for <%= link_to "Menu #{Rails.env}", @root %>.
 </h4>
 
   <form id="myForm" name="myForm"></form>
-  <button type="button" class="btn btn-large btn-success" id="browse">Browse!</button>
 
-  <h4>Check the files you want to import, submit them and get ready to work with your metadata.</h4>
+  <h4>Choose the files you want to import and submit them. Menu will take it from there.</h4>
   <h4 class="success">
-    Yay! These files should be ready to go on Menu's home page soon.
+    Yay! These files should be ready Menu's home page soon.
 
-    You'll be emailed when your submission is complete.
+    You'll be emailed when they are.
   </h4>
   <h4 class="failure">
     We're sorry, something went wrong. Please try again or contact the support team.
