@@ -1,23 +1,22 @@
 <div class="container">
-<div class="row">
-  <h1 id="browsing">METADATA</h1>
-</div>
-<div class="row">
-  <h4><button type="button" class="btn btn-large btn-success" id="browse">Browse!</button> will show you all the tiffs in <%= "#{@filesystem_location}" %>, the shared dropbox for <%= link_to "Menu #{Rails.env}", @root %>.
-</h4>
+<div class="jumbotron">
+  <h1 id="browsing" class="text-center">Import Images</h1>
+  <p class='lead'>Browse! will show you all the tiffs in <%= "#{@filesystem_location}" %>, the shared dropbox for <%= link_to "Menu #{Rails.env}", @root %>. Choose the files you want to import and submit them. Menu will take it from there.
+</p>
 
   <form id="myForm" name="myForm"></form>
 
-  <h4>Choose the files you want to import and submit them. Menu will take it from there.</h4>
-  <h4 class="success">
-    Yay! These files should be ready Menu's home page soon.
+  <p class="text-center"><a class="btn btn-lg btn-success" id="browse">Browse!</a></p>
+
+  <p class="success">
+    Yay! These files should be ready on Menu's home page soon.
 
     You'll be emailed when they are (or if they didn't make it, and what to do then).
-  </h4>
-  <h4 class="failure">
+  </p>
+  <p class="failure">
     We're sorry, something went wrong. Please try again or contact the support team.
-  </h4>
-</div>
+  </p>
+
 
 <script>
 $().ready(function() {
@@ -31,8 +30,8 @@ $().ready(function() {
     target: "#myForm",
     accept: "image/tiff",
     }).done(function(data){
-      $.post('/jobs/import', {'file_list': data}, function(){ $("h4.success").show(); }).fail(function() {
-        $("h4.failure").show();
+      $.post('/jobs/import', {'file_list': data}, function(){ $("p.success").show(); }).fail(function() {
+        $("p.failure").show();
   })
     }).cancel(function() {
     // User cancelled the browse operation
@@ -41,4 +40,5 @@ $().ready(function() {
     });
 });
 </script>
+</div>
 </div>
