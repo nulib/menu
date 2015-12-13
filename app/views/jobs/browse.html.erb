@@ -14,7 +14,7 @@
     You'll be emailed when they are (or if they didn't make it, and what to do then).
   </p>
   <p class="failure">
-    We're sorry, something went wrong. Please try again or contact the support team.
+    We're sorry, something went wrong. Please try again or email repo-support@northwestern.edu.
   </p>
 
 
@@ -30,11 +30,19 @@ $().ready(function() {
     target: "#myForm",
     accept: "image/tiff",
     }).done(function(data){
-      $.post('/jobs/import', {'file_list': data}, function(){ $("p.success").show(); }).fail(function() {
-        $("p.failure").show();
-  })
+      $.post('/jobs/import', {'file_list': data},
+        function(){
+          $("p.success").show();
+          $("p.failure").hide();
+        }).
+        fail(function() {
+          $("p.success").hide();
+          $("p.failure").show();
+        })
     }).cancel(function() {
     // User cancelled the browse operation
+      $("p.success").hide();
+      $("p.failure").hide();
     }).fail(function(status, error, text) {
     // URL retrieval experienced a techical failure
     });
