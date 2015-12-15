@@ -4,7 +4,7 @@ describe "visiting the new_record edit page" do
 
   before :each do
     visit root_url
-    
+
     within("#new_user") do
       fill_in 'user_username', :with => Rails.application.secrets["test_user_id"]
       fill_in 'user_password', :with => Rails.application.secrets["test_user_password"]

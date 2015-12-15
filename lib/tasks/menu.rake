@@ -12,4 +12,9 @@ namespace :menu do
     exec command
   end
 
+  desc "make new jobs and records of all files in dropbox"
+  task :make_records_for_all_tiffs => :environment do
+    GetNewRecords.current_new_records
+  end
+
 end

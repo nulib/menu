@@ -2,10 +2,42 @@ module GetNewRecords
 
   @path_length = MENU_CONFIG["images_dir"].split( '/' ).count
 
+    def self.current_new_records
+    location = MENU_CONFIG["images_dir"]
+
+    records = []
+    dir_contents = Dir.glob( "#{location}/**/*" )
+    dir_contents.delete_if { |dir| dir =~ /_completed/ }
+    dir_contents.each do |file|
+      records << find_or_create_new_record(file)
+    end
+
+    remove_stale_new_records(records)
+
+  end
+
   def self.remove_stale_new_records( file_system_new_record_ids )
     stale_records = NewRecord.where.not(id: file_system_new_record_ids)
     stale_records.each do |i|
       i.destroy
+    end
+  end
+
+
+  def self.find_or_create_new_record( file )
+    path = file.split( '/' )
+    job_id = path[ -2 ]
+
+    if File.file?( file ) && path.size == @path_length + 2
+      job = Job.find_or_create_by( job_id: job_id )
+      i = NewRecord.find_by( filename: File.basename( file ), job_id: job, location: File.dirname( file ))
+      if i == nil
+        file = prefix_file_name_with_job_id( file, job_id )
+        f = File.open( file )
+        i = job.new_records.create( filename: File.basename( file ), proxy: f, location: File.dirname( file ))
+        f.close
+      end
+      return i.id
     end
   end
 

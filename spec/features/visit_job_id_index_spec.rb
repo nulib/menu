@@ -1,20 +1,18 @@
 require 'rails_helper'
+require 'import_images'
 #these test expect four directories of sample data in lib/assets/dropbox.
 describe "visiting the home page" do
 
-  before :all do
+  before :each do
     visit root_url
-    puts "what up   --  #{root_url}"
     within("#new_user") do
       fill_in 'user_username', :with => Rails.application.secrets["test_user_id"]
       fill_in 'user_password', :with => Rails.application.secrets["test_user_password"]
     end
     click_button('Log in')
-
   end
 
   it "provides a link to the Cataloging Guidelines" do
-    visit root_url
     expect( page ).to have_link( "Cataloging Guidelines" )
   end
 
@@ -54,5 +52,4 @@ describe "visiting the home page" do
     expect(page).to have_selector(".job_link:nth-child(4) a", text: "61120151061120151")
     expect(page).to_not have_content("is out of range for ActiveRecord")
   end
-
 end
