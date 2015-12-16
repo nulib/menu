@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'import_images'
 #these test expect four directories of sample data in lib/assets/dropbox.
 describe "visiting the home page" do
 
