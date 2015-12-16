@@ -1,20 +1,13 @@
 require 'rails_helper'
 Menu::Application.load_tasks
 
-
 RSpec.describe ImportImagesJob, type: :job do
   let(:file_objects) {{
       "0"=>{"url"=>"file://#{Rails.root}/#{MENU_CONFIG['images_dir']}/123/123_internet.tiff", "file_name"=>"123_internet.tiff", "file_size"=>"792132"},
       "1"=>{"url"=>"file://#{Rails.root}/#{MENU_CONFIG['images_dir']}/123/123_Rodinia.tiff", "file_name"=>"123_Rodinia.tiff", "file_size"=>"429296"},
       "2"=>{"url"=>"file://#{Rails.root}/#{MENU_CONFIG['images_dir']}/123/123_technology.tiff", "file_name"=>"123_technology.tiff", "file_size"=>"904934"}}}
 
-    before :all do
-      Rake::Task["jobs:clear"].invoke
-      ActionMailer::Base.deliveries.clear
-    end
-
     before :each do
-      ActionMailer::Base.deliveries.clear
       Rake::Task["jobs:clear"].invoke
     end
 
@@ -41,7 +34,7 @@ RSpec.describe ImportImagesJob, type: :job do
       user = instance_double("User", :username => "dilpickle", :email => "test@testing.com")
 
       Delayed::Job.enqueue ImportImagesJob.new(file_list, user.email, "localhost")
-      Rake::Task["jobs:workoff"].invoke
+      Delayed::Worker.new.work_off
 
       expect(Delayed::Job.count).to eq(0)
     end
@@ -60,7 +53,7 @@ RSpec.describe ImportImagesJob, type: :job do
     end
 
 
-    it "sends a success email upon successful job" do
+    it "sends a status emails when jobs get  run" do
       file_list = []
       file_objects.each do | item |
        file_list << item[1]["url"]
@@ -68,12 +61,9 @@ RSpec.describe ImportImagesJob, type: :job do
 
       user = instance_double("User", :username => "dilpickle", :email => "test@testing.com")
       Delayed::Job.enqueue ImportImagesJob.new(file_list, user.email, "localhost")
-      Rake::Task["jobs:workoff"].invoke
-      expect(ActionMailer::Base.deliveries.last.subject).to eq("Your Menu job has been successfully imported")
-    end
 
-    it "sends a failure email upon a failed job" do
-      file_objects = {
+
+      bad_files = {
         "0"=>{"url"=> "/123/123_internet.tiff", "file_name"=>"123_internet.tiff", "file_size"=>"792132"},
         "1"=>{"url"=> "/123/123_Rodinia.tiff", "file_name"=>"123_Rodinia.tiff", "file_size"=>"429296"},
         "2"=>{"url"=> "/123/123_technology.tiff", "file_name"=>"123_technology.tiff", "file_size"=>"904934"}}
@@ -84,9 +74,11 @@ RSpec.describe ImportImagesJob, type: :job do
       end
 
       user = instance_double("User", :username => "dilpickle", :email => "test@testing.com")
-      Delayed::Job.enqueue ImportImagesJob.new(file_list, user.email, "localhost")
+      Delayed::Job.enqueue ImportImagesJob.new(bad_files, user.email, "localhost")
 
       Rake::Task["jobs:workoff"].invoke
+
+      expect(ActionMailer::Base.deliveries.first.subject).to eq("Your Menu job has been successfully imported")
       expect(ActionMailer::Base.deliveries.last.subject).to eq("Your Menu job did not get imported")
     end
 end
