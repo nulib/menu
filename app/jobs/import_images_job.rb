@@ -1,4 +1,4 @@
-ImportImagesJob = Struct.new(:file_list, :current_user, :root_url) do
+ImportImagesJob = Struct.new(:file_list, :user_email, :root_url) do
 
   def enqueue(job)
   end
@@ -17,6 +17,7 @@ ImportImagesJob = Struct.new(:file_list, :current_user, :root_url) do
           proper_file = GetNewRecords.prefix_file_name_with_job_id( proper_file, job_id )
           f = File.open( proper_file )
           i = job.new_records.create( filename: File.basename(proper_file), proxy: f, location: File.dirname( proper_file ))
+
           raise StandardError.new("Failed to create record for job: #{job_id}") if i.nil?
           f.close
         end
@@ -34,9 +35,7 @@ ImportImagesJob = Struct.new(:file_list, :current_user, :root_url) do
 
 
   def success(job)
-    Delayed::Worker.logger.info("I AM SUCCESS #{file_list} and #{root_url}")
-    user_email = current_user.get_ldap_email
-    Delayed::Worker.logger.info("I AM SUCCESS #{user_email }")
+    Delayed::Worker.logger.info("SUCCESS #{file_list} and #{root_url}")
     imported_files = file_list.collect do |file_string|
       file_string.split("dropbox/")[1]
     end.join(", ")
@@ -46,18 +45,27 @@ ImportImagesJob = Struct.new(:file_list, :current_user, :root_url) do
 
 
   def failure(job)
-    Delayed::Worker.logger.error("failure really not cool")
+    Delayed::Worker.logger.error("#{job} failure")
+
+    imported_files = file_list.collect do |file_string|
+      file_string.split("dropbox/")[1]
+    end.join(", ")
+
     ImportMailer.failed_import_email(imported_files, user_email).deliver_now
   end
 
   def error(job, exception)
-    Delayed::Worker.logger.error("errorrrrrrrr oh great just great and i mean not great")
-    Delayed::Worker.logger.error(" job failed because #{exception}")
-    #get Airbrake.notify(exception)
+    Delayed::Worker.logger.error(" job caused error because #{exception}")
+
+    imported_files = file_list.collect do |file_string|
+      file_string.split("dropbox/")[1]
+    end.join(", ")
+
+    ImportMailer.failed_import_email(imported_files, "jennifer.lindner@northwestern.edu").deliver_now
   end
 
   def alert_us_emergency(job, exception)
-    #OHMIGOD
+    #text notification, airbrake, etc
   end
 
 end

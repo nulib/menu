@@ -18,7 +18,9 @@ class JobsController < ApplicationController
     file_objects.each do | item |
      file_list << item[1]["url"]
     end
-    Delayed::Job.enqueue ImportImagesJob.new(file_list, current_user, root_url)
+    user_email = current_user.get_ldap_email
+
+    Delayed::Job.enqueue ImportImagesJob.new(file_list, user_email, root_url)
 
     head :ok
   end
