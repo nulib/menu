@@ -12,7 +12,7 @@ describe GetNewRecords do
   it "rejects invalid new_records from persisting to the DB" do
     `touch #{Rails.root}/spec/dropbox_invalid/invalid.tiff`
     GetNewRecords.find_or_create_new_record("#{Rails.root}/spec/dropbox_invalid/invalid.tiff")
-    expect( NewRecord.all.count ).to eql( 0 )
+    expect(NewRecord.find_by_filename("invalid.tiff").nil?).to be true
   end
 
   # The empty array sent to the remove_stale_new_records function implies that there are no

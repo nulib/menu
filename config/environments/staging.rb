@@ -29,4 +29,9 @@ Menu::Application.configure do
 
   Paperclip.options[:command_path] = "/usr/bin/"
 
+  config.action_mailer.delivery_method = :sendmail
+
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = true
+
 end

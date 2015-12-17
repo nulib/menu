@@ -1,0 +1,52 @@
+<div class="container">
+<div class="jumbotron">
+  <h1 id="browsing" class="text-center">Import Images</h1>
+  <p class='lead'>Browse! will show you all the tiffs in <%= "#{@filesystem_location}" %>, the shared dropbox for <%= link_to "Menu #{Rails.env}", @root %>. Choose the files you want and submit them. Menu will take it from there.
+</p>
+
+  <form id="myForm" name="myForm"></form>
+
+  <p class="text-center"><a class="btn btn-lg btn-success" id="browse">Browse!</a></p>
+
+  <p class="success">
+    Yay! These files should be ready on Menu's home page soon.
+
+    You'll be emailed when they are (or if they didn't make it, and what to do then).
+  </p>
+  <p class="failure">
+    We're sorry, something went wrong. Please try again or email repo-support@northwestern.edu.
+  </p>
+
+
+<script>
+$().ready(function() {
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+  $('#browse').browseEverything({
+    route: "/browse",
+    target: "#myForm",
+    accept: "image/tiff",
+    }).done(function(data){
+      $.post('/jobs/import', {'file_list': data},
+        function(){
+          $("p.success").show();
+          $("p.failure").hide();
+        }).
+        fail(function() {
+          $("p.success").hide();
+          $("p.failure").show();
+        })
+    }).cancel(function() {
+    // User cancelled the browse operation
+      $("p.success").hide();
+      $("p.failure").hide();
+    }).fail(function(status, error, text) {
+    // URL retrieval experienced a techical failure
+    });
+});
+</script>
+</div>
+</div>

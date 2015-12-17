@@ -27,6 +27,9 @@ gem 'jbuilder', '~> 1.2'
 # our session data is too much for a mere cookie: https://github.com/rails/activerecord-session_store
 gem 'activerecord-session_store', github: 'rails/activerecord-session_store'
 
+#our app is now too much for a mere webrick server
+gem 'thin'
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
@@ -51,6 +54,10 @@ gem 'rest-client'
 gem 'lograge'
 gem 'devise'
 gem 'devise_ldap_authenticatable'
+gem 'browse-everything'
+gem 'delayed_job_active_record'
+gem 'capistrano3-delayed-job', '~> 1.0'
+gem 'daemons'
 
 
 group :development, :test do
@@ -70,6 +77,7 @@ group :test do
   gem 'launchy'
   gem 'database_cleaner'
   gem 'selenium-webdriver'
+  gem 'rspec-activejob'
 end
 
 group :staging, :production do

@@ -11,6 +11,7 @@ class NewRecord < ActiveRecord::Base
   validates :job_id, :presence => true
   validates :filename, :uniqueness => true
 
+
   def job_id_display
     self.job.job_id
   end

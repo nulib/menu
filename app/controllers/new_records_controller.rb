@@ -2,6 +2,7 @@ require 'rest-client'
 
 class NewRecordsController < ApplicationController
   before_action :set_new_record, only: [:show, :edit, :update, :destroy, :save_xml, :publish]
+  layout "new_records"
 
   # GET /new_records
   # GET /new_records.json
@@ -18,6 +19,12 @@ class NewRecordsController < ApplicationController
     end
   end
 
+  def get_record_id
+    @new_record_id = GetNewRecords.find_or_create_new_record(params[:file])
+    render json: {"new_record_id": @new_record_id}
+  end
+
+
   # GET /new_records/new
   def new
     @new_record = NewRecord.new
@@ -25,6 +32,7 @@ class NewRecordsController < ApplicationController
 
   # GET /new_records/1/edit
   def edit
+
   end
 
 
@@ -86,9 +94,9 @@ class NewRecordsController < ApplicationController
 
     if @new_record.save
       @new_record.xml = TransformXML.prepare_vra_xml( @new_record.xml, @new_record.filename )
-      
+
       @accession_nbr = TransformXML.get_accession_nbr( @new_record.xml )
-      
+
       if @new_record.valid_vra?
           #TODO - fix this full_path_thing, yo -- needs to be in config
           full_path = "#{Rails.root}/" + "#{@new_record.path}"

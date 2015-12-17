@@ -2,7 +2,7 @@ module GetNewRecords
 
   @path_length = MENU_CONFIG["images_dir"].split( '/' ).count
 
-  def self.current_new_records
+    def self.current_new_records
     location = MENU_CONFIG["images_dir"]
 
     records = []
@@ -15,7 +15,6 @@ module GetNewRecords
     remove_stale_new_records(records)
 
   end
-
 
   def self.remove_stale_new_records( file_system_new_record_ids )
     stale_records = NewRecord.where.not(id: file_system_new_record_ids)

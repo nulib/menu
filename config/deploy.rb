@@ -23,7 +23,7 @@ set :log_level, :debug
 # set :pty, true
 
 # Default value for :linked_files is []
-set :linked_files, %w{config/database.yml config/secrets.yml config/ldap.yml}
+set :linked_files, %w{config/database.yml config/secrets.yml config/ldap.yml config/browse_everything_providers.yml}
 
 # cap-passenger gem allows for deploy:restart hook, requires this to be set to also
 # allow touch tmp/restart.txt to work
@@ -39,6 +39,11 @@ set :linked_dirs, %w{public/system}
 
 # Default value for keep_releases is 5
 set :keep_releases, 5
+
+set :delayed_job_workers, 2
+
+set :delayed_job_queues, ["image_importing"]
+
 
 # Run all rspec tests before deploying
 set :tests, []
@@ -72,9 +77,22 @@ namespace :deploy do
     on roles(:app), in: :sequence, wait: 5 do
       # Your restart mechanism here, for example:
      execute :touch, release_path.join('tmp/restart.txt')
+
     end
   end
 
+after 'deploy:published', 'restart' do
+  task do
+    on roles(:app) do
+      with RAILS_ENV: fetch(:environment) do
+        execute :rake, 'delayed_job:kill_the_djs'
+        execute :bundle, :exec, :'bin/delayed_job', fetch(:delayed_job_args, ""), :start
+        execute :rake, 'jobs:work'
+      end
+    end
+  end
+    #execute 'delayed_job:restart'
+end
 
   after :publishing, :restart
 
