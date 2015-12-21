@@ -439,6 +439,7 @@ DEPENDENCIES
   sdoc
   selenium-webdriver
   simplecov
+  sprockets (~> 2.8)
   sqlite3
   therubyracer
   thin

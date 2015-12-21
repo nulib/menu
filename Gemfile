@@ -30,6 +30,10 @@ gem 'activerecord-session_store', github: 'rails/activerecord-session_store'
 #our app is now too much for a mere webrick server
 gem 'thin'
 
+#sigh
+gem 'sprockets', '~> 2.8'
+
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
