@@ -430,7 +430,7 @@ DEPENDENCIES
   pg
   pry-byebug
   pry-rails
-  rails (~> 4.1)
+  rails (~> 4.2)
   rb-readline
   rest-client
   rspec-activejob
