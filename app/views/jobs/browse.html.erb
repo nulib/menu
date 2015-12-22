@@ -19,7 +19,7 @@
 
 
 <script>
-$(document).ready(function(){
+$(function(){
   $.ajaxSetup({
     headers: {
       'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
@@ -29,7 +29,8 @@ $(document).ready(function(){
     route: "/browse",
     target: "#myForm",
     accept: "image/tiff",
-    }).done(function(data){
+    }).done(
+      function(data){
       $.post('/jobs/import', {'file_list': data},
         function(){
           $("p.success").show();
