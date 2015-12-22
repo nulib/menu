@@ -1,7 +1,5 @@
 class JobsController < ApplicationController
 
-  layout "jobs", only: [:browse]
-
   def index
     @jobs = Job.order(:job_id)
   end
