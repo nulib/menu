@@ -1,1 +1,0 @@
-//= require browse_everything

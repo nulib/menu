@@ -19,12 +19,12 @@
 
 
 <script>
-$().ready(function() {
-    $.ajaxSetup({
-      headers: {
-        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-      }
-    });
+$(document).ready(function(){
+  $.ajaxSetup({
+    headers: {
+      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
   $('#browse').browseEverything({
     route: "/browse",
     target: "#myForm",
@@ -45,8 +45,9 @@ $().ready(function() {
       $("p.failure").hide();
     }).fail(function(status, error, text) {
     // URL retrieval experienced a techical failure
-    });
+  });
 });
+
 </script>
 </div>
 </div>
