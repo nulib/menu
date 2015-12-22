@@ -34,11 +34,15 @@ set :passenger_restart_with_touch, true
 #we want to enable this, use public/system for sure for default paperclip storage
 set :linked_dirs, %w{public/system}
 
+
+set :rbenv_type :user
+set :rbenv_ruby, '2.2.2'
+set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/bin/rbenv exec"
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
 
 # Default value for keep_releases is 5
-set :keep_releases, 5
+set :keep_releases, 2
 
 set :delayed_job_workers, 2
 
