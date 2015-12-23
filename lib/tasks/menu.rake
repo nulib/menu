@@ -7,7 +7,7 @@ namespace :menu do
 
   desc "make deploy owner of all files in dropbox"
   task :chown_the_dropbox_tiffs => :environment do
-    command = "cd #{MENU_CONFIG["images_dir"]} && find . -type f -name '*.tif*' | xargs chown deploy"
+    command = "chown -R deploy #{MENU_CONFIG["images_dir"]}"
     Delayed::Worker.logger.info("rake task --  #{command}")
     exec command
   end
