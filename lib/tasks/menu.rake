@@ -7,7 +7,7 @@ namespace :menu do
 
   desc "make deploy owner of all files in dropbox"
   task :chown_the_dropbox_tiffs => :environment do
-    command = "sudo chown -R deploy File.expand_path('/images_dropbox', __FILE__)"
+    command = "cd #{MENU_CONFIG["images_dir"]} && find . -type f -name '*.tif*' | xargs sudo chown deploy"
     Delayed::Worker.logger.info("rake task --  #{command}")
     exec command
   end
