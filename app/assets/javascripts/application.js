@@ -13,6 +13,11 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery-ui.min.js
+//= require ace/src-min/ace.js
+//= require ace/src-min/keybindings-emacs.js
+//= require ace/src-min/keybindings-vim.js
+//= require ace/src-min/mode-xml.js
+//= require ace/src-min/theme-textmate.js
 //= require bootstrap
 //= require cycle.js
 //= require images.js.coffee
