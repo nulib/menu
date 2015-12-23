@@ -24,10 +24,10 @@ ImportImagesJob = Struct.new(:file_list, :user_email, :root_url) do
         i.id
       else
         raise StandardError.new("File doesn't exist for job: #{job_id} and file #{proper_file}")
-      end
-      #ensure app has ownership of the new files
-      system("cd #{Rails.root} && RAILS_ENV=#{Rails.env} bundle exec rake menu:chown_the_dropbox_tiffs >> log/delayed_rake.log")
     end
+    end
+    #ensure app has ownership of everything in the dropbox
+    system("cd #{Rails.root} && RAILS_ENV=#{Rails.env} bundle exec rake menu:chown_the_dropbox_tiffs >> log/delayed_rake.log")
     rescue => exception
       raise StandardError.new("There was a problem: #{exception}")
     end
