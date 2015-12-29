@@ -84,15 +84,17 @@ namespace :deploy do
     end
   end
 
-after :restart do
-  on roles(:app), in: :sequence, wait: 5 do
-    with RAILS_ENV: fetch(:environment) do
-      execute :rake, 'delayed_job:kill_the_djs'
-      execute :bundle, :exec, :'bin/delayed_job', fetch(:delayed_job_args, ""), :start
-      execute :rake, 'jobs:work'
+  after :restart, :clear_cache do
+    task do
+      on roles(:app), in: :sequence, wait: 5 do
+        with RAILS_ENV: fetch(:environment) do
+          execute :rake, 'delayed_job:kill_the_djs'
+          execute :bundle, :exec, :'bin/delayed_job', fetch(:delayed_job_args, ""), :start
+          execute :rake, 'jobs:work'
+        end
+      end
     end
   end
-end
 
   after :publishing, :restart
 
