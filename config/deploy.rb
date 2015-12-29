@@ -84,7 +84,7 @@ namespace :deploy do
     end
   end
 
-after 'deploy:published', 'restart' do
+after :restart do
   task do
     on roles(:app) do
       with RAILS_ENV: fetch(:environment) do
