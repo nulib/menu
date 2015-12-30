@@ -5,8 +5,8 @@ namespace :delayed_job do
 
     Dir.glob("#{Rails.root}/tmp/pids/*") do |f|
       if f.include?("delayed_job") and f.include?(".pid")
-        logger.info "hey pid files! #{f}"
-        logger.info "#{:environment}"
+        Delayed::Worker.logger.info "hey pid files! #{f}"
+        Delayed::Worker.logger.info "#{:environment}"
         # pid = File.open(f, "r")
         #   pid.each_line do |line|
         #     puts line
