@@ -5,13 +5,13 @@ namespace :delayed_job do
 
     Dir.glob("#{Rails.root}/tmp/pids/*") do |f|
       if f.include?("delayed_job") and f.include?(".pid")
-        puts f
+        puts "hey girl! #{f}"
         # pid = File.open(f, "r")
         #   pid.each_line do |line|
         #     puts line
         #     puts`kill -9 #{line}`
         #   end
-        # end
+      end
     end
   end
 end
