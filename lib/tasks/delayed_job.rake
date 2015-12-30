@@ -12,6 +12,7 @@ namespace :delayed_job do
           `kill -9 #{line}`
         end
         pid.close()
+        `rm -rf #{f}`
       end
     end
   end
