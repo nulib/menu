@@ -78,12 +78,12 @@ namespace :deploy do
   desc 'Restart application'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
-      # Your restart mechanism here, for example:
-      with RAILS_ENV: fetch(:stage) do
-        execute :rake, "delayed_job:kill_the_djs"
-        execute :touch, release_path.join('tmp/restart.txt')
+      within release_path do
+        with RAILS_ENV: fetch(:rails_env) do
+          execute :rake, "delayed_job:kill_the_djs"
+          execute :touch, release_path.join('tmp/restart.txt')
+        end
       end
-
     end
   end
 
