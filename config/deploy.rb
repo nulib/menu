@@ -82,7 +82,7 @@ namespace :deploy do
         with RAILS_ENV: fetch(:rails_env) do
           execute :rake, "delayed_job:kill_the_djs"
           execute :touch, release_path.join('tmp/restart.txt')
-          invoke :task, "delayed_job:restart"
+          invoke "delayed_job:restart"
         end
       end
     end
