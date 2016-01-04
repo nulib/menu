@@ -9,7 +9,16 @@ namespace :menu do
   task :chown_the_dropbox_tiffs => :environment do
     command = "cd #{MENU_CONFIG["images_dir"]} && find . -not -path '*/\.*' -type f -name '*.tif*' | xargs sudo chown deploy"
     Delayed::Worker.logger.info("rake task --  #{command}")
+    here = "pwd"
+    what = "ls -ltr"
+
+
+    exec what
     exec command
+
+    exec here
+    exec what
+
   end
 
   desc "make new jobs and records of all files in dropbox"
