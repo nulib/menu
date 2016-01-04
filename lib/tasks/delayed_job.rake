@@ -5,7 +5,7 @@ namespace :delayed_job do
     #delete all files that start with delayed_job in tmp/pids
 
     Dir.glob("#{Rails.root}/tmp/pids/*") do |f|
-      if f.include?("delayed_job") and f.include?(".pid")
+      if f.include?("delayed_job")
         pid = File.open(f, "r")
         pid.each_line do |line|
           puts line
