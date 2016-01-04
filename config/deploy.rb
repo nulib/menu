@@ -32,7 +32,7 @@ set :passenger_restart_with_touch, true
 # Default value for linked_dirs is []
 
 #we want to enable this, use public/system for sure for default paperclip storage
-set :linked_dirs, %w{public/system public/assets}
+set :linked_dirs, %w{public/system public/assets tmp/pids}
 
 
 set :rbenv_ruby, '2.2.2'

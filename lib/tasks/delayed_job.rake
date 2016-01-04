@@ -4,16 +4,14 @@ namespace :delayed_job do
   task :kill_the_djs => :environment do
     #delete all files that start with delayed_job in tmp/pids
 
-    Dir.glob("#{Rails.root}/tmp/pids/*") do |f|
-      if f.include?("delayed_job")
-        pid = File.open(f, "r")
-        pid.each_line do |line|
-          puts line
-          `kill -9 #{line}`
-        end
-        pid.close()
-        `rm -rf #{f}`
+    Dir.glob("#{Rails.root}/tmp/pids/delayed_job.*") do |f|
+      pid = File.open(f, "r")
+      pid.each_line do |line|
+        puts line
+        `kill -9 #{line}`
       end
+      pid.close()
+      `rm -rf #{f}`
     end
   end
 end
