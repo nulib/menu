@@ -26,8 +26,7 @@ ImportImagesJob = Struct.new(:file_list, :user_email, :root_url) do
         raise StandardError.new("File doesn't exist for job: #{job_id} and file #{proper_file}")
     end
     end
-    #ensure app has ownership of everything in the dropbox
-    system("cd #{Rails.root} && RAILS_ENV=#{Rails.env} bundle exec rake menu:chown_the_dropbox_tiffs >> log/delayed_rake.log")
+
     rescue => exception
       raise StandardError.new("There was a problem: #{exception}")
     end
@@ -39,7 +38,7 @@ ImportImagesJob = Struct.new(:file_list, :user_email, :root_url) do
     imported_files = file_list.collect do |file_string|
       file_string.split("dropbox/")[1]
     end.join(", ")
-
+    ApplicationHelper.chown_some_tiffs
     ImportMailer.successful_import_email(imported_files, user_email, root_url).deliver_now
   end
 
