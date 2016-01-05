@@ -1,3 +1,5 @@
+require 'open3'
+
 ImportImagesJob = Struct.new(:file_list, :user_email, :root_url) do
 
   def enqueue(job)
@@ -27,6 +29,11 @@ ImportImagesJob = Struct.new(:file_list, :user_email, :root_url) do
     end
     end
 
+    stdout, stdeerr, status = Open3.capture3("sudo chown -R deploy /images_dropbox/*")
+    Delayed::Worker.logger.info(status)
+    Delayed::Worker.logger.info(stdeerr)
+    Delayed::Worker.logger.info(stdout)
+    
     rescue => exception
       raise StandardError.new("There was a problem: #{exception}")
     end
@@ -38,7 +45,7 @@ ImportImagesJob = Struct.new(:file_list, :user_email, :root_url) do
     imported_files = file_list.collect do |file_string|
       file_string.split("dropbox/")[1]
     end.join(", ")
-    ApplicationHelper.chown_some_tiffs
+
     ImportMailer.successful_import_email(imported_files, user_email, root_url).deliver_now
   end
 
