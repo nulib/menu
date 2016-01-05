@@ -21,8 +21,4 @@ module ApplicationHelper
     image_tag "#{Rails.application.secrets.dil_url}/get_image/#{pid}/#{size}", class: "thumbnail thumb"
   end
 
-  def self.chown_some_tiffs
-    system("sudo chown -R #{MENU_CONFIG["images_dir"]}/* >> log/delayed_rake.log")
-  end
-
 end
