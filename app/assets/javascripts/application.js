@@ -12,5 +12,19 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery-ui.min.js
+//= require ace/src-min/ace.js
+//= require ace/src-min/keybinding-emacs.js
+//= require ace/src-min/keybinding-vim.js
+//= require ace/src-min/mode-xml.js
+//= require ace/src-min/theme-textmate.js
 //= require bootstrap
-//= require_tree .
+//= require cycle.js
+//= require images.js.coffee
+
+//= require jquery.autosize-min.js
+//= require jquery.xmleditor.js
+//= require json2.js
+//= require jobs.js
+//= require vkbeautify.js
+//= require xsd2json.js

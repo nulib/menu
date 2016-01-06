@@ -32,7 +32,7 @@ set :passenger_restart_with_touch, true
 # Default value for linked_dirs is []
 
 #we want to enable this, use public/system for sure for default paperclip storage
-set :linked_dirs, %w{public/system public/assets}
+set :linked_dirs, %w{public/system public/assets tmp/pids}
 
 
 set :rbenv_ruby, '2.2.2'
@@ -78,49 +78,17 @@ namespace :deploy do
   desc 'Restart application'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
-      # Your restart mechanism here, for example:
-     execute :touch, release_path.join('tmp/restart.txt')
-
-    end
-  end
-
-after 'deploy:published', 'restart' do
-  task do
-    on roles(:app) do
-      with RAILS_ENV: fetch(:environment) do
-        execute :rake, 'delayed_job:kill_the_djs'
-        execute :bundle, :exec, :'bin/delayed_job', fetch(:delayed_job_args, ""), :start
-        execute :rake, 'jobs:work'
+      within release_path do
+        with RAILS_ENV: fetch(:rails_env) do
+          execute :rake, "delayed_job:kill_the_djs"
+          execute :touch, release_path.join('tmp/restart.txt')
+          #invoke "delayed_job:start"
+        end
       end
     end
   end
-    #execute 'delayed_job:restart'
-end
 
   after :publishing, :restart
 
-  after :restart, :clear_cache do
-    on roles(:web), in: :groups, limit: 3, wait: 10 do
-      # Here we can do anything such as:
-      # within release_path do
-      #   execute :rake, 'cache:clear'
-      # end
-    end
-  end
-
-  # after :restart, :correct_thumbs do
-  #   invoke 'deploy:regenerate_thumbs'
-  # end
-
-  # desc 'Regenerate thumbnails'
-  # task :regenerate_thumbs do
-  #   on roles(:app) do
-  #     within release_path do
-  #       with rails_env: fetch(:rails_env) do
-  #         execute :rake, "paperclip:refresh:thumbnails CLASS=NewRecord"
-  #       end
-  #     end
-  #   end
-  # end
 
 end
