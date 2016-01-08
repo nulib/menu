@@ -9,7 +9,6 @@
         <span class="icon-bar"></span>
       </button>
       <%= link_to "menu -- Metadata Editor at Northwestern University Library", root_path, :class => "navbar-brand" %>
-      <%= link_to('Import Images', jobs_browse_path, :class => "navbar-brand important-item") %>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -20,6 +19,7 @@
           <%= text_field_tag(:pid, params[:pid], placeholder: "Enter identifier...", class: "form-control", id: "pid-field", required: "required") %>
         </div>
         <%= submit_tag "Search", :name => nil, id: "search-button", class: "btn btn-default" %>
+        <%= link_to('Import Images', jobs_browse_path, :class => "btn btn-info") %>
       <% end %>
       <ul class="nav navbar-nav navbar-right">
         <% if user_signed_in? %>
