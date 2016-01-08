@@ -30,7 +30,7 @@ ImportImagesJob = Struct.new(:file_list, :user_email, :root_url) do
     end
 
     #crucial: need to keep the tiffs owned by deploy, needed visudo to allow deploy to sudo and !requiretty for it
-    stdout, stdeerr, status = Open3.capture3("sudo chown -R deploy:librepofiles-images-rw /images_dropbox/*")
+    stdout, stdeerr, status = Open3.capture3("sudo chown -R deploy:librepofiles-images-rw #{MENU_CONFIG["images_dir"]}*")
     Delayed::Worker.logger.info(status)
     Delayed::Worker.logger.info(stdeerr)
     Delayed::Worker.logger.info(stdout)
