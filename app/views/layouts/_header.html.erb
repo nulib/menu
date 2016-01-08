@@ -9,10 +9,12 @@
         <span class="icon-bar"></span>
       </button>
       <%= link_to "menu -- Metadata Editor at Northwestern University Library", root_path, :class => "navbar-brand" %>
+      <%= link_to('Import Images', jobs_browse_path, :class => "navbar-brand important-item") %>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
       <%= form_tag(existing_records_edit_path, method: "get", class: "navbar-form navbar-left") do %>
         <div class="form-group">
           <%= text_field_tag(:pid, params[:pid], placeholder: "Enter identifier...", class: "form-control", id: "pid-field", required: "required") %>
@@ -22,7 +24,7 @@
       <ul class="nav navbar-nav navbar-right">
         <% if user_signed_in? %>
         <li>
-          <%= link_to('Logout', destroy_user_session_path, :method => :delete) %>        
+          <%= link_to('Logout', destroy_user_session_path, :method => :delete) %>
         </li>
         <% end %>
         <li><%= link_to "Help Document", "https://docs.google.com/document/d/1ulpiZOT4f_xBqsqQs-BwFuId3XhedgPfethdjl4J1WA/edit?usp=sharing", :target => "_blank" %></li>

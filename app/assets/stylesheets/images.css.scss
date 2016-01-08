@@ -17,8 +17,14 @@ h1#browsing{
 
 p.success{
   display: none;
+  color: green;
 }
 
 p.failure{
   display: none;
+  color: red;
+}
+
+a.navbar-brand.important-item{
+  color: #333333;
 }
