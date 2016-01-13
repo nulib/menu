@@ -23,6 +23,10 @@ describe "visiting the home page" do
     expect( find('.navbar-form') ).to have_button( 'Search' )
   end
 
+  it "contains a link to the browse images page in the navbar" do
+    expect( find('.navbar') ).to have_link( 'Import Images' )
+  end
+
   it "displays a Job ID header" do
     expect( page ).to have_content( "Job IDs" )
   end
