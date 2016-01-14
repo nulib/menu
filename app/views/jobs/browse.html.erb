@@ -8,13 +8,22 @@
 
   <p class="text-center"><a class="btn btn-lg btn-success" id="browse">Browse!</a></p>
 
-  <div class="alert alert-success">
-    <strong>Yay!</strong> These files should be ready soon. You will be emailed their status.
+  <div id="import-success" class="panel panel-success">
+    <div class="panel-heading">
+      <h3 class="panel-title">Import Success</h3>
+    </div>
+    <div class="panel-body">
+      <strong>Yay!</strong> These files should be ready soon. You will be emailed their status.
+    </div>
   </div>
-
-  <div class="alert alert-danger">
-    <strong>No!</strong> We're sorry, something went wrong. Please try again or email repo-support@northwestern.edu.
-  </div>
+  <div id="import-failure" class="panel panel-danger">
+    <div class="panel-heading">
+      <h3 class="panel-title">Import Error</h3>
+    </div>
+    <div class="panel-body">
+      <strong>No!</strong> We're sorry, something went wrong. Please try again or email repo-support@northwestern.edu.
+    </div>
+  </div>  
 
 <script>
 $(function(){
@@ -31,17 +40,17 @@ $(function(){
       function(data){
       $.post('/jobs/import', {'file_list': data},
         function(){
-          $(".alert-success").show();
-          $(".alert-danger").hide();
+          $("#import-success").show();
+          $("#import-failure").hide();
         }).
         fail(function() {
-          $(".alert-success").hide();
-          $(".alert-danger").show();
+          $("#import-success").hide();
+          $("#import-failure").show();
         })
     }).cancel(function() {
     // User cancelled the browse operation
-      $(".alert-success").hide();
-      $(".alert-danger").hide();
+      $("#import-success").hide();
+      $("#import-failure").hide();
     }).fail(function(status, error, text) {
     // URL retrieval experienced a techical failure
   });

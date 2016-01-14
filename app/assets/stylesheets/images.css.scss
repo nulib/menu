@@ -15,9 +15,12 @@ h1#browsing{
   margin-bottom: 35px;
 }
 
-div.alert{
+#import-success{
   display: none;
-  font-size: 15px;
+}
+
+#import-failure{
+  display: none;
 }
 
 a.navbar-brand.important-item{
