@@ -29,12 +29,13 @@ ImportImagesJob = Struct.new(:file_list, :user_email, :root_url) do
     end
     end
 
-    #crucial: need to keep the tiffs owned by deploy, needed visudo to allow deploy to sudo and !requiretty for it
-    stdout, stdeerr, status = Open3.capture3("sudo chown -R deploy:librepofiles-images-rw #{MENU_CONFIG["images_dir"]}/*")
-    Delayed::Worker.logger.info(status)
-    Delayed::Worker.logger.info(stdeerr)
-    Delayed::Worker.logger.info(stdout)
-
+    #crucial: need to keep the tiffs owned by deploy in production, needed visudo to allow deploy to sudo and !requiretty for it
+    if Rails.env == "production"
+      stdout, stdeerr, status = Open3.capture3("sudo chown -R deploy:librepofiles-images-rw #{MENU_CONFIG["images_dir"]}/*")
+      Delayed::Worker.logger.info(status)
+      Delayed::Worker.logger.info(stdeerr)
+      Delayed::Worker.logger.info(stdout)
+   end
     rescue => exception
       raise StandardError.new("There was a problem: #{exception}")
     end
