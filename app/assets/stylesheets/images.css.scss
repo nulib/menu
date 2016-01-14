@@ -15,14 +15,9 @@ h1#browsing{
   margin-bottom: 35px;
 }
 
-p.success{
+div.alert{
   display: none;
-  color: green;
-}
-
-p.failure{
-  display: none;
-  color: red;
+  font-size: 15px;
 }
 
 a.navbar-brand.important-item{

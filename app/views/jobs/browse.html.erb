@@ -8,15 +8,13 @@
 
   <p class="text-center"><a class="btn btn-lg btn-success" id="browse">Browse!</a></p>
 
-  <p class="success">
-    Yay! These files should be ready on Menu's home page soon.
+  <div class="alert alert-success">
+    <strong>Yay!</strong> These files should be ready soon. You will be emailed their status.
+  </div>
 
-    You'll be emailed when they are (or if they didn't make it, and what to do then).
-  </p>
-  <p class="failure">
-    We're sorry, something went wrong. Please try again or email repo-support@northwestern.edu.
-  </p>
-
+  <div class="alert alert-danger">
+    <strong>No!</strong> We're sorry, something went wrong. Please try again or email repo-support@northwestern.edu.
+  </div>
 
 <script>
 $(function(){
@@ -33,17 +31,17 @@ $(function(){
       function(data){
       $.post('/jobs/import', {'file_list': data},
         function(){
-          $("p.success").show();
-          $("p.failure").hide();
+          $(".alert-success").show();
+          $(".alert-danger").hide();
         }).
         fail(function() {
-          $("p.success").hide();
-          $("p.failure").show();
+          $(".alert-success").hide();
+          $(".alert-danger").show();
         })
     }).cancel(function() {
     // User cancelled the browse operation
-      $("p.success").hide();
-      $("p.failure").hide();
+      $(".alert-success").hide();
+      $(".alert-danger").hide();
     }).fail(function(status, error, text) {
     // URL retrieval experienced a techical failure
   });
