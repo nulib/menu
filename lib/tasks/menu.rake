@@ -46,31 +46,38 @@ namespace :menu do
     unfound_pids = []
     unparsable_xml = []
     unpublished_pids = []
-    #get list of records -- do this in batches to optimize http calls?
-  #  begin
-      records.each do | dil |
-        begin
-          xml = dil_api_get_vra(dil)
-        rescue => e
-          unfound_pids << "dil pid #{dil} couldn't be found, error: #{e}. \n"
-        end
 
-        begin
-          doc = Nokogiri::XML.parse( xml )
-        rescue => e
-          unparsable_xml << "dil pid #{pid} had nokogiri problem #{e}. \n"
-        end
-
-        begin
-          dil_api_update_image( dil, doc.children )
-        rescue => e
-          unpublished_pids << "dil pid #{pid} was not published, error: #{e}. \n"
-        end
-
-        ImportMailer.failed_import_email(unfound_pids, "jennifer.lindner@northwestern.edu").deliver_now
-        ImportMailer.failed_import_email(unparsable_xml, "jennifer.lindner@northwestern.edu").deliver_now
-        ImportMailer.failed_import_email(unpublished_pids, "jennifer.lindner@northwestern.edu").deliver_now
+    records.each do | dil |
+      begin
+        xml = dil_api_get_vra(dil)
+      rescue => e
+        unfound_pids << "dil pid #{dil} couldn't be found, error: #{e}. \n"
       end
+
+      begin
+        doc = Nokogiri::XML.parse( xml )
+      rescue => e
+        unparsable_xml << "dil pid #{dil} had nokogiri problem #{e}. \n"
+      end
+
+      begin
+        dil_api_update_image( dil, doc.children )
+      rescue => e
+        unpublished_pids << "dil pid #{dil} was not published, error: #{e}. \n"
+      end
+    end
+
+    unless unfound_pids.empty?
+      ImportMailer.failed_import_email(unfound_pids, "jennifer.lindner@northwestern.edu").deliver_now
+    end
+
+    unless unparsable_xml.empty?
+     ImportMailer.failed_import_email(unparsable_xml, "jennifer.lindner@northwestern.edu").deliver_now
+    end
+
+    unless unpublished_pids.empty?
+      ImportMailer.failed_import_email(unpublished_pids, "jennifer.lindner@northwestern.edu").deliver_now
+    end
 
   end
 
