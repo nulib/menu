@@ -125,24 +125,30 @@ namespace :menu do
       begin
         xml = dil_api_get_vra(dil)
       rescue => e
-        unfound_pids << "dil pid #{dil} couldn't be found, error: #{e}. \n"
+        unfound_pids << "dil pid #{dil} couldn't be found, error: #{e}."
       end
 
       begin
         doc = Nokogiri::XML.parse( xml )
       rescue => e
-        unparsable_xml << "dil pid #{dil} had nokogiri problem #{e}. \n"
+        unparsable_xml << "dil pid #{dil} had nokogiri problem #{e}."
       end
+
+     #do this in batches, and be sure to log each pid to log file
 
       begin
         if doc.xpath("//vra:descriptionSet/vra:notes").text.include?("Job:")
           job_number = doc.xpath("//vra:descriptionSet/vra:notes").text.split("Job:")[1]
-          #will need to rename all tiffs to same extension
-          move_your_tiff = ["#{dil}.tiff", "/images_dropbox/_completed/#{job_number}/#{dil}.tiff"]
+          accession = doc.xpath("//vra:locationSet/vra:display")[0].text.split("Accession:")[1]
+          nbr = accession.split(/ ;/).first
+          accession_nbr = nbr.split("Accession:")[1]
+
+          filename = "#{job_number}_#{accession_nbr}.tif"
+          move_your_tiff = ["#{filename}", "/images_dropbox/_completed/#{job_number}/#{dil}.tif"]
           dil_api_update_image( dil, doc.children, move_your_tiff )
       end
       rescue => e
-        unpublished_pids << "dil pid #{dil} was not published, error: #{e}. \n"
+        unpublished_pids << "dil pid #{dil} was not published, error: #{e}."
       end
     end
 
