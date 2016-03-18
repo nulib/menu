@@ -27,6 +27,8 @@ module TransformXML
         display.content = transform_description_set(node)
       elsif node.name == 'rightsSet'
         display.content = transform_rights_set(node)
+      elsif node.name == 'textrefSet'
+        display.content = transform_textref_set(node)
       else
         display.content = all_text_nodes.join( " ; " )
       end
@@ -52,6 +54,12 @@ module TransformXML
     description_children = node.children.to_a
     description_children.delete_if {| child | child.name == "notes" or child.blank? }
     description_children.join(" ; ")
+  end
+
+  def self.transform_textref_set(node)
+    textref_children = node.children.to_a
+
+    textref_children.join(" ; ")
   end
 
   def self.transform_rights_set(node)
@@ -120,4 +128,3 @@ module TransformXML
   end
 
 end
-
