@@ -57,9 +57,13 @@ module TransformXML
   end
 
   def self.transform_textref_set(node)
-    textref_children = node.children.to_a
-
-    textref_children.join(" ; ")
+    textrefs = node.children.select {| child | child.name == "textref" }
+        joined_textrefs = textrefs.collect do | textref |
+          textref_children = [textref.children.to_a.delete_if {| child | child.blank? }]
+          textref_children[0].delete_if {| child | child.content.blank? }
+          textref_children.join(", ")
+        end
+      joined_textrefs.join(" ; ")
   end
 
   def self.transform_rights_set(node)
