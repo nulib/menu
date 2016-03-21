@@ -10,7 +10,7 @@
 
   <!-- Tab panes -->
   <div class="tab-content">
-    
+
     <!-- Editor tab -->
     <div role="tabpanel" class="tab-pane active" id="editor">
       <div class="row">
@@ -24,13 +24,13 @@
 
       <!-- Publish button and image thumbnail -->
       <div id="persistData">
-        <div id="publishButton">
-          <div id='publishUrl' class='btn btn-primary' data-url="<%= publish_new_record_path(@new_record) %>">Publish</div>
-        </div>
+        <!--div id="publishButton">
+          <div id='publishUrl' class='btn btn-primary' data-url="<%#= publish_new_record_path(@new_record) #%>">Publish</div>
+        </div-->
         <%= image_tag @new_record.proxy( "thumb" ), class: "thumbnail thumb" %>
       </div>
     </div>
-    
+
     <!-- Image tab -->
     <div role="tabpanel" class="tab-pane" id="image">
       <div class="row">
@@ -47,8 +47,9 @@
 
 <script>
   var xmlUploadConfig = [
-   {id: "defaultUrl", createDomElement: true, cssClass: 'send_xml', linkText: 'Save', url: "<%= save_xml_new_record_path(@new_record) %>"},
-   {id: "publishUrl", createDomElement: false, url: '<%= publish_new_record_path(@new_record) %>'}]
+   {id: "defaultUrl", createDomElement: true, cssClass: 'send_xml', linkText: 'Save', url: "<%= save_xml_new_record_path(@new_record) %>"} //,
+   // {id: "publishUrl", createDomElement: false, url: '<%= publish_new_record_path(@new_record) %>'}
+   ]
 
 
   $(function() {
@@ -71,12 +72,12 @@
       $(".xml_submit_status").html("Errors! This record was not published. Details above.");
       var msg = jqXHR.getResponseHeader('X-Message');
       if ($(".container").children("#errors").length == 0){
-        $(".container").prepend("<div id='errors' class='alert alert-danger'></div>"); 
+        $(".container").prepend("<div id='errors' class='alert alert-danger'></div>");
         $('#errors').html("<p>" + msg + "</p>");
-      } else {       
-        $('#errors').html("<p>" + msg + "</p>"); 
-      }    
-    }    
+      } else {
+        $('#errors').html("<p>" + msg + "</p>");
+      }
+    }
 
     var extractor = new Xsd2Json("vra-both.xsd", {"schemaURI":"<%= root_path %>"});
 
@@ -85,19 +86,19 @@
         xmlRetrievalPath: "<%= url_for(:only_path => false, :controller => 'new_records', :action => 'show', :id => @new_record.id, :format => :xml) %>"
       },
       submitButtonConfigs: [
+        //   {
+        //   id: "publishUrl",
+        //   createDomElement: false,
+        //   //onSubmit: submitThis,
+        //   url: '<%= publish_new_record_path(@new_record) %>',
+        //   responseHandler: publishSuccess,
+        //   errorHandler: publishError
+        // },
           {
-          id: "publishUrl",
-          createDomElement: false,
-          //onSubmit: submitThis,
-          url: '<%= publish_new_record_path(@new_record) %>',
-          responseHandler: publishSuccess,
-          errorHandler: publishError
-        },
-          {
-          id: "defaultUrl", 
-          createDomElement: true, 
-          cssClass: 'send_xml', 
-          label: 'Save', 
+          id: "defaultUrl",
+          createDomElement: true,
+          cssClass: 'send_xml',
+          label: 'Save',
           url: "<%= save_xml_new_record_path(@new_record) %>",
           //submitHandler: submitThis,
           responseHandler: publishSuccess,

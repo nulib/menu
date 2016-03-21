@@ -2,6 +2,7 @@ class JobsController < ApplicationController
 
   def index
     @jobs = Job.order(:job_id)
+    flash[:notice] = "Menu will not allow publishing of cataloged records during Spring Break, from March 21st - 25th. Publishing will be re-enabled again on Monday, March 28th."
   end
 
   def browse
