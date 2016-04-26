@@ -78,4 +78,3 @@ RSpec.describe ImportImagesJob, type: :job do
       expect(ActionMailer::Base.deliveries.last.subject).to eq("Your Menu job did not get imported")
     end
 end
-
