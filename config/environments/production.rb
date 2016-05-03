@@ -46,9 +46,9 @@ Menu::Application.configure do
   config.log_level = :info
 
 
-  config.to_prepare { Devise::SessionsController.force_ssl }
-  config.to_prepare { Devise::RegistrationsController.force_ssl }
-  config.to_prepare { Devise::PasswordsController.force_ssl }
+  # config.to_prepare { Devise::SessionsController.force_ssl }
+  # config.to_prepare { Devise::RegistrationsController.force_ssl }
+  # config.to_prepare { Devise::PasswordsController.force_ssl }
 
   # Prepend all log lines with the following tags.
   # config.log_tags = [ :subdomain, :uuid ]

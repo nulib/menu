@@ -11,6 +11,7 @@ RSpec.describe ImportImagesJob, type: :job do
 
     before :each do
       Rake::Task["jobs:clear"].invoke
+      ActionMailer::Base.deliveries.clear
     end
 
     it "will enqueue a job" do

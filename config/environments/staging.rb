@@ -19,9 +19,9 @@ Menu::Application.configure do
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
-  config.to_prepare { Devise::SessionsController.force_ssl }
-  config.to_prepare { Devise::RegistrationsController.force_ssl }
-  config.to_prepare { Devise::PasswordsController.force_ssl }
+  # config.to_prepare { Devise::SessionsController.force_ssl }
+  # config.to_prepare { Devise::RegistrationsController.force_ssl }
+  # config.to_prepare { Devise::PasswordsController.force_ssl }
 
 
   # Raise an error on page load if there are pending migrations
