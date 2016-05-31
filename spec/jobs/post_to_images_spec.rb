@@ -5,15 +5,14 @@ RSpec.describe PostToImagesJob, type: :job do
 
   let(:user){instance_double("User", :username => "dilpickle", :email => "test@testing.com")}
     before :each do
+      @new_record = NewRecord.new(:job_id => 1, :filename => "#{@path}")
+      @new_record.save!
       Rake::Task["jobs:clear"].invoke
       ActionMailer::Base.deliveries.clear
       @xml = File.read("#{Rails.root}/spec/fixtures/vra_display_with_content.xml")
 
       @path = "#{Rails.root}/spec/fixtures/internet.tiff"
       @accession_nbr = "12367"
-      @controller = ExistingRecordsController.new
-      @new_record = NewRecord.new(:job_id => 1, :filename => "#{@path}")
-      @new_record.save!
       body = {"accession_nbr" => @accession_nbr, "from_menu"=>"true", "path" => @path,"xml" => @xml}
       stub_request(:post, "http://127.0.0.1:3333/multiresimages").
       with(:body => body,

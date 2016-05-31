@@ -2,11 +2,11 @@ require 'rails_helper'
 
 describe GetNewRecords do
 
+
   it "persists valid new_records to the DB" do
     GetNewRecords.add_job_id_to_random_files
     GetNewRecords.current_new_records
     expect( NewRecord.all.count ).to eql( 12 )
-    GetNewRecords.remove_job_id_from_file_name
   end
 
   it "rejects invalid new_records from persisting to the DB" do
@@ -21,6 +21,7 @@ describe GetNewRecords do
     NewRecord.create(filename: "cool_test", job_id: "98765")
     GetNewRecords.remove_stale_new_records( [] )
     expect( NewRecord.all.count ).to eql( 0 )
+
   end
 
 end

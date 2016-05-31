@@ -4,7 +4,6 @@ module GetNewRecords
 
     def self.current_new_records
     location = MENU_CONFIG["images_dir"]
-
     records = []
     dir_contents = Dir.glob( "#{location}/**/*" )
     dir_contents.delete_if { |dir| dir =~ /_completed/ }
