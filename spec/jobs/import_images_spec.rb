@@ -8,10 +8,15 @@ RSpec.describe ImportImagesJob, type: :job do
       "2"=>{"url"=>"file://#{Rails.root}/#{MENU_CONFIG['images_dir']}/123/123_technology.tiff", "file_name"=>"123_technology.tiff", "file_size"=>"904934"}}}
 
   let(:user){instance_double("User", :username => "dilpickle", :email => "test@testing.com")}
+    before :all do
+      Rake::Task["menu:make_records_for_all_tiffs"].invoke
+    end
 
     before :each do
       Rake::Task["jobs:clear"].invoke
+      ActionMailer::Base.deliveries.clear
     end
+
 
     it "will enqueue a job" do
       file_list = []
@@ -59,7 +64,6 @@ RSpec.describe ImportImagesJob, type: :job do
       end
 
       Delayed::Job.enqueue ImportImagesJob.new(file_list, user.email, "localhost")
-
       bad_files = {
         "0"=>{"url"=> "/123/123_internet.tiff", "file_name"=>"123_internet.tiff", "file_size"=>"792132"},
         "1"=>{"url"=> "/123/123_Rodinia.tiff", "file_name"=>"123_Rodinia.tiff", "file_size"=>"429296"},
@@ -78,4 +82,3 @@ RSpec.describe ImportImagesJob, type: :job do
       expect(ActionMailer::Base.deliveries.last.subject).to eq("Your Menu job did not get imported")
     end
 end
-

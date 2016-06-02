@@ -22,7 +22,11 @@ RSpec.configure do |config|
   config.before(:suite) do
     Menu::Application.load_tasks
     Rake::Task["menu:make_records_for_all_tiffs"].invoke
-    end
+  end
+
+  config.after(:suite) do
+    GetNewRecords.remove_job_id_from_file_name
+  end
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"

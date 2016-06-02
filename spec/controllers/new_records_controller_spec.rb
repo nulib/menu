@@ -93,18 +93,8 @@ RSpec.describe NewRecordsController, :type => :controller do
 
       it "generates a multiresimages post to Repository Images" do
         response = @controller.send( :dil_multiresimages_post, @new_record.xml, @new_record.path, @accession_nbr )
-        expect( response ).to include( 'Publish successful' )
-      end
 
-      it "moves the new_record to the dropbox root once published" do
-        raw_post( :publish, {:id => @new_record.id},  @new_record.xml )
-        expect File.exists?("#{@new_record.completed_destination}/#{@new_record.filename}")
-      end
-
-      it "deletes the new_record" do
-        expect do
-          raw_post( :publish, {:id => @new_record.id},  @new_record.xml )
-        end.to change(NewRecord, :count).by(-1)
+        expect( response ).to be_instance_of(Delayed::Backend::ActiveRecord::Job)
       end
 
       it "returns root_url upon success so that ajax can redirect" do
