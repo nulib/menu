@@ -9,7 +9,6 @@ class NewRecordsController < ApplicationController
   # GET /new_records.json
   def index
     @new_records = NewRecord.all
-    flash[:notice] = "Menu will not be allowing any cataloging during Spring Break 2016, from March 21st - 25th. All cataloging will be re-enabled again on Monday, March 28th."
   end
 
   # GET /new_records/1
@@ -34,7 +33,6 @@ class NewRecordsController < ApplicationController
 
   # GET /new_records/1/edit
   def edit
-    flash[:notice] = "Menu will not allow publishing of cataloged records during Spring Break, from March 21st - 25th. Publishing will be re-enabled again on Monday, March 28th."
   end
 
 
