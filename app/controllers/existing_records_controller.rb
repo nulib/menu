@@ -4,6 +4,7 @@ class ExistingRecordsController < ApplicationController
 
   # GET /existing_records/1/edit
   def edit
+  flash[:notice] = "Menu will not allow publishing of cataloged records during Spring Break, from March 21st - 25th. Publishing will be re-enabled again on Monday, March 28th."
 	@existing_record = ExistingRecord.where(pid: params[:pid]).first_or_create
       if @existing_record.xml.blank?
 	 @existing_record.xml = dil_api_get_vra( params[:pid] )

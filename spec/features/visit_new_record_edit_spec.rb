@@ -2,6 +2,11 @@ require 'rails_helper'
 
 describe "visiting the new_record edit page" do
 
+  before :all do
+    Menu::Application.load_tasks
+    Rake::Task["menu:make_records_for_all_tiffs"].invoke
+  end
+
   before :each do
     visit root_url
 

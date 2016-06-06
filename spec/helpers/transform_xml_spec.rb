@@ -26,6 +26,23 @@ describe TransformXML, :type => :helper do
       expect(TransformXML.add_display_elements(xml_with_agentSet).to_xml).to include(xml_with_agentSet_display)
     end
 
+    it "adds textrefSet displays with commas between textrefs and semi-colons between textrefSets" do
+
+      xml_with_textrefSet_string = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n
+      <vra:vra xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:fn=\"http://www.w3.org/2005/xpath-functions\"
+      xmlns:vra=\"http://www.vraweb.org/vracore4.htm\"
+      xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xsi:schemaLocation=\"http://www.vraweb.org/vracore4.htm
+      http://www.loc.gov/standards/vracore/vra-strict.xsd\">\n\n      <vra:image>\n\n      <!--Textref-->\n        <vra:textrefSet>    <vra:textref>\n\n           <vra:name type=\"book\">Fluffy the Butterfly Slayer</vra:name>\n\n           <vra:refid type=\"citation\">Like I said</vra:refid>\n\n           </vra:textref>\n        </vra:textrefSet>\n        </vra:image>\n</vra:vra>\n"
+
+      xml_with_textrefSet = Nokogiri::XML(xml_with_textrefSet_string)
+
+      xml_with_textrefSet_display =
+      "<vra:textrefSet><vra:display>Fluffy the Butterfly Slayer, Like I said</vra:display>"
+
+      expect(TransformXML.add_display_elements(xml_with_textrefSet).to_xml).to include(xml_with_textrefSet_display)
+    end
+
+
 
     it "only adds commas between existing agent elements" do
       xml_with_agentSet_string = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<vra:vra\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:fn=\"http://www.w3.org/2005/xpath-functions\"\n    xmlns:vra=\"http://www.vraweb.org/vracore4.htm\"\n    xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xsi:schemaLocation=\"http://www.vraweb.org/vracore4.htm http://www.loc.gov/standards/vracore/vra-strict.xsd\">\n    <vra:image>\n        <!--Agents-->\n        <vra:agentSet>\n            <vra:agent>\n                <vra:name type=\"personal\" vocab=\"lcnaf\">agent Uno</vra:name>\n                <vra:attribution></vra:attribution>\n                <vra:role vocab=\"RDA\"></vra:role>\n            </vra:agent>\n            <vra:agent>\n                <vra:name>Agent duo</vra:name>\n                <vra:attribution></vra:attribution>\n                <vra:role>role duo</vra:role>\n            </vra:agent>\n

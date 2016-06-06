@@ -1,4 +1,5 @@
 require 'rest-client'
+require 'delayed_job'
 
 class NewRecordsController < ApplicationController
   before_action :set_new_record, only: [:show, :edit, :update, :destroy, :save_xml, :publish]
@@ -8,6 +9,7 @@ class NewRecordsController < ApplicationController
   # GET /new_records.json
   def index
     @new_records = NewRecord.all
+    flash[:notice] = "Menu will not be allowing any cataloging during Spring Break 2016, from March 21st - 25th. All cataloging will be re-enabled again on Monday, March 28th."
   end
 
   # GET /new_records/1
@@ -32,7 +34,7 @@ class NewRecordsController < ApplicationController
 
   # GET /new_records/1/edit
   def edit
-
+    flash[:notice] = "Menu will not allow publishing of cataloged records during Spring Break, from March 21st - 25th. Publishing will be re-enabled again on Monday, March 28th."
   end
 
 
@@ -94,28 +96,14 @@ class NewRecordsController < ApplicationController
 
     if @new_record.save
       @new_record.xml = TransformXML.prepare_vra_xml( @new_record.xml, @new_record.filename )
-
       @accession_nbr = TransformXML.get_accession_nbr( @new_record.xml )
 
       if @new_record.valid_vra?
-          #TODO - fix this full_path_thing, yo -- needs to be in config
-          full_path = "#{Rails.root}/" + "#{@new_record.path}"
-          response = dil_multiresimages_post( @new_record.xml, @new_record.path, @accession_nbr )
-          response_xml_doc = Nokogiri::XML( response )
-          if response_xml_doc.at_xpath( '//pid' ) && /Publish successful/.match(response_xml_doc)
-            destination = @new_record.completed_destination
-            FileUtils.mkdir_p(destination) unless File.exists?(destination)
-            FileUtils.mv(@new_record.path, "#{destination}/#{@new_record.filename}") unless Rails.env.development?
-            @new_record.destroy
-            job_url = "#{root_url}jobs/#{@new_record.job_id}"
+        @user_email = current_user.get_ldap_email
+        Delayed::Job.enqueue PostToImagesJob.new(@new_record.xml, @new_record.path, @accession_nbr, @new_record.id, @user_email)
 
-            render json: {:localName => job_url}
-          else
-            flash_messages = [ response_xml_doc.at_xpath( '//description' ).text.truncate( 50 ) ]
-            flash_messages << "New Record not published"
-            flash[:error] = flash_messages
-            render :template => "new_records/edit", :status => 400
-          end
+        job_url = "#{root_url}jobs/#{@new_record.job_id}"
+        render json: {:localName => job_url}
       else
         errors = @new_record.validate_vra
         flash[:error] = errors
@@ -125,6 +113,8 @@ class NewRecordsController < ApplicationController
       render edit: @new_record.errors, status: :unprocessable_entity
     end
   end
+
+
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -138,13 +128,7 @@ class NewRecordsController < ApplicationController
     end
 
     def dil_multiresimages_post( xml, path, accession_nbr )
-
-      RestClient::Resource.new(
-        MENU_CONFIG["dil_url"],
-        verify_ssl: OpenSSL::SSL::VERIFY_NONE,
-
-      ).post xml: xml , path: path , accession_nbr: accession_nbr, from_menu: true
-
+      Delayed::Job.enqueue PostToImagesJob.new(xml, path, accession_nbr)
     end
 
 end
