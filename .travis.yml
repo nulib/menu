@@ -13,6 +13,6 @@ before_install:
 
 before_script:
   - bundle exec rake db:migrate
-  - bundle exec rake jobs:work
+  - bin/delayed_job start
 
 
