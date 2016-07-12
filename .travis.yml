@@ -10,6 +10,7 @@ before_install:
   - gem install bundler
   - cp config/database.yml.example config/database.yml
   - cp config/secrets.yml.example config/secrets.yml
+  - cp config/ldap.yml.example config/ldap.yml
 
 before_script:
   - bundle exec rake db:migrate
