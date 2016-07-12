@@ -3,6 +3,10 @@ language: ruby
 rvm:
   - 2.2.5
 
+before_install:
+  - gem install bundler
+  - cp config/database.yml.example config/database.yml
+
 before_script:
   - bundle exec rake db:migrate
 
