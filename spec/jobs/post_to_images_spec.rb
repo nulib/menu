@@ -16,7 +16,7 @@ RSpec.describe PostToImagesJob, type: :job do
       body = {"accession_nbr" => @accession_nbr, "from_menu"=>"true", "path" => @path,"xml" => @xml}
       stub_request(:post, "http://127.0.0.1:3333/multiresimages").
       with(:body => body,
-       :headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'Content-Length'=>'5924', 'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Ruby'})
+       :headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'Content-Length'=>'5913', 'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Ruby'})
        .to_return(:status => 200, :body => "<response><returnCode>Publish successful</returnCode><pid>inu:dil-321hdsjfhjs778</pid></response>", :headers => {})
     end
 
@@ -45,8 +45,7 @@ RSpec.describe PostToImagesJob, type: :job do
     end
 
 
-    it "sends a status email when jobs get run" do
-
+    it "sends a success email when jobs are succcessful" do
       Delayed::Job.enqueue PostToImagesJob.new(@xml, @path, @accession_nbr, @new_record.id, user.email)
       Delayed::Job.enqueue PostToImagesJob.new(@xml, @path, @accession_nbr, @new_record.id, user.email)
 
@@ -55,4 +54,20 @@ RSpec.describe PostToImagesJob, type: :job do
       expect(ActionMailer::Base.deliveries.first.subject).to eq("Your Images record was successfully published")
       expect(ActionMailer::Base.deliveries.last.subject).to eq("Your Images record was successfully published")
     end
+
+    it "sends a failure email when jobs fail" do
+      @accession_nbr = ""
+      body = {"accession_nbr" => @accession_nbr, "from_menu"=>"true", "path" => @path,"xml" => @xml}
+      stub_request(:post, "http://127.0.0.1:3333/multiresimages").
+      with(:body => body,
+       :headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'Content-Length'=>'5908', 'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Ruby'})
+       .to_return(:status => 200, :body => "<response><returnCode>Error</returnCode></response>", :headers => {})
+
+      Delayed::Job.enqueue PostToImagesJob.new(@xml, @path, @accession_nbr, @new_record.id, user.email)
+
+      Delayed::Worker.new.work_off
+
+      expect(ActionMailer::Base.deliveries.last.subject).to eq("Your Images record did not get published")
+    end
+
 end

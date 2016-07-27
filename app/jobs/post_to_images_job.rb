@@ -15,14 +15,12 @@ class PostToImagesJob < Struct.new(:xml, :path, :accession_nbr, :new_record_id, 
       if ["staging", "production"].include? "#{Rails.env}"
         FileUtils.mv(@new_record.path, "#{destination}/#{@new_record.filename}")
       end
-      @new_record.destroy
-
       Delayed::Worker.logger.info "Successful publication of #{@new_record.filename}"
       PublicationMailer.successful_publication_email(@new_record.filename, @pid, user_email).deliver_now
+      @new_record.destroy
     else
-
-      Delayed::Worker.logger.error "Failed publication of #{@new_record.filename}"
-      PublicationMailer.failed_publication_email(@new_record.filename, user_email).deliver_now
+      Delayed::Worker.logger.error "Failed publication of #{accession_nbr}"
+      PublicationMailer.failed_publication_email(accession_nbr, user_email).deliver_now
     end
   end
 
