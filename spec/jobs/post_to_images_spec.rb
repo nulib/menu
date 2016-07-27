@@ -14,10 +14,6 @@ RSpec.describe PostToImagesJob, type: :job do
       @path = "#{Rails.root}/spec/fixtures/internet.tiff"
       @accession_nbr = "12367"
       body = {"accession_nbr" => @accession_nbr, "from_menu"=>"true", "path" => @path,"xml" => @xml}
-      #stub_request(:post, "http://127.0.0.1:3333/multiresimages").
-      #with(:body => body,
-      # :headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'Content-Length'=>'5913', 'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Ruby'})
-      # .to_return(:status => 200, :body => "<response><returnCode>Publish successful</returnCode><pid>inu:dil-321hdsjfhjs778</pid></response>", :headers => {})
     end
 
     it "will enqueue a job" do
