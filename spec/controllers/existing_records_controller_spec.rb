@@ -31,7 +31,7 @@ RSpec.describe ExistingRecordsController, :type => :controller do
       @controller = ExistingRecordsController.new
       stub_request(:get, "http://127.0.0.1:3331/multiresimages/get_vra?pid=inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60").
          with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'User-Agent'=>'Ruby'}).
-         to_return(:status => 200, :body => "Some XML for you", :headers => {})
+         to_return(:status => 200, :body => "<response><returnCode>Some XML for you</returnCode></response>", :headers => {})
     end
 
     it "gets the record's vra from Images app" do
