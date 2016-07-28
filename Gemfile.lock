@@ -201,7 +201,7 @@ GEM
     jwt (1.5.2)
     launchy (2.4.3)
       addressable (~> 2.3)
-    libv8 (3.16.14.13)
+    libv8 (3.16.14.15)
     little-plugger (1.1.4)
     logging (2.0.0)
       little-plugger (~> 1.1)
