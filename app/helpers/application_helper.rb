@@ -18,7 +18,7 @@ module ApplicationHelper
   end
 
   def get_repo_image(pid, size)
-    image_tag "#{Rails.application.secrets.dil_url}/get_image/#{pid}/#{size}", class: "thumbnail thumb"
+    "#{Rails.application.secrets.dil_img_service}/image-service/#{pid.gsub!(/:/, '-')}/full/,#{size}/0/default.jpg"
   end
 
 end
