@@ -22,6 +22,7 @@ config/database.yml.pg
 config/menu.yml
 config/secrets.yml
 config/ldap.yml
+config/browse_everything_providers.yml
 
 # Ignore test specific items
 coverage

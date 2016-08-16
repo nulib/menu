@@ -3,7 +3,8 @@
 # The file_system provider can be a path to any directory on the server where your application is running.
 #
 file_system:
-  :home: "/Users/jld555/projects/menu/lib/assets/dropbox"
+  :home: "/images_dropbox" # this is the prod value
+  # staging value :home: "/dropbox"
 # dropbox:
 #   :app_key: YOUR_DROPBOX_APP_KEY
 #   :app_secret: YOUR_DROPBOX_APP_SECRET
