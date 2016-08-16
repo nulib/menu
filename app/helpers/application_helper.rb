@@ -18,7 +18,7 @@ module ApplicationHelper
   end
 
   def get_repo_image(pid, size)
-    "#{Rails.application.secrets.dil_img_service}/image-service/#{pid.gsub!(/:/, '-')}/full/,#{size}/0/default.jpg"
+    "#{Rails.application.secrets.dil_img_service}/image-service/#{pid.gsub(/:/, '-')}/full/,#{size}/0/default.jpg"
   end
 
 end
