@@ -61,7 +61,7 @@ class ExistingRecordsController < ApplicationController
 
     def dil_api_get_vra( pid )
       RestClient::Resource.new(
-        "#{MENU_CONFIG["vra"]}/#{pid}/VRA",
+        "#{MENU_CONFIG["dil_img_service"]}/technical_metadata/#{pid}/VRA",
         verify_ssl: OpenSSL::SSL::VERIFY_NONE
       ).get
     end

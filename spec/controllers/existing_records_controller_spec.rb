@@ -29,7 +29,7 @@ RSpec.describe ExistingRecordsController, :type => :controller do
   describe "Edit an existing record" do
     before do
       @controller = ExistingRecordsController.new
-      stub_request(:get, "http://127.0.0.1:3331/multiresimages/get_vra?pid=inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60").
+      stub_request(:get, "http://127.0.0.1:3331/technical_metadata/inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60/VRA").
          with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'User-Agent'=>'Ruby'}).
          to_return(:status => 200, :body => "<response><returnCode>Some XML for you</returnCode></response>", :headers => {})
     end
@@ -78,8 +78,8 @@ RSpec.describe ExistingRecordsController, :type => :controller do
         </vra:worktypeSet>
       </vra:image>
       </vra:vra>"
-      stub_request(:get, "http://127.0.0.1:3333/multiresimages/get_vra?pid=inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60").
-         to_return(:status => 200, :body => "<response><returnCode>#{xml}</returnCode></response>", :headers => {})
+      stub_request(:get, "http://127.0.0.1:3331/technical_metadata/inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60/VRA").
+         to_return(:status => 200, :body => "#{xml}", :headers => {})
 
       response = get( :edit, :pid => "#{dil_record}")
 
@@ -141,12 +141,12 @@ RSpec.describe ExistingRecordsController, :type => :controller do
         </vra:worktypeSet>
       </vra:image>
       </vra:vra>"
-      stub_request(:get, "http://127.0.0.1:3333/multiresimages/get_vra?pid=inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60").
-         to_return(:status => 200, :body => "<response><returnCode>#{xml}</returnCode></response>", :headers => {})
+      stub_request(:get, "http://127.0.0.1:3331/technical_metadata/inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60/VRA").
+         to_return(:status => 200, :body => "#{xml}", :headers => {})
 
       response = get( :edit, :pid => "#{dil_record}")
 
-       stub_request(:put, "http://127.0.0.1:3333/multiresimages/update_vra").
+       stub_request(:put, "http://127.0.0.1:3331/multiresimages/update_vra").
          with(:body => {"pid"=>"inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60", "xml"=>"<vra:vra xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:fn=\"http://www.w3.org/2005/xpath-functions\" xmlns:marc=\"http://www.loc.gov/MARC21/slim\" xmlns:mods=\"http://www.loc.gov/mods/v3\" xmlns:vra=\"http://www.vraweb.org/vracore4.htm\" xsi:schemaLocation=\"http://www.vraweb.org/vracore4.htm http://www.vraweb.org/projects/vracore4/vra-4.0-restricted.xsd\">\n      <vra:image id=\"inu-dil-2559730_w\" refid=\"inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60\">\n        <!--Agents-->\n        <vra:agentSet>\n            <vra:display>United States. War Production Board ; U.S. G.P.O.</vra:display>\n            <vra:agent>\n                <vra:name type=\"corporate\" vocab=\"lcnaf\"></vra:name>\n                <vra:attribution/>\n            </vra:agent>\n            <vra:agent>\n                <vra:name type=\"corporate\" vocab=\"lcnaf\">U.S. G.P.O.</vra:name>\n            </vra:agent>\n        </vra:agentSet>\n        <vra:culturalContextSet>\n            <vra:display/>\n            <vra:culturalContext/>\n        </vra:culturalContextSet>\n        <!--Dates-->\n        <vra:dateSet>\n            <vra:display>1942</vra:display>\n            <vra:date type=\"creation\">\n                <vra:earliestDate>1942</vra:earliestDate>\n            </vra:date>\n        </vra:dateSet>\n        <!-- Titles -->\n        <vra:titleSet>\n            <vra:display>'Every man, woman and child is a partner'</vra:display>\n            <vra:title pref=\"true\">'Every man, woman and child is a partner'</vra:title>\n        </vra:titleSet>\n        <vra:worktypeSet>\n            <vra:display/>\n            <vra:worktype/>\n        </vra:worktypeSet>\n      </vra:image>\n      </vra:vra>"},
               :headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'Content-Length'=>'3022', 'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Ruby'})
 
