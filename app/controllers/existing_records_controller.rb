@@ -53,10 +53,8 @@ class ExistingRecordsController < ApplicationController
     @existing_record.xml = request.body.read
     respond_to do |format|
       if @existing_record.save
-        puts "saved ok"
         format.xml { redirect_to action: "edit", pid: params[:pid],  notice: 'Record was successfully updated.'  }
       else
-        puts "errors"
         format.xml { render xml: edit.errors, status: :unprocessable_entity }
       end
     end
