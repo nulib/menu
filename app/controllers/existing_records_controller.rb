@@ -6,7 +6,12 @@ class ExistingRecordsController < ApplicationController
   def edit
     @existing_record = ExistingRecord.where(pid: params[:pid]).first_or_create
     if @existing_record.xml.blank?
-      @existing_record.xml = dil_api_get_vra( params[:pid] )
+      begin
+        @existing_record.xml = dil_api_get_vra( params[:pid] )
+      rescue
+        flash[:error] = "The pid: \"#{params[:pid]}\" was not found in Repository|Images"
+        redirect_to root_path
+      end
     end
   end
 
