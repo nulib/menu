@@ -26,6 +26,16 @@ RSpec.describe ExistingRecordsController, :type => :controller do
     end
   end
 
+  describe "Gracefully handle a non-existent record" do
+    it "redirects to root path and responds with a flash error when the pid does not exist in the Images app" do
+      stub_request(:get, "http://127.0.0.1:3331/technical_metadata/non-existent-pid/VRA").
+        to_return(:status => 500)
+      post :edit, pid: "non-existent-pid"
+      expect(response).to redirect_to(root_path)
+      expect(flash[:error]).to be_present
+    end
+  end
+
   describe "Edit an existing record" do
     before do
       @controller = ExistingRecordsController.new
@@ -35,9 +45,9 @@ RSpec.describe ExistingRecordsController, :type => :controller do
     end
 
     it "gets the record's vra from Images app" do
-        @pid = "inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60"
-        response = @controller.send( :dil_api_get_vra, @pid )
-        expect(response).to include("Some XML for you")
+      @pid = "inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60"
+      response = @controller.send( :dil_api_get_vra, @pid )
+      expect(response).to include("Some XML for you")
     end
 
     it "lets you update an existing record" do
