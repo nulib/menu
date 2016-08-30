@@ -33,7 +33,7 @@
     <div role="tabpanel" class="tab-pane" id="image">
       <div class="row">
         <div class="col-lg-12">
-          <%= image_tag( "#{Rails.application.secrets.dil_img_service}/image-service/#{@existing_record.pid}/full/,900/0/default.jpg" , class: 'thumbnail thumb') %>
+          <%= image_tag(get_repo_image(@existing_record.pid, 900), class: 'thumbnail thumb') %>
         </div>
       </div>
     </div>
