@@ -4,11 +4,15 @@ class ExistingRecordsController < ApplicationController
 
   # GET /existing_records/1/edit
   def edit
-  flash[:notice] = "Menu will not allow publishing of cataloged records during Spring Break, from March 21st - 25th. Publishing will be re-enabled again on Monday, March 28th."
-	@existing_record = ExistingRecord.where(pid: params[:pid]).first_or_create
-      if @existing_record.xml.blank?
-	 @existing_record.xml = dil_api_get_vra( params[:pid] )
+    @existing_record = ExistingRecord.where(pid: params[:pid]).first_or_create
+    if @existing_record.xml.blank?
+      begin
+        @existing_record.xml = dil_api_get_vra( params[:pid] )
+      rescue
+        flash[:error] = "The pid: \"#{params[:pid]}\" was not found in Repository|Images"
+        redirect_to root_path
       end
+    end
   end
 
   # PATCH/PUT /existing_records/1
@@ -49,10 +53,8 @@ class ExistingRecordsController < ApplicationController
     @existing_record.xml = request.body.read
     respond_to do |format|
       if @existing_record.save
-        puts "saved ok"
         format.xml { redirect_to action: "edit", pid: params[:pid],  notice: 'Record was successfully updated.'  }
       else
-        puts "errors"
         format.xml { render xml: edit.errors, status: :unprocessable_entity }
       end
     end
@@ -62,9 +64,9 @@ class ExistingRecordsController < ApplicationController
 
     def dil_api_get_vra( pid )
       RestClient::Resource.new(
-        MENU_CONFIG["dil_fedora"],
+        "#{MENU_CONFIG["dil_img_service"]}/technical_metadata/#{pid}/VRA",
         verify_ssl: OpenSSL::SSL::VERIFY_NONE
-      ).get({:params => {pid: pid}})
+      ).get
     end
 
     def dil_api_update_image( pid, xml )
