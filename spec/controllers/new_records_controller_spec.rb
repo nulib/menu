@@ -87,14 +87,14 @@ RSpec.describe NewRecordsController, :type => :controller do
         @accession_nbr = TransformXML.get_accession_nbr( @new_record.xml )
          allow(FileUtils).to receive(:mv)
 
-         stub_request(:post, "https://127.0.0.1:3331/multiresimages").
+         stub_request(:post, "http://127.0.0.1:3331/multiresimages").
               to_return(:status => 200, :body => "<response><returnCode>Publish successful</returnCode><pid>inu:dil-8a21a816-ac14-493c-a571-2be8e6dd4745</pid></response>", :headers => {})
       end
 
       it "generates a multiresimages post to Repository Images" do
         response = @controller.send( :dil_multiresimages_post, @new_record.xml, @new_record.path, @accession_nbr )
 
-        expect( response ).to be_instance_of(Delayed::Backend::ActiveRecord::Job)
+        expect( response ).to include( 'Publish successful' )
       end
 
       it "returns root_url upon success so that ajax can redirect" do
