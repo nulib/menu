@@ -93,6 +93,8 @@ class NewRecordsController < ApplicationController
         response = dil_multiresimages_post( @new_record.xml, @new_record.path, @accession_nbr )
         response_xml_doc = Nokogiri::XML( response )
 
+        logger.info("response: #{response}")
+
         if response_xml_doc.at_xpath( '//pid' ) && /Publish successful/.match(response_xml_doc)
           destination = @new_record.completed_destination
           FileUtils.mkdir_p(destination) unless File.exists?(destination)
