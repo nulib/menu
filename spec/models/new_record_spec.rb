@@ -22,12 +22,6 @@ describe NewRecord do
     expect( new_record.xml ).to be_truthy
   end
 
-  it "can return the directory path where the published image file should be moved" do
-    job = create(:job)
-    new_record = job.new_records.create( filename: 'test.tif', location: 'dropbox' )
-
-    expect( new_record.completed_destination ).to eql( "#{MENU_CONFIG['images_dir']}/_completed/#{ job.job_id }" )
-  end
 
   context "a new_record" do
     it "has the default VRA XML in the xml attribute" do
