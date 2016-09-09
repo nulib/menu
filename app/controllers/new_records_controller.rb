@@ -100,9 +100,9 @@ class NewRecordsController < ApplicationController
           logger.info("destination folder exists?? : #{File.exist?(destination)}")
           FileUtils.mkdir_p(destination) unless File.exists?(destination)
           logger.info("does the source file exist? : #{File.exist?(@new_record.path)}")
-          logger.info("destination file exists?? : #{File.exist?(destination}/#{@new_record.filename)}")
+          logger.info("destination file exists?? : #{File.exist?(destination + "/" + @new_record.filename)}")
           FileUtils.mv(@new_record.path, "#{destination}/#{@new_record.filename}") unless Rails.env.development?
-          logger.info("post move, does the desintation file exist now? : #{File.exist?(destination}/#{@new_record.filename)}")
+          logger.info("post move, does the desintation file exist now? : #{File.exist?(destination + "/" + @new_record.filename)}")
 
           @new_record.destroy
           job_url = "#{root_url}jobs/#{@new_record.job_id}"
